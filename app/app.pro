@@ -98,7 +98,7 @@ OTHER_FILES += \
 
 FORMS += mainwindow.ui
 
-DESTDIR = $$PWD/..build
+DESTDIR = $$PWD/../build
 
 INCLUDEPATH += \
    $$PWD \
