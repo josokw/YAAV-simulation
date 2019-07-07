@@ -46,5 +46,25 @@ TEST_CASE("CartVec class")
       REQUIRE(cv3.get_x() == Approx(0.0));
       REQUIRE(cv3.get_y() == Approx(-1.0));
       REQUIRE(cv3.get_z() == Approx(0.0));
+
+      cv3 = 3 * cv1;
+      REQUIRE(cv3.get_x() == Approx(3.0));
+      REQUIRE(cv3.get_y() == Approx(0.0));
+      REQUIRE(cv3.get_z() == Approx(1.5));
+
+      cv3 = cv1 * 3;
+      REQUIRE(cv3.get_x() == Approx(3.0));
+      REQUIRE(cv3.get_y() == Approx(0.0));
+      REQUIRE(cv3.get_z() == Approx(1.5));
+
+      bool test1 {cv1 == cv1};
+      bool test2 {cv1 == cv2};
+      REQUIRE(test1);
+      REQUIRE_FALSE(test2);
+
+      test1 = cv1 != cv1;
+      test2 = cv1 != cv2;
+      REQUIRE_FALSE(test1);
+      REQUIRE(test2);
    }
 }
