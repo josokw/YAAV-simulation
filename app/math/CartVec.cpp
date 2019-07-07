@@ -7,9 +7,9 @@
 
 double CartVec::eps(1E-8);
 const CartVec CartVec::ZERO(0, 0, 0);
-const CartVec CartVec::UNITx_(1, 0, 0);
-const CartVec CartVec::UNITy_(0, 1, 0);
-const CartVec CartVec::UNITz_(0, 0, 1);
+const CartVec CartVec::UNIT_X(1, 0, 0);
+const CartVec CartVec::UNIT_Y(0, 1, 0);
+const CartVec CartVec::UNIT_Z(0, 0, 1);
 
 CartVec::CartVec(double x, double y, double z)
    : x_(x)

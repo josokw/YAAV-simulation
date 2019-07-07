@@ -30,9 +30,9 @@ class CartVec
 public:
    static double eps;
    static const CartVec ZERO;
-   static const CartVec UNITx_;
-   static const CartVec UNITy_;
-   static const CartVec UNITz_;
+   static const CartVec UNIT_X;
+   static const CartVec UNIT_Y;
+   static const CartVec UNIT_Z;
 
    CartVec()
       : CartVec(0.0, 0.0, 0.0)
