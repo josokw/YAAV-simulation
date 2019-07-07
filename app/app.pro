@@ -14,7 +14,6 @@ QMAKE_CXXFLAGS += -Wall -Wextra
 
 SOURCES += main.cpp \
     MainWindow.cpp \
-    wheel.cpp \
     Vehicle.cpp \
     VirtualReality.cpp \
     Room.cpp \
@@ -49,7 +48,6 @@ SOURCES += main.cpp \
     QVehicleViewer.cpp
 
 HEADERS += MainWindow.h \
-    wheel.h \
     Vehicle.h \
     IOdef.h \
     DoPhysics.h \
