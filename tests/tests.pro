@@ -15,3 +15,5 @@ SOURCES += testMain.cpp
 INCLUDEPATH += \
    ../app \
    ../lib
+
+DESTDIR = $$PWD/../build
