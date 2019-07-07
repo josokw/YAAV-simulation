@@ -8,11 +8,14 @@ TEMPLATE = app
 CONFIG += console
 CONFIG += c++11
 
-SOURCES += testMain.cpp \
+SOURCES += \
+   testMain.cpp \
    CartVecTests.cpp \
-   ../app/math/CartVec.cpp
+   PointTests.cpp \
+   ../app/math/CartVec.cpp \
+   ../app/math/Point.cpp
 
-# HEADERS +=
+HEADERS +=
 
 INCLUDEPATH += \
    ../app \
