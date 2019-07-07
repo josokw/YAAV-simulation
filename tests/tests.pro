@@ -9,3 +9,9 @@ CONFIG += console
 CONFIG += c++11
 
 SOURCES += testMain.cpp
+
+# HEADERS +=
+
+INCLUDEPATH += \
+   ../app \
+   ../lib
