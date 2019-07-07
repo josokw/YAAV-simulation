@@ -1,6 +1,7 @@
 # YAAV simulator
 
-Yet Another Autonomous Vehicle simulator. Still under construction!
+Yet Another Autonomous Vehicle simulator. Started devlopment in 2009, but is still under construction!
+Not based on any 3D game engine.
 
 ## Dependencies
 
