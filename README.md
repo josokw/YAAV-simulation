@@ -12,4 +12,4 @@ Used versions:
 - Qt 5.12.4
 - C++17 compliant compiler
 - Boost C++ libs v1.65.1
-- Unit test framework TBD
+- Unit test C++ framework Catch v2.9.1 [Catch2 assertions](https://github.com/catchorg/Catch2/blob/master/docs/assertions.md)
