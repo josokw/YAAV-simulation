@@ -16,8 +16,6 @@ class CartVec
    friend CartVec operator+(const CartVec &lhs, const CartVec &rhs);
    /// Subtract 2 Cartvec's.
    friend CartVec operator-(const CartVec &lhs, const CartVec &rhs);
-   /// Calculates cross product.
-   friend CartVec operator*(const CartVec &lhs, const CartVec &rhs);
    /// Multiplication by a scalar.
    friend CartVec operator*(double lhs, const CartVec &rhs);
    /// Multiplication by a scalar.
@@ -32,64 +30,64 @@ class CartVec
 public:
    static double eps;
    static const CartVec ZERO;
-   static const CartVec UNIT_X;
-   static const CartVec UNIT_Y;
-   static const CartVec UNIT_Z;
+   static const CartVec UNITx_;
+   static const CartVec UNITy_;
+   static const CartVec UNITz_;
 
    CartVec()
       : CartVec(0.0, 0.0, 0.0)
    {
    }
-   CartVec(double _x, double _y, double _z);
+   CartVec(double x_, double y_, double z_);
    CartVec(const CartVec &other) = default;
-   virtual ~CartVec() = default;
+   ~CartVec() = default;
 
-   double get_x() const { return _x; }
-   double get_y() const { return _y; }
-   double get_z() const { return _z; }
-   void set_x(double x) { _x = x; }
-   void set_y(double y) { _y = y; }
-   void set_z(double z) { _z = z; }
+   double get_x() const { return x_; }
+   double get_y() const { return y_; }
+   double get_z() const { return z_; }
+   void set_x(double x) { x_ = x; }
+   void set_y(double y) { y_ = y; }
+   void set_z(double z) { z_ = z; }
 
    /// Unary + operator
    CartVec operator+() const { return *this; }
    /// Unary - operator
-   CartVec operator-() const { return CartVec(-_x, -_y, -_z); }
+   CartVec operator-() const { return {-x_, -y_, -z_}; }
    /// Compound assignment operator [x,y,z] += [a,b,c]
    CartVec &operator+=(const CartVec &rhs)
    {
-      _x += rhs._x;
-      _y += rhs._y;
-      _z += rhs._z;
+      x_ += rhs.x_;
+      y_ += rhs.y_;
+      z_ += rhs.z_;
       return *this;
    }
    /// [x,y,z] -= [a,b,c]
    CartVec &operator-=(const CartVec &rhs)
    {
-      _x -= rhs._x;
-      _y -= rhs._y;
-      _z -= rhs._z;
+      x_ -= rhs.x_;
+      y_ -= rhs.y_;
+      z_ -= rhs.z_;
       return *this;
    }
    /// [x,y,z] *= s
    CartVec &operator*=(double rhs)
    {
-      _x *= rhs;
-      _y *= rhs;
-      _z *= rhs;
+      x_ *= rhs;
+      y_ *= rhs;
+      z_ *= rhs;
       return *this;
    }
    /// [x,y,z] /= s
    CartVec &operator/=(double rhs)
    {
-      _x /= rhs;
-      _y /= rhs;
-      _z /= rhs;
+      x_ /= rhs;
+      y_ /= rhs;
+      z_ /= rhs;
       return *this;
    }
 
    /// Calculates length: ||vector||
-   double length() const { return std::sqrt(_x * _x + _y * _y + _z * _z); }
+   double length() const { return std::sqrt(x_ * x_ + y_ * y_ + z_ * z_); }
    /// Distance to other end point of a CartVec.
    double distance(const CartVec &cv) const;
    /// Sets vector to unit length.
@@ -97,7 +95,12 @@ public:
    /// Calculates inner product.
    double dot(const CartVec &v) const
    {
-      return _x * v._x + _y * v._y + _z * v._z;
+      return x_ * v.x_ + y_ * v.y_ + z_ * v.z_;
+   }
+   CartVec cross(const CartVec &v) const
+   {
+      return {y_ * v.z_ - z_ * v.y_, -x_ * v.z_ + z_ * v.x_,
+              x_ * v.y_ - y_ * v.x_};
    }
    /// Calculates the angle [rad] between vector and v.
    double angle(const CartVec &v) const;
@@ -111,9 +114,9 @@ public:
    void rotateAround(const CartVec &axis, double cosPhi, double sinPhi);
 
 private:
-   double _x;
-   double _y;
-   double _z;
+   double x_;
+   double y_;
+   double z_;
 };
 
 #endif // CARTVEC_H

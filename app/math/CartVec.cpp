@@ -1,27 +1,28 @@
 #include "CartVec.h"
 #include "MathDef.h"
+
 #include <iomanip>
 #include <ios>
 #include <iostream>
 
 double CartVec::eps(1E-8);
 const CartVec CartVec::ZERO(0, 0, 0);
-const CartVec CartVec::UNIT_X(1, 0, 0);
-const CartVec CartVec::UNIT_Y(0, 1, 0);
-const CartVec CartVec::UNIT_Z(0, 0, 1);
+const CartVec CartVec::UNITx_(1, 0, 0);
+const CartVec CartVec::UNITy_(0, 1, 0);
+const CartVec CartVec::UNITz_(0, 0, 1);
 
 CartVec::CartVec(double x, double y, double z)
-   : _x(x)
-   , _y(y)
-   , _z(z)
+   : x_(x)
+   , y_(y)
+   , z_(z)
 {
 }
 
 bool operator==(const CartVec &lhs, const CartVec &rhs)
 {
-   return fabs(lhs._x - rhs._x) < CartVec::eps &&
-          fabs(lhs._y - rhs._y) < CartVec::eps &&
-          fabs(lhs._z - rhs._z) < CartVec::eps;
+   return fabs(lhs.x_ - rhs.x_) < CartVec::eps &&
+          fabs(lhs.y_ - rhs.y_) < CartVec::eps &&
+          fabs(lhs.z_ - rhs.z_) < CartVec::eps;
 }
 
 bool operator!=(const CartVec &lhs, const CartVec &rhs)
@@ -39,13 +40,6 @@ CartVec operator-(const CartVec &lhs, const CartVec &rhs)
 {
    CartVec temp(lhs);
    return temp -= rhs;
-}
-
-CartVec operator*(const CartVec &lhs, const CartVec &rhs)
-{
-   return CartVec(lhs._y * rhs._z - lhs._z * rhs._y,
-                  -lhs._x * rhs._z + lhs._z * rhs._x,
-                  lhs._x * rhs._y - lhs._y * rhs._x);
 }
 
 CartVec operator*(double lhs, const CartVec &rhs)
@@ -68,9 +62,8 @@ CartVec operator/(const CartVec &lhs, double rhs)
 
 double CartVec::distance(const CartVec &cv) const
 {
-   return std::sqrt((_x - cv._x) * (_x - cv._x) +
-                    (_y - cv._y) * (_y - cv._y) +
-                    (_z - cv._z) * (_z - cv._z));
+   return std::sqrt((x_ - cv.x_) * (x_ - cv.x_) + (y_ - cv.y_) * (y_ - cv.y_) +
+                    (z_ - cv.z_) * (z_ - cv.z_));
 }
 
 double CartVec::angle(const CartVec &v) const
@@ -84,7 +77,7 @@ double CartVec::angle(const CartVec &v) const
    if (xxL == 0) {
       return 0;
    }
-   CartVec zz((*this) * v); // z-Axis
+   CartVec zz(this->cross(v)); // z-Axis
    double zzL = zz.length();
    if (zzL == 0) {
       // v can coincide with *this or can point in the opposite direction!
@@ -96,33 +89,32 @@ double CartVec::angle(const CartVec &v) const
    CartVec xx((*this) / xxL); // x-Axis
    zz /= zzL;
    // now zz and xx are orthonormal to each other.
-   CartVec yy(zz * xx); // y-Axis
+   CartVec yy(zz.cross(xx)); // y-Axis
    return atan2(yy.dot(v), xx.dot(v));
 }
 
 void CartVec::rotateAroundZ(const double cosPhi, const double sinPhi)
 {
-   double xtemp = _x;
-   _x = cosPhi * _x - sinPhi * _y;
-   _y = sinPhi * xtemp + cosPhi * _y;
+   double xtemp = x_;
+   x_ = cosPhi * x_ - sinPhi * y_;
+   y_ = sinPhi * xtemp + cosPhi * y_;
 }
 
 void CartVec::rotateAroundY(const double cosPhi, const double sinPhi)
 {
-   double xtemp = _x;
-   _x = cosPhi * _x + sinPhi * _z;
-   _z = -sinPhi * xtemp + cosPhi * _z;
+   double xtemp = x_;
+   x_ = cosPhi * x_ + sinPhi * z_;
+   z_ = -sinPhi * xtemp + cosPhi * z_;
 }
 
 void CartVec::rotateAroundX(const double cosPhi, const double sinPhi)
 {
-   double ytemp = _y;
-   _y = cosPhi * _y - sinPhi * _z;
-   _z = sinPhi * ytemp + cosPhi * _z;
+   double ytemp = y_;
+   y_ = cosPhi * y_ - sinPhi * z_;
+   z_ = sinPhi * ytemp + cosPhi * z_;
 }
 
-void CartVec::rotateAround(const CartVec &Axis, double cosPhi,
-                           double sinPhi)
+void CartVec::rotateAround(const CartVec &Axis, double cosPhi, double sinPhi)
 {
    // An arbitrarily rotation around Axis.
    // Implemented by constructing a new local CS
@@ -136,7 +128,7 @@ void CartVec::rotateAround(const CartVec &Axis, double cosPhi,
    CartVec zz(Axis);
    zz.normalize();    // zz is unit-length
    CartVec xx(*this); // xx and zz are NOT orthogonal !!
-   CartVec yy(zz * xx);
+   CartVec yy(zz.cross(xx));
    double yyL = yy.length();
    if (yyL == 0) {
       // now we have 2 possibilities
@@ -147,18 +139,18 @@ void CartVec::rotateAround(const CartVec &Axis, double cosPhi,
    }
    yy /= yyL;
    // now zz and yy are orthonormal to each other.
-   xx = yy * zz;
+   xx = yy.cross(zz);
    // so now we have complete orthonormal set
    CartVec NCS(dot(xx), dot(yy), dot(zz)); // New Coordinate System
    NCS.rotateAroundZ(cosPhi, sinPhi);      // do the rotation in New CS
-   *this = xx * NCS._x + yy * NCS._y + zz * NCS._z;
+   *this = xx * NCS.x_ + yy * NCS.y_ + zz * NCS.z_;
 }
 
 std::ostream &operator<<(std::ostream &os, const CartVec &rhs)
 {
    os << std::setiosflags(std::ios::fixed) << std::setprecision(3) << '['
-      << std::setw(5) << rhs._x << ',' << std::setw(5) << rhs._y << ','
-      << std::setw(5) << rhs._z << ']';
+      << std::setw(5) << rhs.x_ << ',' << std::setw(5) << rhs.y_ << ','
+      << std::setw(5) << rhs.z_ << ']';
    return os;
 }
 

@@ -52,7 +52,7 @@ void math::Polygon::calcNormal()
    CartVec temp2(_vertices[0]);
    temp1 -= _vertices[1];
    temp2 -= _vertices[1];
-   _normal = temp1 * temp2;
+   _normal = temp1.cross(temp2);
    _normal.normalize();
 }
 
@@ -188,15 +188,13 @@ void math::Polygon::rotateAroundXYZ(const CartVec &xyz, double angle)
 bool math::Polygon::isInside(const CartVec &point) const
 {
    bool isIn = false;
-   for (size_t i = 0, j = _vertices.size() - 1; i < _vertices.size();
-        j = i++) {
+   for (size_t i = 0, j = _vertices.size() - 1; i < _vertices.size(); j = i++) {
       if ((_vertices[i].get_y() > point.get_y()) !=
              (_vertices[j].get_y() > point.get_y()) &&
-          (point.get_x() <
-           (_vertices[j].get_x() - _vertices[i].get_x()) *
-                 (point.get_y() - _vertices[i].get_y()) /
-                 (_vertices[j].get_y() - _vertices[i].get_y()) +
-              _vertices[i].get_x())) {
+          (point.get_x() < (_vertices[j].get_x() - _vertices[i].get_x()) *
+                                 (point.get_y() - _vertices[i].get_y()) /
+                                 (_vertices[j].get_y() - _vertices[i].get_y()) +
+                              _vertices[i].get_x())) {
          isIn = !isIn;
       }
    }
