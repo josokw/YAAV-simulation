@@ -8,12 +8,15 @@ TEMPLATE = app
 CONFIG += console
 CONFIG += c++11
 
-SOURCES += testMain.cpp
+SOURCES += testMain.cpp \
+   CartVecTests.cpp \
+   ../app/math/CartVec.cpp
 
 # HEADERS +=
 
 INCLUDEPATH += \
    ../app \
-   ../lib
+   ../lib \
+   ../app/math
 
 DESTDIR = $$PWD/../build
