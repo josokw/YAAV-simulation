@@ -57,8 +57,8 @@ TEST_CASE("CartVec class")
       REQUIRE(cv3.get_y() == Approx(0.0));
       REQUIRE(cv3.get_z() == Approx(1.5));
 
-      bool test1 {cv1 == cv1};
-      bool test2 {cv1 == cv2};
+      bool test1{cv1 == cv1};
+      bool test2{cv1 == cv2};
       REQUIRE(test1);
       REQUIRE_FALSE(test2);
 
@@ -66,5 +66,21 @@ TEST_CASE("CartVec class")
       test2 = cv1 != cv2;
       REQUIRE_FALSE(test1);
       REQUIRE(test2);
+   }
+
+   SECTION("Dot product")
+   {
+      CartVec cv1{1.0, 1.0, 1.0};
+      CartVec cv2{-1.0, 1.0, 0.0};
+
+      REQUIRE(cv1.dot(cv2) == Approx(0.0));
+   }
+
+   SECTION("Cross product")
+   {
+      CartVec cv1{1.0, 0.0, 0.0};
+      CartVec cv2{0.0, 1.0, 0.0};
+
+      REQUIRE(cv1.cross(cv2) == CartVec{0, 0, 1});
    }
 }
