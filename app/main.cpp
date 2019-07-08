@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
    logger.setDebugMode(logDebugModeIsOn);
    utils::INIreader &Ini = IniReader();
    try {
-      Ini.setFileName("../YAAV.ini");
+      Ini.setFileName("../data/YAAV.ini");
       Ini.init();
       LOGI("INIreader initialized");
       VirtualReality vr;
