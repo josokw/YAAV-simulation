@@ -5,7 +5,6 @@
 #include "Drawable.h"
 #include "MathDef.h"
 
-
 #include <cmath>
 #include <iostream>
 
