@@ -94,7 +94,7 @@ TEST_CASE("CartVec class")
       REQUIRE(CartVec::ZERO.length() == Approx(0.0));
    }
 
-   SECTION("Input streams")
+   SECTION("Input and output streams")
    {
       std::stringstream ss;
       ss << "[10.11, 20.22, 30.33]" << std::ends;
@@ -114,5 +114,21 @@ TEST_CASE("CartVec class")
       REQUIRE(cv2.get_x() == Approx(0.0));
       REQUIRE(cv2.get_y() == Approx(0.0));
       REQUIRE(cv2.get_z() == Approx(0.0));
+
+      CartVec cv3{1.1, -2.2, 3.3};
+      ss = std::stringstream{};
+      ss << cv3;
+
+      REQUIRE(ss.str() == std::string("[1.100,-2.200,3.300]"));
+   }
+
+   SECTION("get()")
+   {
+      CartVec cv{1.1, -2.2, 3.3};
+      auto [x, y, z] = cv.get();
+
+      REQUIRE(x == Approx(1.1));
+      REQUIRE(y == Approx(-2.2));
+      REQUIRE(z == Approx(3.3));
    }
 }
