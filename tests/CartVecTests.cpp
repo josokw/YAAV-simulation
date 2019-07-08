@@ -83,4 +83,14 @@ TEST_CASE("CartVec class")
 
       REQUIRE(cv1.cross(cv2) == CartVec{0, 0, 1});
    }
+
+   SECTION("Length")
+   {
+      REQUIRE(CartVec::UNIT_X.length() == Approx(1.0));
+      REQUIRE(CartVec::UNIT_Y.length() == Approx(1.0));
+      REQUIRE(CartVec::UNIT_Z.length() == Approx(1.0));
+      REQUIRE(CartVec::ZERO.length() == Approx(0.0));
+   }
+
+   SECTION("Input streams") { CartVec cv; }
 }
