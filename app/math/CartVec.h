@@ -9,21 +9,21 @@
 class CartVec
 {
    /// Testing for equality.
-   /// @see CartVec::eps
+   /// \see CartVec::eps
    friend bool operator==(const CartVec &lhs, const CartVec &rhs);
    friend bool operator!=(const CartVec &lhs, const CartVec &rhs);
-   /// Add 2 Cartvec's.
+   /// Add 2 CartVec's.
    friend CartVec operator+(const CartVec &lhs, const CartVec &rhs);
-   /// Subtract 2 Cartvec's.
+   /// Subtract 2 CartVec's.
    friend CartVec operator-(const CartVec &lhs, const CartVec &rhs);
-   /// Multiplication by a scalar.
+   /// Multiplication by a scalar (lhs).
    friend CartVec operator*(double lhs, const CartVec &rhs);
-   /// Multiplication by a scalar.
+   /// Multiplication by a scalar (rhs).
    friend CartVec operator*(const CartVec &lhs, double rhs);
-   /// Division by a scalar.
+   /// Division by a scalar (rhs).
    friend CartVec operator/(const CartVec &lhs, double rhs);
    /// Output format: [x,y,z]
-   friend std::ostream &operator<<(std::ostream &out, const CartVec &rhs);
+   friend std::ostream &operator<<(std::ostream &os, const CartVec &rhs);
    /// Input format: [x,y,z]  extra whitespaces allowed
    friend std::istream &operator>>(std::istream &is, CartVec &rhs);
 
@@ -34,12 +34,12 @@ public:
    static const CartVec UNIT_Y;
    static const CartVec UNIT_Z;
 
-   CartVec()
-      : CartVec(0.0, 0.0, 0.0)
-   {
-   }
+   CartVec() = default;
    CartVec(double x_, double y_, double z_);
    CartVec(const CartVec &other) = default;
+   CartVec &operator=(const CartVec &other) = default;
+   CartVec(CartVec &&other) = default;
+   CartVec &operator=(CartVec &&other) = default;
    ~CartVec() = default;
 
    double get_x() const { return x_; }
@@ -97,6 +97,7 @@ public:
    {
       return x_ * v.x_ + y_ * v.y_ + z_ * v.z_;
    }
+   /// Calulates cross product.
    CartVec cross(const CartVec &v) const
    {
       return {y_ * v.z_ - z_ * v.y_, -x_ * v.z_ + z_ * v.x_,
@@ -105,18 +106,18 @@ public:
    /// Calculates the angle [rad] between vector and v.
    double angle(const CartVec &v) const;
    /// Rotates around z.
-   void rotateAroundZ(const double cosPhi, const double sinPhi);
+   void rotateAroundZ(double cosPhi, double sinPhi);
    /// Rotates around y.
-   void rotateAroundY(const double cosPhi, const double sinPhi);
+   void rotateAroundY(double cosPhi, double sinPhi);
    /// Rotates around x.
-   void rotateAroundX(const double cosPhi, const double sinPhi);
+   void rotateAroundX(double cosPhi, double sinPhi);
    /// Rotates around an arbitrarily rotation axis.
    void rotateAround(const CartVec &axis, double cosPhi, double sinPhi);
 
 private:
-   double x_;
-   double y_;
-   double z_;
+   double x_{0.0};
+   double y_{0.0};
+   double z_{0.0};
 };
 
 #endif // CARTVEC_H
