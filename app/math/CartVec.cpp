@@ -85,7 +85,7 @@ double CartVec::angle(const CartVec &v) const
    if (zzL == 0) {
       // v can coincide with *this or can point in the opposite direction!
       if (-v == *this) {
-         return math::PI;
+         return M_PI;
       }
       return 0;
    }
