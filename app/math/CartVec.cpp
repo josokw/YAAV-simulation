@@ -71,18 +71,21 @@ double CartVec::distance(const CartVec &cv) const
 
 double CartVec::angle(const CartVec &v) const
 {
+   auto comp = [](double d1, double d2) {
+      return fabs(d1 - d2) < CartVec::eps;
+   };
    // Construct the plane containing v and *this;
    // a local CS is constructed with xx in direction *this
    // yy generates other component of v
    // then atan2 for angle calculation is called.
    double xxL = length();
 
-   if (xxL == 0) {
+   if (comp(xxL, 0.0)) {
       return 0;
    }
    CartVec zz{this->cross(v)}; // z-Axis
    double zzL = zz.length();
-   if (zzL == 0) {
+   if (comp(zzL, 0.0)) {
       // v can coincide with *this or can point in the opposite direction!
       if (-v == *this) {
          return M_PI;
@@ -119,12 +122,15 @@ void CartVec::rotateAroundX(double cosPhi, double sinPhi)
 
 void CartVec::rotateAround(const CartVec &Axis, double cosPhi, double sinPhi)
 {
+   auto comp = [](double d1, double d2) {
+      return fabs(d1 - d2) < CartVec::eps;
+   };
    // An arbitrarily rotation around Axis.
    // Implemented by constructing a new local CS
    // In this CS Axis becomes zz and xx will span the orthogonal
    // component of xx. yy is constructed by a cross product.
    double axisL{Axis.length()};
-   if (axisL == 0) {
+   if (comp(axisL, 0.0)) {
       return; // a rotation around zero-CartVec is *this
    }
 
@@ -134,7 +140,7 @@ void CartVec::rotateAround(const CartVec &Axis, double cosPhi, double sinPhi)
    CartVec yy{zz.cross(xx)};
    double yyL{yy.length()};
 
-   if (yyL == 0) {
+   if (comp(yyL, 0.0)) {
       // now we have 2 possibilities
       //	 either the two CartVecs are dependent
       //	 or one of them is zero.
