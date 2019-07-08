@@ -1,51 +1,45 @@
 #include "stringExt.h"
 
-using namespace std;
+#include <algorithm>
 
-void utils::removeLeadingSpacesTabs(string &line)
+void utils::removeLeadingSpacesTabs(std::string &line)
 {
    if (!line.empty()) {
-      while (line[0] == ' ' || line[0] == '\t') {
+      while (line[0] == ' ' or line[0] == '\t') {
          line.erase(0, 1);
       }
    }
 }
 
-void utils::removeTrailingSpacesTabs(string &line)
+void utils::removeTrailingSpacesTabs(std::string &line)
 {
    if (!line.empty()) {
-      while (line[line.size() - 1] == ' ' ||
-             line[line.size() - 1] == '\t') {
+      while (line[line.size() - 1] == ' ' || line[line.size() - 1] == '\t') {
          line.erase(line.size() - 1, 1);
       }
    }
 }
 
-void utils::removeLeadingTrailingSpacesTabs(string &line)
+void utils::removeLeadingTrailingSpacesTabs(std::string &line)
 {
    removeLeadingSpacesTabs(line);
    removeTrailingSpacesTabs(line);
 }
 
-void utils::replaceCommasBySpaces(string &line)
+void utils::replaceCommasBySpaces(std::string &line)
 {
    size_t pos;
-   while ((pos = line.find(string(","))) != string::npos) {
+   while ((pos = line.find(std::string(","))) != std::string::npos) {
       line.replace(pos, 1, " ");
    }
 }
 
-void utils::removeReturns(string &line)
+void utils::removeReturns(std::string &line)
 {
-   size_t pos;
-   while ((pos = line.find(string("\r"))) != string::npos) {
-      line.replace(pos, 1, "");
-   }
+   line.erase(std::remove(begin(line), end(line), '\n'), end(line));
 }
 
-// function to split-up strings, to a vector of strings, using a delimiter
-void utils::tokenize(const std::string &str,
-                     std::vector<std::string> &tokens,
+void utils::tokenize(const std::string &str, std::vector<std::string> &tokens,
                      const std::string &delimiters)
 {
    // Skip delimiters at beginning.
@@ -65,14 +59,14 @@ void utils::tokenize(const std::string &str,
 
 void utils::decapitalize(std::string &input)
 {
-   for (size_t i = 0; i < input.length(); ++i) {
-      input[i] = tolower(input[i]);
+   for (auto &c : input) {
+      c = tolower(c);
    }
 }
 
 void utils::capitalize(std::string &input)
 {
-   for (size_t i = 0; i < input.length(); ++i) {
-      input[i] = toupper(input[i]);
+   for (auto &c : input) {
+      c = toupper(c);
    }
 }

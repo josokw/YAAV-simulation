@@ -13,6 +13,7 @@ void removeTrailingSpacesTabs(std::string &line);
 void removeLeadingTrailingSpacesTabs(std::string &line);
 void replaceCommasBySpaces(std::string &line);
 void removeReturns(std::string &line);
+/// Function to split-up strings, to a vector of strings, using a delimiter
 void tokenize(const std::string &str, std::vector<std::string> &tokens,
               const std::string &delimiters = " ");
 void capitalize(std::string &input);
