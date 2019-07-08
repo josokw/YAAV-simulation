@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <iosfwd>
+#include <tuple>
 
 /// Class 'CartVec' represents a Cartesian vector [x,y,z] in 3D space.
 /// @short Cartesian vector in 3D space.
@@ -45,6 +46,7 @@ public:
    double get_x() const { return x_; }
    double get_y() const { return y_; }
    double get_z() const { return z_; }
+   auto get() const { return std::tuple<double, double, double>{x_, y_, z_}; }
    void set_x(double x) { x_ = x; }
    void set_y(double y) { y_ = y; }
    void set_z(double z) { z_ = z; }
