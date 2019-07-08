@@ -3,6 +3,7 @@
 
 #include "CartVec.h"
 #include "MathDef.h"
+
 #include <cstddef>
 #include <initializer_list>
 #include <iosfwd>
@@ -27,22 +28,19 @@ typedef struct {
 /// @todo Apply algorithms and Lambda functions.
 class Polygon
 {
-   friend std::ostream &operator<<(std::ostream &out,
-                                   const math::Polygon &rhs);
+   friend std::ostream &operator<<(std::ostream &os, const math::Polygon &rhs);
 
 public:
-   Polygon();
+   Polygon() = default;
    /// Initializer list of vertices.
+   /// math::Polygon p = { { 1, 2, 3 }, { 2, 3, 4 }, { 5, 7, 8 } };
    /// @pre Number of vertices >= 3 and these vertices are not collinear.
    Polygon(const std::initializer_list<CartVec> &cvlist);
    /// @pre Number of vertices >= 3 and these vertices are not collinear.
    explicit Polygon(const std::vector<CartVec> &vertices);
 
    /// Returns vertex by its index value.
-   CartVec &operator[](const std::size_t index)
-   {
-      return _vertices[index];
-   }
+   CartVec &operator[](const std::size_t index) { return _vertices[index]; }
    /// Returns vertex by its index value.
    const CartVec &operator[](const std::size_t index) const
    {
@@ -68,8 +66,7 @@ public:
    /// Get edge (pair of two vertices) by its index, starts at index 0.
    edge_t getEdge(std::size_t index) const;
    /// Get closest point on an edge identified by its index to point p.
-   CartVec getClosestPointToEdge(std::size_t index,
-                                 const CartVec &p) const;
+   CartVec getClosestPointToEdge(std::size_t index, const CartVec &p) const;
    /// Calculates and returns minimal and maximal values x, y and z of all
    /// vertices. For bounding box calculations.
    minmaxXYZ_t getMinMaxXYZ() const;
