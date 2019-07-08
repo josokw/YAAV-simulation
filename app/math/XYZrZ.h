@@ -1,9 +1,11 @@
 #ifndef XYZRZ_H
 #define XYZRZ_H
 
+#include "CartVec.h"
 #include "Drawable.h"
 #include "MathDef.h"
-#include "math/CartVec.h"
+
+
 #include <cmath>
 #include <iostream>
 
@@ -48,18 +50,15 @@ public:
 
    CartVec atDistance(double d) const
    {
-      return CartVec(position.get_x() + d * cos(math::toRadians(Rz)),
-                     position.get_y() + d * sin(math::toRadians(Rz)),
-                     position.get_z());
+      return {position.get_x() + d * cos(math::toRadians(Rz)),
+              position.get_y() + d * sin(math::toRadians(Rz)),
+              position.get_z()};
    }
 
-   virtual void draw() const override;
+   void draw() const override;
    double length() const { return position.length(); }
    void normalize() { position.normalize(); }
-   double dot(const XYZrZ &xyzRz) const
-   {
-      return position.dot(xyzRz.position);
-   }
+   double dot(const XYZrZ &xyzRz) const { return position.dot(xyzRz.position); }
 
    CartVec position;
    double Rz;
