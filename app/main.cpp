@@ -5,6 +5,7 @@
 #include "VirtualReality.h"
 #include "utils/Logger.h"
 #include <QApplication>
+
 #include <boost/program_options.hpp>
 #include <boost/version.hpp>
 #include <iostream>
@@ -47,8 +48,7 @@ int main(int argc, char *argv[])
    logger.setDebugMode(logDebugModeIsOn);
    utils::INIreader &Ini = IniReader();
    try {
-      Ini.setFileName("../data/YAAV.ini");
-      Ini.init();
+      Ini.init("../data/YAAV.ini");
       LOGI("INIreader initialized");
       VirtualReality vr;
       vr.init();

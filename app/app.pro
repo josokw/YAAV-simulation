@@ -92,7 +92,7 @@ HEADERS += MainWindow.h \
     QVehicleViewer.h
 
 OTHER_FILES += \
-    YAAV.ini
+    $$PWD/../data/YAAV.ini
 
 FORMS += mainwindow.ui
 

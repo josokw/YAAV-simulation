@@ -59,12 +59,9 @@ public:
    INIreader &operator=(const INIreader &) = delete;
    /// Destructor
    virtual ~INIreader();
-   /// Set file name of .ini file.
-   /// @param fileName  name of .ini file.
-   void setFileName(const std::string &fileName);
    /// Initialising INIreader.
    /// @exception string the .ini file can't be opened.
-   void init();
+   void init(const std::string &fileName);
    /// Fill the internal map by an istream input.
    void fillINImap(std::istream &In, const std::string &EndINIline);
    /// Add one data item to the internal map
