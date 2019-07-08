@@ -1,6 +1,7 @@
 #include "Logger.h"
 #include "AppInfo.h"
 #include "Log.h"
+
 #include <boost/date_time.hpp>
 #include <boost/thread.hpp>
 
@@ -14,36 +15,37 @@ utils::Logger::~Logger()
 {
    SET_FNAME("Logger::~Logger()");
    LOGI("LOGGER closed");
-   m_logFile.close();
+   logFile_.close();
 }
 
 void utils::Logger::setFilename(const std::string &filename)
 {
+   std::lock_guard<std::mutex> lock(logMutex_);
    SET_FNAME("Logger::setFilename()");
-   m_logFile.close();
-   m_logFile.open(filename.c_str());
-   if (m_logFile) {
-      m_filename = filename;
+   logFile_.close();
+   logFile_.open(filename.c_str());
+   if (logFile_) {
+      filename_ = filename;
    }
-   LOGI("LOGGER filename: " + m_filename.c_str());
+   LOGI("LOGGER filename: " + filename_);
 }
 
 void utils::Logger::log(const std::string &message)
 {
-   boost::mutex::scoped_lock lock(m_logMutex);
-   m_logFile << boost::get_system_time() << "  " << message << std::endl;
+   std::lock_guard<std::mutex> lock(logMutex_);
+   logFile_ << boost::get_system_time() << "  " << message << std::endl;
 }
 
 void utils::Logger::log(const char *message)
 {
-   boost::mutex::scoped_lock lock(m_logMutex);
-   m_logFile << boost::get_system_time() << "  " << message << std::endl;
+   std::lock_guard<std::mutex> lock(logMutex_);
+   logFile_ << boost::get_system_time() << "  " << message << std::endl;
 }
 
 utils::Logger::Logger()
-   : m_logMutex()
-   , m_filename()
-   , m_logFile(APPNAME ".log")
-   , m_debugMode(true)
+   : logMutex_{}
+   , filename_{}
+   , logFile_{APPNAME ".log"}
+   , debugMode_{true}
 {
 }
