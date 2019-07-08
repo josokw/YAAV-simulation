@@ -1,6 +1,8 @@
 #include "CartVec.h"
 #include "catch.hpp"
 
+#include <sstream>
+
 TEST_CASE("CartVec class")
 {
    SECTION("Constants")
@@ -92,5 +94,25 @@ TEST_CASE("CartVec class")
       REQUIRE(CartVec::ZERO.length() == Approx(0.0));
    }
 
-   SECTION("Input streams") { CartVec cv; }
+   SECTION("Input streams")
+   {
+      std::stringstream ss;
+      ss << "[10.11, 20.22, 30.33]" << std::ends;
+
+      CartVec cv1;
+      ss >> cv1;
+
+      REQUIRE(cv1.get_x() == Approx(10.11));
+      REQUIRE(cv1.get_y() == Approx(20.22));
+      REQUIRE(cv1.get_z() == Approx(30.33));
+
+      // Syntax error in input stream
+      ss << "[10.11, 20.22 30.33]" << std::ends;
+      CartVec cv2;
+      ss >> cv2;
+
+      REQUIRE(cv2.get_x() == Approx(0.0));
+      REQUIRE(cv2.get_y() == Approx(0.0));
+      REQUIRE(cv2.get_z() == Approx(0.0));
+   }
 }

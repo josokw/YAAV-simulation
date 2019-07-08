@@ -27,5 +27,8 @@ TEST_CASE("Point class")
       REQUIRE(p.get_x() == Approx(1.0));
       REQUIRE(p.get_y() == Approx(0.0));
       REQUIRE(p.get_z() == Approx(0.0));
+
+      CartVec v{Point{1.0, 1.0, 1.0} - Point{2.0, 2.0, 2.0}};
+      REQUIRE(v == CartVec{1.0, 1.0, 1.0});
    }
 }
