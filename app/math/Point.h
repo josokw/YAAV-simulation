@@ -28,9 +28,9 @@ public:
    Point &operator-=(const CartVec &rhs);
 
 private:
-   double x_ = 0.0;
-   double y_ = 0.0;
-   double z_ = 0.0;
+   double x_{0.0};
+   double y_{0.0};
+   double z_{0.0};
 };
 
 #endif // POINT_H
