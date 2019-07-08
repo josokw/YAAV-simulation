@@ -40,6 +40,7 @@ SOURCES += main.cpp \
     utils/Logger.cpp \
     utils/stringExt.cpp \
     math/CartVec.cpp \
+    math/Point.cpp \
     math/MathDef.cpp \
     math/XYZrZ.cpp \
     math/Polygon.cpp \
@@ -83,6 +84,7 @@ HEADERS += MainWindow.h \
     utils/Logger.h \
     utils/stringExt.h \
     math/CartVec.h \
+    math/Point.h \
     math/MathDef.h \
     math/XYZrZ.h \
     DynamicDirt.h \
