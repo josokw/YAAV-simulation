@@ -1,5 +1,6 @@
 #include "Polygon.h"
 #include "MathDef.h"
+
 #include <algorithm>
 #include <functional>
 #include <iostream>
@@ -9,20 +10,14 @@
 
 namespace math {
 
-std::ostream &operator<<(std::ostream &out, const math::Polygon &rhs)
+std::ostream &operator<<(std::ostream &os, const math::Polygon &rhs)
 {
    std::copy(rhs.getVertices().begin(), rhs.getVertices().end(),
-             std::ostream_iterator<CartVec>(out, " "));
-   out << "N = " << rhs.getNormal();
-   return out;
+             std::ostream_iterator<CartVec>(os, " "));
+   os << "N = " << rhs.getNormal();
+   return os;
 }
 } // namespace math
-
-math::Polygon::Polygon()
-   : _vertices()
-   , _normal()
-{
-}
 
 math::Polygon::Polygon(const std::initializer_list<CartVec> &cvlist)
    : _vertices()
@@ -190,7 +185,7 @@ bool math::Polygon::isInside(const CartVec &point) const
    bool isIn = false;
    for (size_t i = 0, j = _vertices.size() - 1; i < _vertices.size(); j = i++) {
       if ((_vertices[i].get_y() > point.get_y()) !=
-             (_vertices[j].get_y() > point.get_y()) &&
+             (_vertices[j].get_y() > point.get_y()) and
           (point.get_x() < (_vertices[j].get_x() - _vertices[i].get_x()) *
                                  (point.get_y() - _vertices[i].get_y()) /
                                  (_vertices[j].get_y() - _vertices[i].get_y()) +
