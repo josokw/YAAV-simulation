@@ -5,7 +5,7 @@
 
 namespace math {
 
-typedef struct Circle {
+using circle_t = struct Circle {
    Circle(const CartVec &m, double r)
       : m(m)
       , r(r)
@@ -13,9 +13,9 @@ typedef struct Circle {
    }
    CartVec m;
    double r;
-} circle_t;
+};
 
-typedef struct Edge {
+using edge_t = struct Edge {
    Edge(const CartVec &start, const CartVec &end)
       : start(start)
       , end(end)
@@ -23,16 +23,14 @@ typedef struct Edge {
    }
    CartVec start;
    CartVec end;
-} edge_t;
+};
 
-const double PI = 3.1415926535;
-
-inline double toRadians(double x)
+[[nodiscard]] constexpr double toRadians(double x) noexcept
 {
    return 0.0174532925 * x;
 }
 
-inline double toDegrees(double x)
+[[nodiscard]] constexpr double toDegrees(double x) noexcept
 {
    return 57.2957795130 * x;
 }
