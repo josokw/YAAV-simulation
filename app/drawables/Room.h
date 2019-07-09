@@ -12,9 +12,9 @@ class Room : public Drawable
 {
 public:
    Room();
-   virtual ~Room() = default;
+   ~Room() override = default;
 
-   virtual void draw() const;
+   void draw() const override;
    /// Returns collision shape.
    const math::Polygon &getCollisionShape() const { return m_corners; }
    const std::vector<CartVec> &getCorners() const

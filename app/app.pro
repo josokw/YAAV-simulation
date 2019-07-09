@@ -16,17 +16,18 @@ SOURCES += main.cpp \
     MainWindow.cpp \
     Vehicle.cpp \
     VirtualReality.cpp \
-    Room.cpp \
     QVrViewer.cpp \
-    CylObject.cpp \
-    Block.cpp \
     OrientationCone.cpp \
-    Ball.cpp \
     DoPhysics.cpp \
-    Dirt.cpp \
     EventQueue.cpp \
     Log.cpp \
     Ini.cpp \
+    drawables/Ball.cpp \
+    drawables/Block.cpp \
+    drawables/CylObject.cpp \
+    drawables/Dirt.cpp \
+    drawables/DynamicDirt.cpp \
+    drawables/Room.cpp \
     hardware/Sensor.cpp \
     hardware/Actuator.cpp \
     hardware/Timer.cpp \
@@ -44,7 +45,6 @@ SOURCES += main.cpp \
     math/MathDef.cpp \
     math/XYZrZ.cpp \
     math/Polygon.cpp \
-    DynamicDirt.cpp \
     physics/CollisionDetector.cpp \
     QVehicleViewer.cpp
 
@@ -55,21 +55,22 @@ HEADERS += MainWindow.h \
     PhysicsState.h \
     PhysicsDef.h \
     VirtualReality.h \
-    Drawable.h \
-    Room.h \
     QVrViewer.h \
     AppInfo.h \
     PeriodicTask.h \
-    Block.h \
-    CylObject.h \
     OrientationCone.h \
-    Ball.h \
     HWdef.h \
-    Dirt.h \
     EventQueue.h \
     ExceptDef.h \
     Log.h \
     Ini.h \
+    drawables/Ball.h \
+    drawables/Block.h \
+    drawables/CylObject.h \
+    drawables/Dirt.h \
+    drawables/Drawable.h \
+    drawables/DynamicDirt.h \
+    drawables/Room.h \
     hardware/Sensor.h \
     hardware/Actuator.h \
     hardware/Timer.h \
@@ -80,6 +81,7 @@ HEADERS += MainWindow.h \
     hardware/IOintern.h \
     hardware/IOextern.h \
     hardware/IObus.h \
+    ui_MainWindow.h \
     utils/INIreader.h \
     utils/Logger.h \
     utils/stringExt.h \
@@ -87,7 +89,6 @@ HEADERS += MainWindow.h \
     math/Point.h \
     math/MathDef.h \
     math/XYZrZ.h \
-    DynamicDirt.h \
     math/Random.h \
     math/Polygon.h \
     physics/CollisionDetector.h \
@@ -102,6 +103,7 @@ DESTDIR = $$PWD/../build
 
 INCLUDEPATH += \
    $$PWD \
+   drawables \
    hardware \
    math \
    physics \
@@ -123,4 +125,3 @@ win32 {
     LIBS += -L$(BOOST_LIBGCC) \
         -lboost_program_options-mgw44-mt-d-1_47
 }
-

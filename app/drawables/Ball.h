@@ -2,7 +2,7 @@
 #define BALL_H
 
 #include "Drawable.h"
-#include "math/XYZrZ.h"
+#include "XYZrZ.h"
 
 class Ball : public Drawable
 {
@@ -10,13 +10,14 @@ public:
    Ball(double R, const XYZrZ &xyzRz);
    Ball(const Ball &) = delete;
    Ball &operator=(const Ball &) = delete;
-   virtual ~Ball() = default;
-   virtual void draw() const;
+   ~Ball() override = default;
+
+   void draw() const override;
 
 private:
-   double m_R;
-   XYZrZ m_XYZrZ;
-   GLUquadricObj *m_pBody;
+   double R_;
+   XYZrZ XYZrZ_;
+   GLUquadricObj *pBody_;
 };
 
 #endif // BALL_H

@@ -2,8 +2,8 @@
 #define BLOCK_H
 
 #include "Drawable.h"
-#include "math/Polygon.h"
-#include "math/XYZrZ.h"
+#include "Polygon.h"
+#include "XYZrZ.h"
 
 /// A Block has length, width and height.
 /// Can be used to model a chair.

@@ -1,5 +1,3 @@
-#include <QGLWidget>
-
 #include "Block.h"
 
 Block::Block(double l, double w, double h, const XYZrZ &xyzRz)

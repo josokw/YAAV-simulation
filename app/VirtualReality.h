@@ -11,6 +11,7 @@
 #include "PhysicsDef.h"
 #include "Room.h"
 #include "Vehicle.h"
+
 #include <vector>
 
 /// Reponsible for all aspects of calculating graphics and physics.
@@ -20,11 +21,11 @@ class VirtualReality : public Drawable, public physics::DoPhysics
 {
 public:
    VirtualReality();
-   virtual ~VirtualReality();
+   ~VirtualReality() override;
    /// Execute graphics
-   virtual void draw() const override;
+   void draw() const override;
    /// Excecute all physics.
-   virtual void process() override;
+   void process() override;
    /// Initalize contained objects.
    void init();
    /// Continues processing physics.
