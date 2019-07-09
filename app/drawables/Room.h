@@ -2,7 +2,8 @@
 #define ROOM_H
 
 #include "Drawable.h"
-#include "math/Polygon.h"
+#include "Polygon.h"
+
 #include <vector>
 
 /// Room contains a number of corners (Z-values must be 0) represented by a

@@ -2,7 +2,7 @@
 #define DIRT_H
 
 #include "Drawable.h"
-#include "math/XYZrZ.h"
+#include "XYZrZ.h"
 
 class Dirt : public Drawable
 {
