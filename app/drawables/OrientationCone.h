@@ -22,7 +22,7 @@ public:
    void draw() const override;
 
 private:
-   double red_, green_, blue_;
+   float red_, green_, blue_;
    XYZrZ XYZrZ_;
    double size_;
    GLUquadricObj *pBody_;

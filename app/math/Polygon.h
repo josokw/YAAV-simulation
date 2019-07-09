@@ -11,14 +11,14 @@
 
 namespace math {
 
-typedef struct {
+using minmaxXYZ_t = struct minmaxXYZ {
    double minX;
    double maxX;
    double minY;
    double maxY;
    double minZ;
    double maxZ;
-} minmaxXYZ_t;
+};
 
 /// Represents a polygon: a number of coplanar line segments (edges),
 /// each connected end to end to form a closed shape in 3D.

@@ -22,7 +22,7 @@ public:
    void draw() const override;
    math::circle_t getCollisionShape() const
    {
-      return math::circle_t(_XYZrZ.position, _R);
+      return {_XYZrZ.position, _R};
    }
 // private:
    double _R;

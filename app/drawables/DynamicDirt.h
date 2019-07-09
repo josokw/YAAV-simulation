@@ -25,7 +25,7 @@ public:
    /// Generates randomly #maxDustParticles Dirt objects inside the room.
    /// @pre Room object must contain a valid polygon representing the
    /// corners.
-   void generateDirt(const Room &room, size_t maxDustParticles);
+   void generateDirt(const Room &room, size_t maxDirtParticles);
    /// Returns percentage value dirt level.
    double getDirtLevel() const
    {

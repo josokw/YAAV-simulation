@@ -10,13 +10,13 @@
 #include <vector>
 
 DynamicDirt::DynamicDirt()
-   : Drawable()
+   : Drawable{}
 {
-   _dirt.push_back(Dirt(0.05, XYZrZ(-2.00, 0.30, 0.0)));
-   _dirt.push_back(Dirt(0.05, XYZrZ(-1.10, -1.25, 0.0)));
-   _dirt.push_back(Dirt(0.04, XYZrZ(-0.10, -1.00, 0.0)));
-   _dirt.push_back(Dirt(0.04, XYZrZ(-0.10, 0.25, 0.0)));
-   _dirt.push_back(Dirt(0.03, XYZrZ(-0.15, 0.75, 0.0)));
+   _dirt.emplace_back(Dirt(0.05, XYZrZ(-2.00, 0.30, 0.0)));
+   _dirt.emplace_back(Dirt(0.05, XYZrZ(-1.10, -1.25, 0.0)));
+   _dirt.emplace_back(Dirt(0.04, XYZrZ(-0.10, -1.00, 0.0)));
+   _dirt.emplace_back(Dirt(0.04, XYZrZ(-0.10, 0.25, 0.0)));
+   _dirt.emplace_back(Dirt(0.03, XYZrZ(-0.15, 0.75, 0.0)));
    _initialDirtLevel = _dirt.size();
 }
 
@@ -38,7 +38,7 @@ void DynamicDirt::draw() const
 
 void DynamicDirt::generateDirt(const Room &room, size_t maxDirtParticles)
 {
-   auto corners = room.getCorners();
+   const auto corners = room.getCorners();
    _dirt.clear();
    while (_dirt.size() < maxDirtParticles) {
       math::minmaxXYZ_t mm = room.getMinMaxXYZ();
