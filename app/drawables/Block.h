@@ -10,18 +10,18 @@
 class Block : public Drawable
 {
 public:
-   Block(double l, double w, double h, const XYZrZ &xyzRz);
+   Block(double length, double width, double height, const XYZrZ &xyzRz);
    ~Block() override = default;
 
-   const math::Polygon &getCollisionShape() const { return _corners; }
    void draw() const override;
+   const math::Polygon &getCollisionShape() const { return corners_; }
 
 private:
-   double _l;
-   double _h;
-   double _w;
-   XYZrZ _XYZrZ;
-   math::Polygon _corners;
+   double length_;
+   double height_;
+   double width_;
+   XYZrZ XYZrZ_;
+   math::Polygon corners_;
 };
 
 #endif // BLOCK_H

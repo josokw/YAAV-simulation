@@ -1,34 +1,33 @@
 #include "Block.h"
 
-Block::Block(double l, double w, double h, const XYZrZ &xyzRz)
-   : Drawable()
-   , _l(l)
-   , _h(h)
-   , _w(w)
-   , _XYZrZ(xyzRz)
-   , _corners()
+Block::Block(double length, double width, double height, const XYZrZ &xyzRz)
+   : Drawable{}
+   , length_{length}
+   , height_{height}
+   , width_{width}
+   , XYZrZ_{xyzRz}
+   , corners_{{XYZrZ_.position.get_x() - 0.5 * length_,
+               XYZrZ_.position.get_y() - 0.5 * width_},
+              {XYZrZ_.position.get_x() + 0.5 * length_,
+               XYZrZ_.position.get_y() - 0.5 * width_},
+              {XYZrZ_.position.get_x() + 0.5 * length_,
+               XYZrZ_.position.get_y() + 0.5 * width_},
+              {XYZrZ_.position.get_x() - 0.5 * length_,
+               XYZrZ_.position.get_y() + 0.5 * width_}}
 {
-   _corners.addVertex(CartVec(_XYZrZ.position.get_x() - 0.5 * _l,
-                              _XYZrZ.position.get_y() - 0.5 * _w, 0));
-   _corners.addVertex(CartVec(_XYZrZ.position.get_x() + 0.5 * _l,
-                              _XYZrZ.position.get_y() - 0.5 * _w, 0));
-   _corners.addVertex(CartVec(_XYZrZ.position.get_x() + 0.5 * _l,
-                              _XYZrZ.position.get_y() + 0.5 * _w, 0));
-   _corners.addVertex(CartVec(_XYZrZ.position.get_x() - 0.5 * _l,
-                              _XYZrZ.position.get_y() + 0.5 * _w, 0));
-   _corners.calcNormal();
+   corners_.calcNormal();
 }
 
 void Block::draw() const
 {
-   double lx = 0.5 * _l;
-   double ly = 0.5 * _h;
-   double lz = 0.5 * _w;
+   double lx = 0.5 * length_;
+   double ly = 0.5 * height_;
+   double lz = 0.5 * width_;
 
    glPushMatrix();
-   glTranslatef(_XYZrZ.position.get_x(), _XYZrZ.position.get_y(),
-                _XYZrZ.position.get_z());
-   glRotatef(_XYZrZ.Rz, 0.0, 0.0, 1.0);
+   glTranslatef(XYZrZ_.position.get_x(), XYZrZ_.position.get_y(),
+                XYZrZ_.position.get_z());
+   glRotatef(XYZrZ_.Rz, 0.0, 0.0, 1.0);
 
    glColor3f(1.0f, 0.5f, 0.0f);
 
