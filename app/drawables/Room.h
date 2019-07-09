@@ -17,24 +17,24 @@ public:
 
    void draw() const override;
    /// Returns collision shape.
-   const math::Polygon &getCollisionShape() const { return m_corners; }
+   const math::Polygon &getCollisionShape() const { return corners_; }
    const std::vector<CartVec> &getCorners() const
    {
-      return m_corners.getVertices();
+      return corners_.getVertices();
    }
    /// Checks if point is in the room. Z-value is ignored!
    bool isInside(const CartVec &point) const
    {
-      return m_corners.isInside(point);
+      return corners_.isInside(point);
    }
    math::minmaxXYZ_t getMinMaxXYZ() const
    {
-      return m_corners.getMinMaxXYZ();
+      return corners_.getMinMaxXYZ();
    }
 
 private:
    /// Last corner must equals first corner.
-   math::Polygon m_corners;
+   math::Polygon corners_;
 
 public:
    CartVec closestPointWall(int wallID, const CartVec &xyz) const;

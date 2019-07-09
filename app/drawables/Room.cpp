@@ -4,19 +4,13 @@
 #include <sstream>
 
 Room::Room()
-   : m_corners{{-2, -3, 0}}
+   : corners_{{-3, -2, 0}, {-3, 1, 0}, {0, 1, 0},  {0, 2, 0},
+               {2, 2, 0},   {2, -2, 0}, {-3, -2, 0}}
 {
    SET_FNAME("Room::Room()");
-   m_corners.addVertex(CartVec(-3, -2, 0));
-   m_corners.addVertex(CartVec(-3, 1, 0));
-   m_corners.addVertex(CartVec(0, 1, 0));
-   m_corners.addVertex(CartVec(0, 2, 0));
-   m_corners.addVertex(CartVec(2, 2, 0));
-   m_corners.addVertex(CartVec(2, -2, 0));
-   m_corners.addVertex(CartVec(-3, -2, 0));
-   m_corners.calcNormal();
+   corners_.calcNormal();
    std::ostringstream msg;
-   msg << m_corners;
+   msg << corners_;
    LOGD(msg.str());
 }
 
@@ -28,21 +22,20 @@ void Room::draw() const
    glGetDoublev(GL_LINE_WIDTH, &lw);
    glLineWidth(lw * 1.3);
    glBegin(GL_POLYGON);
-   for (size_t i = 0; i < m_corners.getVertices().size(); ++i) {
-      glVertex3f(m_corners[i].get_x(), m_corners[i].get_y(),
-                 m_corners[i].get_z());
+   for (size_t i = 0; i < corners_.getVertices().size(); ++i) {
+      glVertex3f(corners_[i].get_x(), corners_[i].get_y(),
+                 corners_[i].get_z());
    }
-   glVertex3f(m_corners[0].get_x(), m_corners[0].get_y(),
-              m_corners[0].get_z());
+   glVertex3f(corners_[0].get_x(), corners_[0].get_y(), corners_[0].get_z());
    glEnd();
    glColor4f(0.15f, 0.15f, 0.15f, 0.7f); // line color
    glLineWidth(lw);
    glBegin(GL_LINES);
-   for (size_t i = 0; i < m_corners.getVertices().size(); ++i) {
-      glVertex3f(m_corners[i].get_x(), m_corners[i].get_y(),
-                 m_corners[i].get_z());
-      glVertex3f(m_corners[i].get_x(), m_corners[i].get_y(),
-                 m_corners[i].get_z() + 0.5);
+   for (size_t i = 0; i < corners_.getVertices().size(); ++i) {
+      glVertex3f(corners_[i].get_x(), corners_[i].get_y(),
+                 corners_[i].get_z());
+      glVertex3f(corners_[i].get_x(), corners_[i].get_y(),
+                 corners_[i].get_z() + 0.5);
    }
    // glVertex3f(m_corners[0].x, m_corners[0].y, m_corners[0].z);
    glEnd();
@@ -52,5 +45,5 @@ void Room::draw() const
 
 CartVec Room::closestPointWall(int wallID, const CartVec &xyz) const
 {
-   return m_corners.getClosestPointToEdge(wallID, xyz);
+   return corners_.getClosestPointToEdge(wallID, xyz);
 }
