@@ -3,6 +3,8 @@
 
 #include "VirtualReality.h"
 
+#include <QGLWidget>
+
 class QVehicleViewer : public QGLWidget
 {
    Q_OBJECT

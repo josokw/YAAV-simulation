@@ -2,11 +2,12 @@
 #define CYLOBJECT_H
 
 #include "Drawable.h"
-#include "math/MathDef.h"
-#include "math/XYZrZ.h"
+#include "MathDef.h"
+#include "XYZrZ.h"
+
 #include <iosfwd>
 
-/// Cylindrical shaped opject (e.g. chair and table legs).
+/// Cylindrical shaped object (e.g. chair and table legs).
 class CylObject : public Drawable
 {
    /// Input format: R H x y z Rz
@@ -16,14 +17,14 @@ public:
    CylObject(double R, double H, const XYZrZ &xyzRz);
    CylObject(const CylObject &cylobj);
    CylObject &operator=(const CylObject &cylobj);
-   virtual ~CylObject() override;
-   virtual void draw() const override;
+   ~CylObject() override;
 
+   void draw() const override;
    math::circle_t getCollisionShape() const
    {
       return math::circle_t(_XYZrZ.position, _R);
    }
-   // private:
+// private:
    double _R;
    double _H;
    XYZrZ _XYZrZ;

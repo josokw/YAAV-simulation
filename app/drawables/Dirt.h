@@ -10,9 +10,9 @@ public:
    Dirt(double R, const XYZrZ &xyzRz);
    Dirt(const Dirt &dirt);
    Dirt &operator=(const Dirt &dirt);
-   virtual ~Dirt() override;
+   ~Dirt() override;
 
-   virtual void draw() const override;
+   void draw() const override;
    XYZrZ getXYZrZ() const { return _XYZrZ; }
    double getR() const { return _R; }
 

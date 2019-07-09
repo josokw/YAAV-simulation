@@ -44,7 +44,7 @@ Dirt::~Dirt()
 void Dirt::draw() const
 {
    glPushMatrix();
-   glColor3f(0.7, 0.7, 0.7);
+   glColor3f(0.7f, 0.7f, 0.7f);
    _XYZrZ.draw();
    GLfloat color[] = {1, 1, 1};
    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, color);

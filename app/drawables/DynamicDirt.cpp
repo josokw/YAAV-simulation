@@ -31,8 +31,9 @@ DynamicDirt::DynamicDirt(const std::initializer_list<Dirt> &dirtlist)
 
 void DynamicDirt::draw() const
 {
-   std::for_each(_dirt.begin(), _dirt.end(),
-                 std::mem_fun_ref(&Dirt::draw));
+   for (const auto& drt: _dirt) {
+      drt.draw();
+   }
 }
 
 void DynamicDirt::generateDirt(const Room &room, size_t maxDirtParticles)
@@ -75,7 +76,7 @@ Dirt DynamicDirt::generate(double minX, double maxX, double minY,
 {
    double x = getRandom(minX, maxX);
    double y = getRandom(minY, maxY);
-   double R = getRandom(0.001, 0.01);
+   double R = getRandom(0.005, 0.01);
 
-   return Dirt(R, XYZrZ(x, y, 0));
+   return {R, XYZrZ{x, y, 0.0}};
 }

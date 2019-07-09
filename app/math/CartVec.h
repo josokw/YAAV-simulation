@@ -5,7 +5,7 @@
 #include <iosfwd>
 #include <tuple>
 
-/// Class 'CartVec' represents a Cartesian vector [x,y,z] in 3D space.
+/// Represents a Cartesian vector [x,y,z] in 3D space.
 /// @short Cartesian vector in 3D space.
 class CartVec
 {
@@ -36,7 +36,7 @@ public:
    static const CartVec UNIT_Z;
 
    CartVec() = default;
-   CartVec(double x_, double y_, double z_);
+   CartVec(double x, double y, double z = 0.0);
    CartVec(const CartVec &other) = default;
    CartVec &operator=(const CartVec &other) = default;
    CartVec(CartVec &&other) = default;

@@ -1,9 +1,10 @@
 #include "Room.h"
 #include "Log.h"
+
 #include <sstream>
 
 Room::Room()
-   : m_corners()
+   : m_corners{{-2, -3, 0}}
 {
    SET_FNAME("Room::Room()");
    m_corners.addVertex(CartVec(-3, -2, 0));

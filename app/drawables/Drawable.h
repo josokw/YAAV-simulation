@@ -3,7 +3,6 @@
 
 #include <GL/gl.h>
 #include <GL/glut.h>
-#include <QGLWidget>
 
 /// Abstract base class for drawables.
 class Drawable

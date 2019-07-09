@@ -17,7 +17,6 @@ SOURCES += main.cpp \
     Vehicle.cpp \
     VirtualReality.cpp \
     QVrViewer.cpp \
-    OrientationCone.cpp \
     DoPhysics.cpp \
     EventQueue.cpp \
     Log.cpp \
@@ -27,6 +26,7 @@ SOURCES += main.cpp \
     drawables/CylObject.cpp \
     drawables/Dirt.cpp \
     drawables/DynamicDirt.cpp \
+    drawables/OrientationCone.cpp \
     drawables/Room.cpp \
     hardware/Sensor.cpp \
     hardware/Actuator.cpp \
@@ -58,7 +58,6 @@ HEADERS += MainWindow.h \
     QVrViewer.h \
     AppInfo.h \
     PeriodicTask.h \
-    OrientationCone.h \
     HWdef.h \
     EventQueue.h \
     ExceptDef.h \
@@ -70,6 +69,7 @@ HEADERS += MainWindow.h \
     drawables/Dirt.h \
     drawables/Drawable.h \
     drawables/DynamicDirt.h \
+    drawables/OrientationCone.h \
     drawables/Room.h \
     hardware/Sensor.h \
     hardware/Actuator.h \

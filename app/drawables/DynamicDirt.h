@@ -19,9 +19,9 @@ class DynamicDirt : public Drawable
 public:
    DynamicDirt();
    DynamicDirt(const std::initializer_list<Dirt> &dirtlist);
-   virtual ~DynamicDirt() override = default;
+   ~DynamicDirt() override = default;
 
-   virtual void draw() const override;
+   void draw() const override;
    /// Generates randomly #maxDustParticles Dirt objects inside the room.
    /// @pre Room object must contain a valid polygon representing the
    /// corners.

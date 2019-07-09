@@ -11,10 +11,10 @@ class Block : public Drawable
 {
 public:
    Block(double l, double w, double h, const XYZrZ &xyzRz);
-   virtual ~Block() override = default;
+   ~Block() override = default;
 
    const math::Polygon &getCollisionShape() const { return _corners; }
-   virtual void draw() const override;
+   void draw() const override;
 
 private:
    double _l;

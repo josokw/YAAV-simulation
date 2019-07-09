@@ -12,6 +12,11 @@ Ball::Ball(double R, const XYZrZ &xyzRz)
    gluQuadricNormals(pBody_, GLU_SMOOTH);
 }
 
+Ball::~Ball()
+{
+   gluDeleteQuadric(pBody_);
+}
+
 void Ball::draw() const
 {
    glPushMatrix();

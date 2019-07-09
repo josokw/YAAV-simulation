@@ -10,7 +10,7 @@ public:
    Ball(double R, const XYZrZ &xyzRz);
    Ball(const Ball &) = delete;
    Ball &operator=(const Ball &) = delete;
-   ~Ball() override = default;
+   ~Ball() override;
 
    void draw() const override;
 
