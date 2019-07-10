@@ -3,6 +3,14 @@
 
 #include <sstream>
 
+// Catch has two natural expression assertion macro's:
+// - REQUIRE() stops at first failure.
+// - CHECK() continues after failure.
+
+// There are two variants to support decomposing negated expressions:
+// - REQUIRE_FALSE() stops at first failure.
+// - CHECK_FALSE() continues after failure.
+
 TEST_CASE("CartVec class")
 {
    SECTION("Constants")
@@ -26,11 +34,17 @@ TEST_CASE("CartVec class")
 
    SECTION("Initialisation")
    {
-      CartVec cv;
+      CartVec cv1; // default initialisation
 
-      REQUIRE(cv.get_x() == Approx(0.0));
-      REQUIRE(cv.get_y() == Approx(0.0));
-      REQUIRE(cv.get_z() == Approx(0.0));
+      REQUIRE(cv1.get_x() == Approx(0.0));
+      REQUIRE(cv1.get_y() == Approx(0.0));
+      REQUIRE(cv1.get_z() == Approx(0.0));
+
+      CartVec cv2{1.1, 2.2};  // z is default 0.0
+
+      REQUIRE(cv2.get_x() == Approx(1.1));
+      REQUIRE(cv2.get_y() == Approx(2.2));
+      REQUIRE(cv2.get_z() == Approx(0.0));
    }
 
    SECTION("Operators")
@@ -59,18 +73,14 @@ TEST_CASE("CartVec class")
       REQUIRE(cv3.get_y() == Approx(0.0));
       REQUIRE(cv3.get_z() == Approx(1.5));
 
-      bool test1{cv1 == cv1};
-      bool test2{cv1 == cv2};
-      REQUIRE(test1);
-      REQUIRE_FALSE(test2);
+      REQUIRE(cv1 == cv1);
+      REQUIRE_FALSE(cv1 == cv2);
 
-      test1 = cv1 != cv1;
-      test2 = cv1 != cv2;
-      REQUIRE_FALSE(test1);
-      REQUIRE(test2);
+      REQUIRE_FALSE(cv1 != cv1);
+      REQUIRE(cv1 != cv2);
    }
 
-   SECTION("Dot product")
+   SECTION("Inner (dot) product")
    {
       CartVec cv1{1.0, 1.0, 1.0};
       CartVec cv2{-1.0, 1.0, 0.0};
@@ -97,35 +107,28 @@ TEST_CASE("CartVec class")
    SECTION("Input and output streams")
    {
       std::stringstream ss;
-      ss << "[10.11, 20.22, 30.33]" << std::ends;
-
       CartVec cv1;
+      ss << "[10.11, 20.22, 30.33]" << std::ends;
       ss >> cv1;
-
-      REQUIRE(cv1.get_x() == Approx(10.11));
-      REQUIRE(cv1.get_y() == Approx(20.22));
-      REQUIRE(cv1.get_z() == Approx(30.33));
+      REQUIRE(cv1 == CartVec{10.11, 20.22, 30.33});
 
       // Syntax error in input stream
       ss << "[10.11, 20.22 30.33]" << std::ends;
-      CartVec cv2;
+      CartVec cv2{-1.0, -2.0, -3.0};
+      CartVec cv3{cv2};
       ss >> cv2;
+      REQUIRE(cv2 == cv3);
 
-      REQUIRE(cv2.get_x() == Approx(0.0));
-      REQUIRE(cv2.get_y() == Approx(0.0));
-      REQUIRE(cv2.get_z() == Approx(0.0));
-
-      CartVec cv3{1.1, -2.2, 3.3};
+      CartVec cv4{1.1, -2.2, 3.3};
       ss = std::stringstream{};
-      ss << cv3;
-
+      ss << cv4;
       REQUIRE(ss.str() == std::string("[1.100,-2.200,3.300]"));
    }
 
    SECTION("get()")
    {
       CartVec cv{1.1, -2.2, 3.3};
-      auto [x, y, z] = cv.get();
+      auto [x, y, z] = cv.get();  // structured bindings
 
       REQUIRE(x == Approx(1.1));
       REQUIRE(y == Approx(-2.2));
