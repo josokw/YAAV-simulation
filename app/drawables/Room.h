@@ -27,7 +27,7 @@ public:
    {
       return corners_.isInside(point);
    }
-   math::minmaxXYZ_t getMinMaxXYZ() const
+   math::Polygon::minmaxXYZ_t getMinMaxXYZ() const
    {
       return corners_.getMinMaxXYZ();
    }

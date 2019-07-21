@@ -6,8 +6,6 @@
 #include <iostream>
 #include <iterator>
 
-// math::Polygon p = { { 1, 2, 3 }, { 2, 3, 4 }, { 5, 7, 8 } };
-
 namespace math {
 
 std::ostream &operator<<(std::ostream &os, const math::Polygon &rhs)
@@ -17,82 +15,86 @@ std::ostream &operator<<(std::ostream &os, const math::Polygon &rhs)
    os << "N = " << rhs.getNormal();
    return os;
 }
+
 } // namespace math
 
 math::Polygon::Polygon(const std::initializer_list<CartVec> &cvlist)
-   : _vertices()
-   , _normal()
+   : vertices_{}
+   , normal_{}
 {
    for (auto i = begin(cvlist); i != end(cvlist); ++i) {
-      _vertices.push_back(*i);
+      vertices_.push_back(*i);
    }
    calcNormal();
 }
 
 math::Polygon::Polygon(const std::vector<CartVec> &vertices)
-   : _vertices(vertices)
-   , _normal()
+   : vertices_{vertices}
+   , normal_{}
 {
    calcNormal();
 }
 
 void math::Polygon::addVertex(const CartVec &vertex)
 {
-   _vertices.push_back(vertex);
+   vertices_.push_back(vertex);
 }
 
 void math::Polygon::calcNormal()
 {
-   CartVec temp1(_vertices[2]);
-   CartVec temp2(_vertices[0]);
-   temp1 -= _vertices[1];
-   temp2 -= _vertices[1];
-   _normal = temp1.cross(temp2);
-   _normal.normalize();
+   CartVec temp1{vertices_[2]};
+   CartVec temp2{vertices_[0]};
+
+   temp1 -= vertices_[1];
+   temp2 -= vertices_[1];
+   normal_ = temp1.cross(temp2);
+   normal_.normalize();
 }
 
 bool math::Polygon::isFacing(const CartVec &point) const
 {
-   CartVec temp(point);
-   temp -= _vertices[0];
-   return _normal.dot(temp) >= 0.0f;
+   CartVec temp{point};
+
+   temp -= vertices_[0];
+   return normal_.dot(temp) >= 0.0f;
 }
 
 math::edge_t math::Polygon::getEdge(std::size_t index) const
 {
-   size_t size = _vertices.size();
-   math::edge_t result = {_vertices[index % size],
-                          _vertices[(index + 1) % size]};
-   return result;
+   auto size{vertices_.size()};
+
+   return {vertices_[index % size], vertices_[(index + 1) % size]};
 }
 
 CartVec math::Polygon::getClosestPointToEdge(std::size_t index,
                                              const CartVec &p) const
 {
-   math::edge_t edge = getEdge(index);
-   CartVec v(edge.end - edge.start);
-   CartVec w(p - _vertices[index]);
-   double wDotv = w.dot(v);
-   double t = wDotv / v.dot(v);
+   auto edge{getEdge(index)};
+   CartVec v{edge.end - edge.start};
+   CartVec w{p - vertices_[index]};
+   double wDotv{w.dot(v)};
+   double t{wDotv / v.dot(v)};
+
    if (t < 0)
       t = 0;
    if (t > 1)
       t = 1;
-   return _vertices[index] + v * t;
+
+   return vertices_[index] + v * t;
 }
 
-math::minmaxXYZ_t math::Polygon::getMinMaxXYZ() const
+math::Polygon::minmaxXYZ_t math::Polygon::getMinMaxXYZ() const
 {
-   math::minmaxXYZ_t result;
-   result.maxX = _vertices[0].get_x();
-   result.minX = _vertices[0].get_x();
-   result.maxY = _vertices[0].get_y();
-   result.minY = _vertices[0].get_y();
-   result.maxZ = _vertices[0].get_z();
-   result.minZ = _vertices[0].get_z();
+   math::Polygon::minmaxXYZ_t result;
+   result.maxX = vertices_[0].get_x();
+   result.minX = vertices_[0].get_x();
+   result.maxY = vertices_[0].get_y();
+   result.minY = vertices_[0].get_y();
+   result.maxZ = vertices_[0].get_z();
+   result.minZ = vertices_[0].get_z();
 
-   auto it = _vertices.begin();
-   while (it != _vertices.end()) {
+   auto it = vertices_.begin();
+   while (it != vertices_.end()) {
       result.maxX = std::max(result.maxX, it->get_x());
       result.maxY = std::max(result.maxY, it->get_y());
       result.maxZ = std::max(result.maxZ, it->get_z());
@@ -106,7 +108,7 @@ math::minmaxXYZ_t math::Polygon::getMinMaxXYZ() const
 
 math::Polygon &math::Polygon::operator+=(const CartVec &rhs)
 {
-   for (auto &v : _vertices) {
+   for (auto &v : vertices_) {
       v += rhs;
    }
    return *this;
@@ -114,7 +116,7 @@ math::Polygon &math::Polygon::operator+=(const CartVec &rhs)
 
 math::Polygon &math::Polygon::operator-=(const CartVec &rhs)
 {
-   for (auto &v : _vertices) {
+   for (auto &v : vertices_) {
       v -= rhs;
    }
    return *this;
@@ -122,11 +124,11 @@ math::Polygon &math::Polygon::operator-=(const CartVec &rhs)
 
 void math::Polygon::rotateAroundX(double angle)
 {
-   double angleRadians = toRadians(angle);
-   double cosPhi = std::cos(angleRadians);
-   double sinPhi = std::sin(angleRadians);
+   double angleRadians{toRadians(angle)};
+   double cosPhi{std::cos(angleRadians)};
+   double sinPhi{std::sin(angleRadians)};
 
-   for (auto &v : _vertices) {
+   for (auto &v : vertices_) {
       v.rotateAroundX(cosPhi, sinPhi);
    }
    calcNormal();
@@ -134,11 +136,11 @@ void math::Polygon::rotateAroundX(double angle)
 
 void math::Polygon::rotateAroundY(double angle)
 {
-   double angleRadians = toRadians(angle);
-   double cosPhi = std::cos(angleRadians);
-   double sinPhi = std::sin(angleRadians);
+   double angleRadians{toRadians(angle)};
+   double cosPhi{std::cos(angleRadians)};
+   double sinPhi{std::sin(angleRadians)};
 
-   for (auto &v : _vertices) {
+   for (auto &v : vertices_) {
       v.rotateAroundY(cosPhi, sinPhi);
    }
    calcNormal();
@@ -146,11 +148,11 @@ void math::Polygon::rotateAroundY(double angle)
 
 void math::Polygon::rotateAroundZ(double angle)
 {
-   double angleRadians = toRadians(angle);
-   double cosPhi = std::cos(angleRadians);
-   double sinPhi = std::sin(angleRadians);
+   double angleRadians{toRadians(angle)};
+   double cosPhi{std::cos(angleRadians)};
+   double sinPhi{std::sin(angleRadians)};
 
-   for (auto &v : _vertices) {
+   for (auto &v : vertices_) {
       v.rotateAroundZ(cosPhi, sinPhi);
    }
    calcNormal();
@@ -158,11 +160,11 @@ void math::Polygon::rotateAroundZ(double angle)
 
 void math::Polygon::rotateAroundXYZ(const CartVec &xyz, double angle)
 {
-   double angleRadians = toRadians(angle);
-   double cosPhi = std::cos(angleRadians);
-   double sinPhi = std::sin(angleRadians);
+   double angleRadians{toRadians(angle)};
+   double cosPhi{std::cos(angleRadians)};
+   double sinPhi{std::sin(angleRadians)};
 
-   for (auto &v : _vertices) {
+   for (auto &v : vertices_) {
       v.rotateAround(xyz, cosPhi, sinPhi);
    }
    calcNormal();
@@ -182,16 +184,18 @@ void math::Polygon::rotateAroundXYZ(const CartVec &xyz, double angle)
 //}
 bool math::Polygon::isInside(const CartVec &point) const
 {
-   bool isIn = false;
-   for (size_t i = 0, j = _vertices.size() - 1; i < _vertices.size(); j = i++) {
-      if ((_vertices[i].get_y() > point.get_y()) !=
-             (_vertices[j].get_y() > point.get_y()) and
-          (point.get_x() < (_vertices[j].get_x() - _vertices[i].get_x()) *
-                                 (point.get_y() - _vertices[i].get_y()) /
-                                 (_vertices[j].get_y() - _vertices[i].get_y()) +
-                              _vertices[i].get_x())) {
+   bool isIn{false};
+
+   for (size_t i = 0, j = vertices_.size() - 1; i < vertices_.size(); j = i++) {
+      if ((vertices_[i].get_y() > point.get_y()) !=
+             (vertices_[j].get_y() > point.get_y()) and
+          (point.get_x() < (vertices_[j].get_x() - vertices_[i].get_x()) *
+                                 (point.get_y() - vertices_[i].get_y()) /
+                                 (vertices_[j].get_y() - vertices_[i].get_y()) +
+                              vertices_[i].get_x())) {
          isIn = !isIn;
       }
    }
+
    return isIn;
 }
