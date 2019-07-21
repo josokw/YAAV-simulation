@@ -51,8 +51,8 @@ void OrientationCone::draw() const
    double yaw;
    double pitch;
 
-   if ((fabs((XYZrZ_.position.get_x()) < 1e-4) and
-        (fabs(XYZrZ_.position.get_z()) < 1e-4))) {
+   if ((std::abs((XYZrZ_.position.get_x()) < 1e-4) and
+        (std::abs(XYZrZ_.position.get_z()) < 1e-4))) {
       yaw = 0.0;
    } else {
       yaw = atan2(XYZrZ_.position.get_x(), XYZrZ_.position.get_z());
@@ -67,8 +67,7 @@ void OrientationCone::draw() const
    glVertex3f(XYZrZ_.position.get_x(), XYZrZ_.position.get_y(),
               XYZrZ_.position.get_z());
    glEnd();
-   glTranslatef(XYZrZ_.position.get_x() * 0.66,
-                XYZrZ_.position.get_y() * 0.66,
+   glTranslatef(XYZrZ_.position.get_x() * 0.66, XYZrZ_.position.get_y() * 0.66,
                 XYZrZ_.position.get_z() * 0.66);
    glRotatef(math::toDegrees(yaw), 0.0, 1.0, 0.0);
    glRotatef(math::toDegrees(pitch), 1.0, 0.0, 0.0);
