@@ -5,23 +5,17 @@
 #include <ios>
 #include <iostream>
 
-double CartVec::eps{1E-8};
 const CartVec CartVec::ZERO{0.0, 0.0, 0.0};
 const CartVec CartVec::UNIT_X{1.0, 0.0, 0.0};
 const CartVec CartVec::UNIT_Y{0.0, 1.0, 0.0};
 const CartVec CartVec::UNIT_Z{0.0, 0.0, 1.0};
 
-CartVec::CartVec(double x, double y, double z)
-   : x_{x}
-   , y_{y}
-   , z_{z}
-{
-}
+double CartVec::eps{1E-8};
 
 bool operator==(const CartVec &lhs, const CartVec &rhs)
 {
    auto comp = [](double d1, double d2) {
-      return fabs(d1 - d2) < CartVec::eps;
+      return std::abs(d1 - d2) < CartVec::eps;
    };
 
    return comp(lhs.x_, rhs.x_) and comp(lhs.y_, rhs.y_) and
@@ -63,6 +57,13 @@ CartVec operator/(const CartVec &lhs, double rhs)
    return temp /= rhs;
 }
 
+CartVec::CartVec(double x, double y, double z)
+   : x_{x}
+   , y_{y}
+   , z_{z}
+{
+}
+
 double CartVec::distance(const CartVec &cv) const
 {
    return std::sqrt((x_ - cv.x_) * (x_ - cv.x_) + (y_ - cv.y_) * (y_ - cv.y_) +
@@ -72,19 +73,19 @@ double CartVec::distance(const CartVec &cv) const
 double CartVec::angle(const CartVec &v) const
 {
    auto comp = [](double d1, double d2) {
-      return fabs(d1 - d2) < CartVec::eps;
+      return std::abs(d1 - d2) < CartVec::eps;
    };
    // Construct the plane containing v and *this;
    // a local CS is constructed with xx in direction *this
    // yy generates other component of v
    // then atan2 for angle calculation is called.
-   double xxL = length();
+   double xxL{length()};
 
    if (comp(xxL, 0.0)) {
       return 0;
    }
    CartVec zz{this->cross(v)}; // z-Axis
-   double zzL = zz.length();
+   double zzL{zz.length()};
    if (comp(zzL, 0.0)) {
       // v can coincide with *this or can point in the opposite direction!
       if (-v == *this) {
@@ -101,7 +102,7 @@ double CartVec::angle(const CartVec &v) const
 
 void CartVec::rotateAroundZ(double cosPhi, double sinPhi)
 {
-   double xtemp = x_;
+   double xtemp{x_};
    x_ = cosPhi * x_ - sinPhi * y_;
    y_ = sinPhi * xtemp + cosPhi * y_;
 }
@@ -123,7 +124,7 @@ void CartVec::rotateAroundX(double cosPhi, double sinPhi)
 void CartVec::rotateAround(const CartVec &Axis, double cosPhi, double sinPhi)
 {
    auto comp = [](double d1, double d2) {
-      return fabs(d1 - d2) < CartVec::eps;
+      return std::abs(d1 - d2) < CartVec::eps;
    };
    // An arbitrarily rotation around Axis.
    // Implemented by constructing a new local CS

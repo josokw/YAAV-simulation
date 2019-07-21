@@ -6,8 +6,8 @@
 #include <tuple>
 
 /// Represents a Cartesian vector [x,y,z] in 3D space.
-/// @short Cartesian vector in 3D space.
-class CartVec
+/// \short Cartesian vector in 3D space.
+class CartVec final
 {
    /// Testing for equality.
    /// \see CartVec::eps
@@ -17,23 +17,24 @@ class CartVec
    friend CartVec operator+(const CartVec &lhs, const CartVec &rhs);
    /// Subtract 2 CartVec's.
    friend CartVec operator-(const CartVec &lhs, const CartVec &rhs);
-   /// Multiplication by a scalar (lhs).
+   /// Scaling: multiplication by a scalar (lhs).
    friend CartVec operator*(double lhs, const CartVec &rhs);
-   /// Multiplication by a scalar (rhs).
+   /// Scaling: multiplication by a scalar (rhs).
    friend CartVec operator*(const CartVec &lhs, double rhs);
-   /// Division by a scalar (rhs).
+   /// Scaling: division by a scalar (rhs).
    friend CartVec operator/(const CartVec &lhs, double rhs);
    /// Output format: [x,y,z]
    friend std::ostream &operator<<(std::ostream &os, const CartVec &rhs);
-   /// Input format: [x,y,z]  extra whitespaces allowed
+   /// Input format: [x,y,z]  extra whitespaces are allowed.
    friend std::istream &operator>>(std::istream &is, CartVec &rhs);
 
 public:
-   static double eps;
    static const CartVec ZERO;
    static const CartVec UNIT_X;
    static const CartVec UNIT_Y;
    static const CartVec UNIT_Z;
+
+   static double eps;
 
    CartVec() = default;
    CartVec(double x, double y, double z = 0.0);
