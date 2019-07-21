@@ -47,7 +47,7 @@ object_script.*.Release
 object_script.*.Debug
 *_plugin_import.cpp
 /.qmake.cache
-/.qmake.stash
+.qmake.stash
 *.pro.user
 *.pro.user.*
 *.qbs.user
@@ -81,5 +81,6 @@ compile_commands.json
 # QtCreator local machine specific files for imported projects
 *creator.user*
 
-# Executables in build dir
+# Executables in build dir and logging
 build
+YAAVsimulator.log
