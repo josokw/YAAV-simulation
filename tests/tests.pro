@@ -6,13 +6,15 @@ TARGET = YAAVsimulatorUnitTests
 TEMPLATE = app
 
 CONFIG += console
-CONFIG += c++11
+CONFIG += c++17
 
 SOURCES += \
    testMain.cpp \
+   CircleTests.cpp \
    CartVecTests.cpp \
    PointTests.cpp \
    ../app/math/CartVec.cpp \
+   ../app/math/Circle.cpp \
    ../app/math/Point.cpp
 
 HEADERS +=
