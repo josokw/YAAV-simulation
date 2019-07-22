@@ -82,17 +82,17 @@ public:
    void getData(const std::string &dataName, T *pData,
                 const int nData = 1) const
    {
-      std::istream buffer((*findDataValue(dataName)).second[0].c_str());
+      std::istringstream buffer((*findDataValue(dataName)).second[0].c_str());
 
       for (int i = 0; i < nData; i++) {
          buffer >> pData[i];
          // \todo check:  if (buffer.fail() || ((i+1) == nData &&
          // !buffer.eof()))
          if (buffer.fail()) {
-            std::ostream Xtext;
+            std::ostringstream Xtext;
             Xtext << "[INIreader] requested argument format for '" << dataName
                   << "'  #" << nData << " not correct" << std::ends;
-            throw std::runtime_error(std::string(Xtext));
+            throw std::runtime_error(Xtext.str());
          }
       }
    }

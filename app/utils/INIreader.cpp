@@ -301,7 +301,7 @@ utils::INIreader::findDataValue(const std::string &dataName) const
    if (iter == INImap_.end()) {
       std::ostringstream Xtext;
       Xtext << "[INIreader] could not find '" << dataName << "'" << std::ends;
-      //throw std::runtime_error(Xtext.str());
+      throw std::runtime_error(Xtext.str());
    }
    return iter;
 }
