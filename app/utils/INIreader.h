@@ -15,6 +15,7 @@ namespace utils {
 /// The client code is responsible for converting the string format stored
 /// in the internal map to the required type by overloading the input
 /// stream operator for the corresponding type.
+///
 /// INIreader is implemented according to the singleton pattern.
 ///
 /// Example contents of an '.ini' file:
@@ -39,12 +40,12 @@ namespace utils {
 /// </pre>
 /// DOS format files can be read, the '\r' character will be removed
 /// in the lines read.
-/// @short A class for '.ini' file and 'ini' data handling.
+/// /short A class for '.ini' file and 'ini' data handling.
 class INIreader
 {
    /// Output stream operator.
-   /// @param os output stream showing contents map.
-   /// @param reader INIreader object.
+   /// \param os output stream showing contents map.
+   /// \param reader INIreader object.
    friend std::ostream &operator<<(std::ostream &os,
                                    const utils::INIreader &iniReader);
 
@@ -57,38 +58,40 @@ public:
    }
    INIreader(const INIreader &) = delete;
    INIreader &operator=(const INIreader &) = delete;
-   /// Destructor
-   virtual ~INIreader();
+   INIreader(const INIreader &&) = delete;
+   INIreader &operator=(const INIreader &&) = delete;
+   ~INIreader() = default;
+
    /// Initialising INIreader.
-   /// @exception string the .ini file can't be opened.
+   /// \exception string the .ini file can't be opened.
    void init(const std::string &fileName);
    /// Fill the internal map by an istream input.
-   void fillINImap(std::istream &In, const std::string &EndINIline);
+   void fillINImap(std::istream &is, const std::string &endINIline);
    /// Add one data item to the internal map
-   void AddToINImap(const std::string &Key, const std::string &Value);
+   void AddToINImap(const std::string &key, const std::string &value);
 
    /// Getting the coresponding value for the requested data item.
-   /// @param dataName  name of data item
-   /// @param pData     pointer to memory address to store an array of type
+   /// \param dataName  name of data item
+   /// \param pData     pointer to memory address to store an array of type
    /// T
-   /// @param nData     number of array elements to be stored
-   /// @exception std::runtime_error the requested data item is not found.
-   /// @exception std::runtime_error the requested data item can't be
+   /// \param nData     number of array elements to be stored
+   /// \exception std::runtime_error the requested data item is not found.
+   /// \exception std::runtime_error the requested data item can't be
    /// converted to type T.
    template <class T>
-   void GetData(const std::string &dataName, T *pData,
+   void getData(const std::string &dataName, T *pData,
                 const int nData = 1) const
    {
       std::istream buffer((*findDataValue(dataName)).second[0].c_str());
+
       for (int i = 0; i < nData; i++) {
          buffer >> pData[i];
-         // \todo JOS  check:  if (buffer.fail() || ((i+1) == nData &&
+         // \todo check:  if (buffer.fail() || ((i+1) == nData &&
          // !buffer.eof()))
          if (buffer.fail()) {
             std::ostream Xtext;
-            Xtext << "[INIreader] requested argument format for '"
-                  << dataName << "'  #" << nData << " not correct"
-                  << std::ends;
+            Xtext << "[INIreader] requested argument format for '" << dataName
+                  << "'  #" << nData << " not correct" << std::ends;
             throw std::runtime_error(std::string(Xtext));
          }
       }
@@ -97,26 +100,25 @@ public:
    /// requested data item. \param dataName name of data item \param Data
    /// reference to store a string (do not use a pointer) \exception string
    /// the requested data item is not found.
-   void GetData(const std::string &dataName, std::string &Data) const;
+   void getData(const std::string &dataName, std::string &Data) const;
    /// Getting the corresponding string for the requested data item.
    /// \param dataName name of data item
    /// \param Data reference to store a string (do not use a pointer)
    /// \exception string the requested data item is not found.
-   /// \todo JO Function necessarry?
-   void GetData(const char *dataName, std::string &Data) const;
+   /// \todo Function necessarry?
+   void getData(const char *dataName, std::string &data) const;
    /// Getting the corresponding string vector for the requested data item.
    /// \param dataName name of data itemDataName
    /// \param Data reference to store a vector of strings (do not use a
    /// pointer) \exception the requested data item is not found.
-   void GetData(const std::string &dataName,
-                std::vector<std::string> &Data) const;
+   void getData(const std::string &dataName,
+                std::vector<std::string> &data) const;
    /// Getting the corresponding string vector for the requested data item.
    /// \param dataName name of data item
-   /// \param Data reference to store a vector of strings (do not use a
+   /// \param data reference to store a vector of strings (do not use a
    /// pointer) \exception the requested data item is not found. \todo JO
-   /// Function necessarry?
-   void GetData(const char *dataName,
-                std::vector<std::string> &Data) const;
+   /// \todo Function necessarry?
+   void getData(const char *dataName, std::vector<std::string> dData) const;
    /// Clear internal map.
    void clear();
 
@@ -124,19 +126,19 @@ protected:
    INIreader();
 
 private:
-   typedef std::map<std::string, std::vector<std::string>> INImap_t;
-   typedef INImap_t::const_iterator INImap_const_iter_t;
+   using INImap_t = std::map<std::string, std::vector<std::string>>;
+   using INImap_const_iter_t = INImap_t::const_iterator;
 
-   const static std::string m_CommentSeperator;
-   std::string m_fileName;
-   std::ifstream m_INIfile;
-   std::string m_line;
-   int m_lineNumber;
+   const static std::string commentSeperator_s;
+   std::string fileName_;
+   std::ifstream INIfile_;
+   std::string line_;
+   int lineNumber_;
 
 public:
    /// Internal map <string, vector<string>> for storing unique data item
    /// names and their corresponding values (all in string format).
-   INImap_t m_INImap;
+   INImap_t INImap_;
 
 private:
    void fillINImap();
@@ -148,13 +150,13 @@ private:
    /// syntax: <LHS> + '=' + <RHS>.
    /// \param RHSline  string containing RHS of the assignment statement.
    /// \exception  a '=' isn't found in line read.
-   void GetRHSassignment(std::string &RHSline) const;
+   void getRHSassignment(std::string &RHSline) const;
 
    /// Getting the left hand site string of an assignment statement,
    /// syntax: <LHS> + '=' + <RHS>.
    /// \param RHSline  string containing LHS of the assignment statement.
    /// \exception  if a '=' isn't found in the line read.
-   void GetLHSassignment(std::string &LHSline) const;
+   void getLHSassignment(std::string &LHSline) const;
 
    /// Checkking if line contains a section, syntax:
    /// '[' + <system ID> + ':' + <prefix data name> + ']'.
@@ -162,11 +164,10 @@ private:
    bool lineIsSection() const;
 
    /// Parse section line and subtract data contents.
-   /// \param MustBeAddedToMap indicates if the data item read must be
-   /// added to the map. \param PrefixdataName  string to be add as a
+   /// \param mustBeAddedToMap indicates if the data item read must be
+   /// added to the map. \param prefixdataName  string to be add as a
    /// prefix to data name read from the input file.
-   void GetSectionData(bool &MustBeAddedToMap,
-                       std::string &PrefixdataName);
+   void getSectionData(bool &mustBeAddedToMap, std::string &prefixdataName);
 
    /// Find data in internal map.
    /// \param dataName string containing name of data item.

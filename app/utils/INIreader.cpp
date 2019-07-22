@@ -6,39 +6,38 @@
 #include <stdexcept>
 
 namespace {
-/// String format ".....".
-/// Pre-condition: no leading and trailing spaces or tabs.
-void processEscChars(std::string &String)
+/// str format ".....".
+/// \pre: no leading and trailing spaces or tabs.
+void processEscChars(std::string &str)
 {
-   if (String.size() > 1 && String[0] == '"' &&
-       String[String.size() - 1] == '"') {
-      String.erase(0, 1);
-      String.erase(String.size() - 1, 1);
+   if (str.size() > 1 && str[0] == '"' && str[str.size() - 1] == '"') {
+      str.erase(0, 1);
+      str.erase(str.size() - 1, 1);
       // Process escape chars
       size_t Index = 0;
-      while (Index < String.size() - 1) {
+      while (Index < str.size() - 1) {
          // Check for escape char
-         if (String[Index] == '\\') {
-            switch (String[Index + 1]) {
+         if (str[Index] == '\\') {
+            switch (str[Index + 1]) {
                case '\\':
-                  String[Index] = '\\';
-                  String.erase(Index + 1, 1);
+                  str[Index] = '\\';
+                  str.erase(Index + 1, 1);
                   break;
                case '"':
-                  String[Index] = '"';
-                  String.erase(Index + 1, 1);
+                  str[Index] = '"';
+                  str.erase(Index + 1, 1);
                   break;
                case 'n':
-                  String[Index] = '\n';
-                  String.erase(Index + 1, 1);
+                  str[Index] = '\n';
+                  str.erase(Index + 1, 1);
                   break;
                case 't':
-                  String[Index] = '\t';
-                  String.erase(Index + 1, 1);
+                  str[Index] = '\t';
+                  str.erase(Index + 1, 1);
                   break;
                default:
                   // Remove '\' char
-                  String.erase(Index, 1);
+                  str.erase(Index, 1);
                   break;
             }
          }
@@ -50,8 +49,8 @@ void processEscChars(std::string &String)
 
 std::ostream &operator<<(std::ostream &os, const utils::INIreader &iniReader)
 {
-   auto iterMap = iniReader.m_INImap.begin();
-   while (iterMap != iniReader.m_INImap.end()) {
+   auto iterMap = iniReader.INImap_.begin();
+   while (iterMap != iniReader.INImap_.end()) {
       auto iterStrings = (*iterMap).second.begin();
       while (iterStrings != (*iterMap).second.end()) {
          os << (*iterMap).first << " = " << (*iterStrings) << std::endl;
@@ -62,43 +61,40 @@ std::ostream &operator<<(std::ostream &os, const utils::INIreader &iniReader)
    return os;
 }
 
-const std::string utils::INIreader::m_CommentSeperator("//");
-
-utils::INIreader::~INIreader() {}
+const std::string utils::INIreader::commentSeperator_s("//");
 
 void utils::INIreader::init(const std::string &fileName)
 {
-    m_fileName = fileName;
-   m_INIfile.open(m_fileName.c_str());
-   if (!m_INIfile.good()) {
+   fileName_ = fileName;
+   INIfile_.open(fileName_);
+   if (!INIfile_) {
       std::ostringstream Xtext;
-      Xtext << "[INIreader] can't open file '" << m_fileName << "'"
-            << std::ends;
-      //throw std::runtime_error(Xtext.str());
-   }
-   else {
-   fillINImap();
-   m_INIfile.close();
+      Xtext << "[INIreader] can't open file '" << fileName_ << "'" << std::ends;
+      throw std::runtime_error(Xtext.str());
+   } else {
+      fillINImap();
+      INIfile_.close();
    }
 }
 
-void utils::INIreader::GetData(const std::string &dataName, std::string &Data) const
+void utils::INIreader::getData(const std::string &dataName,
+                               std::string &data) const
 {
-   Data = (*findDataValue(dataName)).second[0];
-   processEscChars(Data);
+   data = (*findDataValue(dataName)).second[0];
+   processEscChars(data);
 }
 
-void utils::INIreader::GetData(const char *dataName, std::string &Data) const
+void utils::INIreader::getData(const char *dataName, std::string &Data) const
 {
-   GetData(std::string(dataName), Data);
+   getData(std::string(dataName), Data);
 }
 
-void utils::INIreader::GetData(const std::string &dataName,
-                               std::vector<std::string> &Data) const
+void utils::INIreader::getData(const std::string &dataName,
+                               std::vector<std::string> &data) const
 {
-   Data = (*findDataValue(dataName)).second;
-   auto I = Data.begin();
-   while (I != Data.end()) {
+   data = (*findDataValue(dataName)).second;
+   auto I = begin(data);
+   while (I != end(data)) {
       processEscChars(*I);
       ++I;
    }
@@ -106,38 +102,38 @@ void utils::INIreader::GetData(const std::string &dataName,
 
 void utils::INIreader::clear()
 {
-   m_INImap.clear();
+   INImap_.clear();
 }
 
-void utils::INIreader::fillINImap(std::istream &InputStream,
+void utils::INIreader::fillINImap(std::istream &is,
                                   const std::string &EndINIline)
 {
    std::string RHSline;
    std::vector<std::string> RHSlines;
    std::string LHSline;
    std::string PreviousLHSline;
-   bool MustBeAddedToMap(false);
-   std::string PrefixdataName;
+   bool mustBeAddedToMap(false);
+   std::string prefixdataName;
    bool INIisEnded = false;
 
-   while (!InputStream.eof() && !INIisEnded) {
+   while (!is.eof() && !INIisEnded) {
       // read line by line
-      getline(InputStream, m_line);
-      ++m_lineNumber;
+      getline(is, line_);
+      ++lineNumber_;
       // if DOS format: remove \r
-      utils::removeReturns(m_line);
+      utils::removeReturns(line_);
       removeComment();
-      utils::removeLeadingTrailingSpacesTabs(m_line);
-      if (!m_line.empty()) {
-         INIisEnded = (m_line == EndINIline);
+      utils::removeLeadingTrailingSpacesTabs(line_);
+      if (!line_.empty()) {
+         INIisEnded = (line_ == EndINIline);
          if (!INIisEnded && lineIsSection()) {
-            GetSectionData(MustBeAddedToMap, PrefixdataName);
+            getSectionData(mustBeAddedToMap, prefixdataName);
             PreviousLHSline = "";
          } else {
-            if (!INIisEnded && MustBeAddedToMap) {
-               GetRHSassignment(RHSline);
+            if (!INIisEnded && mustBeAddedToMap) {
+               getRHSassignment(RHSline);
                utils::replaceCommasBySpaces(RHSline);
-               GetLHSassignment(LHSline);
+               getLHSassignment(LHSline);
                if (LHSline.empty()) {
                   LHSline = PreviousLHSline;
                   RHSlines.push_back(RHSline);
@@ -146,38 +142,38 @@ void utils::INIreader::fillINImap(std::istream &InputStream,
                   RHSlines.clear();
                   RHSlines.push_back(RHSline);
                }
-               if (!PrefixdataName.empty()) {
-                  LHSline = PrefixdataName + "." + LHSline;
+               if (prefixdataName.empty()) {
+                  LHSline = prefixdataName + "." + LHSline;
                }
-               m_INImap[LHSline] = RHSlines;
+               INImap_[LHSline] = RHSlines;
             }
          }
       }
    }
 }
 
-void utils::INIreader::AddToINImap(const std::string &Key,
-                                   const std::string &Value)
+void utils::INIreader::AddToINImap(const std::string &key,
+                                   const std::string &value)
 {
-   std::vector<std::string> Values;
-   Values.push_back(Value);
-   m_INImap[Key] = Values;
+   std::vector<std::string> values;
+   values.push_back(value);
+   INImap_[key] = values;
 }
 
 //-------------------------------------------------------------------------
-//protected
+// protected
 
 utils::INIreader::INIreader()
-   : m_fileName("")
-   , m_INIfile()
-   , m_line("")
-   , m_lineNumber(0)
-   , m_INImap()
+   : fileName_{""}
+   , INIfile_{}
+   , line_{""}
+   , lineNumber_{0}
+   , INImap_{}
 {
 }
 
 //-------------------------------------------------------------------------
-//private
+// private
 
 void utils::INIreader::fillINImap()
 {
@@ -185,26 +181,26 @@ void utils::INIreader::fillINImap()
    std::vector<std::string> RHSlines;
    std::string LHSline;
    std::string PreviousLHSline;
-   bool MustBeAddedToMap(false);
-   std::string PrefixdataName;
+   bool mustBeAddedToMap(false);
+   std::string prefixdataName;
 
-   while (not m_INIfile.eof()) {
+   while (not INIfile_.eof()) {
       // read line by line
-      getline(m_INIfile, m_line);
-      ++m_lineNumber;
+      getline(INIfile_, line_);
+      ++lineNumber_;
       // if DOS format: remove \r
-      utils::removeReturns(m_line);
+      utils::removeReturns(line_);
       removeComment();
-      utils::removeLeadingTrailingSpacesTabs(m_line);
-      if (!m_line.empty()) {
+      utils::removeLeadingTrailingSpacesTabs(line_);
+      if (!line_.empty()) {
          if (lineIsSection()) {
-            GetSectionData(MustBeAddedToMap, PrefixdataName);
+            getSectionData(mustBeAddedToMap, prefixdataName);
             PreviousLHSline = "";
          } else {
-            if (MustBeAddedToMap) {
-               GetRHSassignment(RHSline);
+            if (mustBeAddedToMap) {
+               getRHSassignment(RHSline);
                utils::replaceCommasBySpaces(RHSline);
-               GetLHSassignment(LHSline);
+               getLHSassignment(LHSline);
                if (LHSline.empty()) {
                   LHSline = PreviousLHSline;
                   RHSlines.push_back(RHSline);
@@ -213,104 +209,104 @@ void utils::INIreader::fillINImap()
                   RHSlines.clear();
                   RHSlines.push_back(RHSline);
                }
-               if (!PrefixdataName.empty()) {
-                  LHSline = PrefixdataName + "." + LHSline;
+               if (not prefixdataName.empty()) {
+                  LHSline = prefixdataName + "." + LHSline;
                }
-               m_INImap[LHSline] = RHSlines;
+               INImap_[LHSline] = RHSlines;
             }
          }
       }
    }
 }
 
-void utils::INIreader::GetRHSassignment(std::string &RHSline) const
+void utils::INIreader::getRHSassignment(std::string &RHSline) const
 {
-   size_t pos(m_line.find("="));
+   size_t pos(line_.find("="));
    if (pos == std::string::npos) {
       std::ostringstream Xtext;
-      Xtext << "[INIreader] syntax error in line " << m_lineNumber;
-      Xtext << ": '" << m_line << "', could not find =" << std::ends;
+      Xtext << "[INIreader] syntax error in line " << lineNumber_;
+      Xtext << ": '" << line_ << "', could not find =" << std::ends;
       throw std::runtime_error(Xtext.str());
    }
-   RHSline = m_line;
+   RHSline = line_;
    RHSline.erase(0, pos + 1);
    utils::removeLeadingTrailingSpacesTabs(RHSline);
 }
 
-void utils::INIreader::GetLHSassignment(std::string &LHSline) const
+void utils::INIreader::getLHSassignment(std::string &LHSline) const
 {
-   size_t pos(m_line.find("="));
+   size_t pos(line_.find("="));
    if (pos == std::string::npos) {
       std::ostringstream Xtext;
-      Xtext << "[INIreader] syntax error in line " << m_lineNumber << ": '"
-            << m_line << "', could not find =" << std::ends;
+      Xtext << "[INIreader] syntax error in line " << lineNumber_ << ": '"
+            << line_ << "', could not find =" << std::ends;
       throw std::runtime_error(Xtext.str());
    }
-   LHSline = m_line;
+   LHSline = line_;
    LHSline.erase(pos);
    utils::removeLeadingTrailingSpacesTabs(LHSline);
 }
 
 void utils::INIreader::removeComment()
 {
-   size_t pos = m_line.find(m_CommentSeperator);
+   size_t pos = line_.find(commentSeperator_s);
    if (pos != std::string::npos) {
-      m_line.erase(pos);
+      line_.erase(pos);
    }
 }
 
 bool utils::INIreader::lineIsSection() const
 {
    // pre-condition: line contains no leading and trailing spaces and tabs
-   return (m_line[0] == '[' && m_line[m_line.size() - 1] == ']');
+   return (line_[0] == '[' && line_[line_.size() - 1] == ']');
 }
 
-void utils::INIreader::GetSectionData(bool &MustBeAddedToMap,
-                                      std::string &PrefixdataName)
+void utils::INIreader::getSectionData(bool &mustBeAddedToMap,
+                                      std::string &prefixdataName)
 {
    // line must be a section
-   std::string Buffer(m_line);
+   std::string buffer(line_);
    // remove '[' and ']'
-   Buffer.erase(0, 1);
-   Buffer.erase(Buffer.size() - 1, 1);
-   utils::removeLeadingTrailingSpacesTabs(Buffer);
+   buffer.erase(0, 1);
+   buffer.erase(buffer.size() - 1, 1);
+   utils::removeLeadingTrailingSpacesTabs(buffer);
    // create IDline
-   std::string IDline(Buffer);
-   // size_t pos = Buffer.find(':');
-   // IDline.assign(Buffer, 0, pos);
+   std::string IDline(buffer);
+   // size_t pos = buffer.find(':');
+   // IDline.assign(buffer, 0, pos);
    utils::removeLeadingTrailingSpacesTabs(IDline);
 
-   MustBeAddedToMap = false;
-   std::istringstream IDBuffer(IDline.c_str());
+   mustBeAddedToMap = false;
+   std::istringstream IDBuffer(IDline);
    std::string ID;
-   while (!IDBuffer.fail() && !MustBeAddedToMap) {
+   while (!IDBuffer.fail() && !mustBeAddedToMap) {
       IDBuffer >> ID;
       // m_ID = ID;
-      // MustBeAddedToMap = (ID == m_ID);
-      MustBeAddedToMap = true;
+      // mustBeAddedToMap = (ID == m_ID);
+      mustBeAddedToMap = true;
    }
-   if (MustBeAddedToMap) {
+   if (mustBeAddedToMap) {
       // create prefixdataName
-      PrefixdataName.assign(Buffer, 0, Buffer.size());
-      // utils::removeLeadingTrailingSpacesTabs(PrefixdataName);
+      prefixdataName.assign(buffer, 0, buffer.size());
+      // utils::removeLeadingTrailingSpacesTabspPrefixdataName);
    } else {
-      PrefixdataName = "";
+      prefixdataName = "";
    }
 }
 
 utils::INIreader::INImap_const_iter_t
 utils::INIreader::findDataValue(const std::string &dataName) const
 {
-   auto iter = m_INImap.find(dataName);
-   if (iter == m_INImap.end()) {
+   auto iter = INImap_.find(dataName);
+   if (iter == INImap_.end()) {
       std::ostringstream Xtext;
       Xtext << "[INIreader] could not find '" << dataName << "'" << std::ends;
-      throw std::runtime_error(Xtext.str());
+      //throw std::runtime_error(Xtext.str());
    }
    return iter;
 }
 
 bool utils::INIreader::dataNameIsUnique(const std::string &dataName) const
 {
-   return m_INImap.find(dataName) == end(m_INImap);
+   return INImap_.find(dataName) == end(INImap_);
 }

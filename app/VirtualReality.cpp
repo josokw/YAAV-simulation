@@ -126,7 +126,7 @@ void VirtualReality::init()
    SET_FNAME("VirtualReality::init()");
    m_vehicle.setXYZrZ(XYZrZ(-1.0, -1.0, 0.0, -35));
    vector<string> data;
-   IniReader().GetData(string("VR.cylobjects"), data);
+   IniReader().getData(string("VR.cylobjects"), data);
    for (size_t i = 0; i < data.size(); ++i) {
       std::istringstream is(data[i]);
       CylObject *pCylObj = new CylObject(0, 0, XYZrZ(0, 0, 0));
