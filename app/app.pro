@@ -37,11 +37,11 @@ SOURCES += main.cpp \
     hardware/IOextern.cpp \
     hardware/IOintern.cpp \
     hardware/Battery.cpp \
+    math/Circle.cpp \
     utils/INIreader.cpp \
     utils/Logger.cpp \
     utils/stringExt.cpp \
     math/CartVec.cpp \
-    math/Circle.cpp \
     math/Point.cpp \
     math/MathDef.cpp \
     math/XYZrZ.cpp \
@@ -82,12 +82,12 @@ HEADERS += MainWindow.h \
     hardware/IOintern.h \
     hardware/IOextern.h \
     hardware/IObus.h \
+    math/Circle.h \
     ui_MainWindow.h \
     utils/INIreader.h \
     utils/Logger.h \
     utils/stringExt.h \
     math/CartVec.h \
-    math/Circle.h \
     math/Point.h \
     math/MathDef.h \
     math/XYZrZ.h \
