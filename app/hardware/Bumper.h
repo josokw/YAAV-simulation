@@ -3,6 +3,7 @@
 
 #include "DoPhysics.h"
 #include "Sensor.h"
+
 #include <vector>
 
 namespace utils {
@@ -15,8 +16,8 @@ namespace hardware {
 class Bumper : public Sensor, public physics::DoPhysics
 {
 public:
-   Bumper(const Vehicle &vehicle, double startAngle, double endAngle,
-          int n, memory_t &memory, size_t index1);
+   Bumper(const Vehicle &vehicle, double startAngle, double endAngle, int n,
+          memory_t &memory, size_t index1);
    ~Bumper() = default;
 
    void process();
