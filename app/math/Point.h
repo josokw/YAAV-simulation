@@ -6,6 +6,7 @@
 class CartVec;
 
 /// Represents a point in 3D Cartesian coordinates.
+/// A point has no dimensions, only position.
 /// Can be translated by a vector (CartVec).
 class Point
 {
@@ -28,11 +29,16 @@ public:
 
    Point() = default;
    Point(double x, double y, double z = 0.0);
+   Point(const Point &) = default;
+   Point &operator=(const Point &) = default;
+   Point(Point &&) = default;
+   Point &operator=(Point &&) = default;
+   ~Point() = default;
 
    double get_x() const { return x_; }
    double get_y() const { return y_; }
    double get_z() const { return z_; }
-   std::tuple<double, double, double> get() const { return {x_, y_, z_}; }
+   std::tuple<double, double, double> get_xyz() const { return {x_, y_, z_}; }
    void set_x(double x) { x_ = x; }
    void set_y(double y) { y_ = y; }
    void set_z(double z) { z_ = z; }
