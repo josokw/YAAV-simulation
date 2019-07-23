@@ -47,6 +47,11 @@ public:
       return *this;
    }
 
+   CartVec heading() const
+   {
+      return {cos(math::toRadians(Rz)), sin(math::toRadians(Rz))};
+   }
+
    CartVec atDistance(double d) const
    {
       return {position.get_x() + d * cos(math::toRadians(Rz)),
@@ -56,8 +61,6 @@ public:
 
    void draw() const override;
    double length() const { return position.length(); }
-   void normalize() { position.normalize(); }
-   double dot(const XYZrZ &xyzRz) const { return position.dot(xyzRz.position); }
 
    CartVec position;
    double Rz;
