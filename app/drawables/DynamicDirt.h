@@ -18,7 +18,6 @@ class DynamicDirt : public Drawable
 {
 public:
    DynamicDirt();
-   DynamicDirt(const std::initializer_list<Dirt> &dirtlist);
    ~DynamicDirt() override = default;
 
    void draw() const override;
