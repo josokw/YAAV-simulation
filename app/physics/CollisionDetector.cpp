@@ -1,11 +1,7 @@
 #include "CollisionDetector.h"
 #include "Log.h"
-#include <sstream>
 
-physics::CollisionDetector::CollisionDetector()
-   : m_collisionPoints()
-{
-}
+#include <sstream>
 
 bool physics::CollisionDetector::isColliding(const math::circle_t &c,
                                              const math::Polygon &p)

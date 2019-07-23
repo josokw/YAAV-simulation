@@ -1,18 +1,20 @@
 #ifndef COLLISIONDETECTOR_H
 #define COLLISIONDETECTOR_H
 
-#include "math/CartVec.h"
-#include "math/MathDef.h"
-#include "math/Polygon.h"
+#include "CartVec.h"
+#include "MathDef.h"
+#include "Polygon.h"
+
 #include <vector>
 
 namespace physics {
-/// @short Detects collisions between a circle and a polygon, and a circle
+
+/// \short Detects collisions between a circle and a polygon, and a circle
 /// and another circle.
 class CollisionDetector
 {
 public:
-   CollisionDetector();
+   CollisionDetector() = default;
    virtual ~CollisionDetector() = default;
 
    /// Tests for collission between a cicle and a polygon.
