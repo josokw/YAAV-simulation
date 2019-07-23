@@ -2,7 +2,8 @@
 #define DOPHYSICS_H
 
 #include "PhysicsDef.h"
-#include "math/XYZrZ.h"
+#include "XYZrZ.h"
+
 #include <vector>
 
 namespace physics {
@@ -10,7 +11,7 @@ namespace physics {
 class DoPhysics
 {
 public:
-   DoPhysics() {}
+   DoPhysics() = default;
    virtual ~DoPhysics() = default;
 
    virtual void process() = 0;
