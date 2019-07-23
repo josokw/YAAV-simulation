@@ -9,10 +9,10 @@ class Drawable
 {
 public:
    Drawable() = default;
-   Drawable(const Drawable &other) = default;
-   Drawable& operator=(const Drawable &other) = default;
-   Drawable(Drawable &&other) = default;
-   Drawable& operator=(Drawable &&other) = default;
+   Drawable(const Drawable &) = default;
+   Drawable& operator=(const Drawable &) = default;
+   Drawable(Drawable &&) = default;
+   Drawable& operator=(Drawable &&) = default;
    virtual ~Drawable() = default;
 
    virtual void draw() const = 0;
