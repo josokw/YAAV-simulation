@@ -1,5 +1,5 @@
-#include "Point.h"
 #include "CartVec.h"
+#include "Point.h"
 #include "catch.hpp"
 
 TEST_CASE("Point class")
