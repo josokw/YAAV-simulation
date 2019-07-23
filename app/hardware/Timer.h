@@ -24,7 +24,7 @@ public:
    Timer &operator=(const Timer &other) = delete;
    virtual ~Timer() = default;
 
-   virtual void process()
+   void process() override
    {
       if (_isRunning) {
          _elapsedTime_ms += PHYSICS_SIMTIME_MSEC;
