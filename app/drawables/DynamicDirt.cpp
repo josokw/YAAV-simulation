@@ -26,7 +26,6 @@ void DynamicDirt::draw() const
 
 void DynamicDirt::generateDirt(const Room &room, size_t maxDirtParticles)
 {
-   //const auto &corners = room.getCorners();
    _dirt.clear();
    while (_dirt.size() < maxDirtParticles) {
       auto mm = room.getMinMaxXYZ();
