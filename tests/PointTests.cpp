@@ -30,5 +30,24 @@ TEST_CASE("Point class")
 
       CartVec v{Point{1.0, 1.0, 1.0} - Point{2.0, 2.0, 2.0}};
       REQUIRE(v == CartVec{1.0, 1.0, 1.0});
+      REQUIRE_FALSE(v == CartVec{-1.0, 1.0, 1.0});
+      REQUIRE(v != CartVec{-1.0, 1.0, 1.0});
+   }
+
+   SECTION("Distance")
+   {
+      Point p1{1.0, 0.0, 3.0};
+      Point p2{-1.0, 0.0, 3.0};
+
+      REQUIRE(p1.distance(p1) == Approx(0.0));
+      REQUIRE(p1.distance(p2) == Approx(2.0));
+   }
+
+   SECTION("Rotation")
+   {
+      Point p{1.0, 0.0, 0.0};
+
+      p.rotateAroundZ(std::cos(M_PI), std::sin(M_PI));
+      REQUIRE(p == Point{-1.0, 0.0, 0.0});
    }
 }

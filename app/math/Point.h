@@ -9,6 +9,10 @@ class CartVec;
 /// Can be translated by a vector (CartVec).
 class Point
 {
+   /// Output format: [x,y,z]
+   friend std::ostream &operator<<(std::ostream &os, const Point &rhs);
+   /// Input format: [x,y,z]  extra whitespaces are allowed.
+   friend std::istream &operator>>(std::istream &is, Point &rhs);
    friend bool operator==(const Point &lhs, const Point &rhs);
    friend bool operator!=(const Point &lhs, const Point &rhs);
    /// cv = p1 - p2
@@ -37,6 +41,16 @@ public:
    Point &operator+=(const CartVec &rhs);
    /// Translation p -= cv
    Point &operator-=(const CartVec &rhs);
+   /// Rotates around z.
+   void rotateAroundZ(double cosPhi, double sinPhi);
+   /// Rotates around y.
+   void rotateAroundY(double cosPhi, double sinPhi);
+   /// Rotates around x.
+   void rotateAroundX(double cosPhi, double sinPhi);
+   /// Rotates around an arbitrarily rotation axis.
+   // void rotateAround(const CartVec &axis, double cosPhi, double sinPhi);
+   /// Calculates distance to other point.
+   double distance(const Point &pnt) const;
 
 private:
    double x_{0.0};
