@@ -2,18 +2,18 @@
 #include "Block.h"
 #include "CylObject.h"
 #include "EventQueue.h"
+#include "IObus.h"
 #include "Log.h"
+#include "MathDef.h"
 #include "OrientationCone.h"
 #include "Room.h"
-#include "hardware/IObus.h"
-#include "math/MathDef.h"
-#include "math/XYZrZ.h"
+#include "XYZrZ.h"
+
 #include <algorithm>
 #include <boost/thread/thread.hpp>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
-//#include <thread>
 #include <vector>
 
 std::ostream &operator<<(std::ostream &os, const Vehicle &rhs)
@@ -107,8 +107,8 @@ void Vehicle::process()
       m_nextXYZrZ.Rz = m_XYZrZ.Rz + math::toDegrees(rotation);
    } else {
       static int incr = 0;
-      m_nextXYZrZ = m_XYZrZ - CartVec(cos(rz) * translation,
-                                      sin(rz) * translation, 0);
+      m_nextXYZrZ =
+         m_XYZrZ - CartVec(cos(rz) * translation, sin(rz) * translation, 0);
       // m_nextXYZrZ.position.x = m_XYZrZ.position.x - cos(rz) *
       // translation; m_nextXYZrZ.position.y = m_XYZrZ.position.y - sin(rz)
       // * translation;
@@ -173,9 +173,11 @@ void Vehicle::controlExecute()
          boost::thread::sleep(timeout);
          // std::this_thread::sleep_for(timeout);
       }
-   } catch (std::exception &x) {
+   }
+   catch (std::exception &x) {
       LOGE(x.what());
-   } catch (...) {
+   }
+   catch (...) {
       LOGE("UNKNOWN EXCEPTION");
    }
    LOGI("stopped");
@@ -215,16 +217,18 @@ bool Vehicle::isColliding(const Room &room)
          ++iteration;
       }
    }
-   std::vector<CartVec> corners(room.getCorners());
+   const auto &corners(room.getCorners());
    int nCollisions = 0;
    for (size_t wallID = 0; wallID < corners.size() - 1; ++wallID) {
-      CartVec closestPoint(
-         room.closestPointWall(wallID, m_XYZrZ.position));
+      CartVec closestPoint(room.closestPointWall(wallID, m_XYZrZ.position));
+
       if ((closestPoint - m_XYZrZ).length() <= m_R) {
          double overshoot =
             (m_R - (closestPoint - m_XYZrZ.position).length()) / m_R;
          ++nCollisions;
+
          vehicleCollisions.push_back(closestPoint - m_XYZrZ.position);
+
          std::ostringstream msg;
          msg << "WCS: " << closestPoint << " "
              << (closestPoint - m_XYZrZ.position) << " " << std::setw(2)
@@ -247,8 +251,8 @@ bool Vehicle::isColliding(const CylObject &object)
    if (collisionDetector.isColliding(getCollisionShape(),
                                      object.getCollisionShape())) {
       /// In Vehicle CS.
-      vehicleCollisions.push_back(
-         collisionDetector.getCollisionPoints()[0] - m_XYZrZ.position);
+      vehicleCollisions.push_back(collisionDetector.getCollisionPoints()[0] -
+                                  m_XYZrZ.position);
       return true;
    }
    return false;
@@ -263,8 +267,8 @@ bool Vehicle::isColliding(const Block &object)
       for (size_t i = 0; i < collisionDetector.getCollisionPoints().size();
            i++) {
          /// In Vehicle CS.
-         vehicleCollisions.push_back(
-            collisionDetector.getCollisionPoints()[i] - m_XYZrZ.position);
+         vehicleCollisions.push_back(collisionDetector.getCollisionPoints()[i] -
+                                     m_XYZrZ.position);
       }
       return true;
    }
