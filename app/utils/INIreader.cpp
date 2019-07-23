@@ -71,10 +71,9 @@ void utils::INIreader::init(const std::string &fileName)
       std::ostringstream Xtext;
       Xtext << "[INIreader] can't open file '" << fileName_ << "'" << std::ends;
       throw std::runtime_error(Xtext.str());
-   } else {
-      fillINImap();
-      INIfile_.close();
    }
+   fillINImap();
+   INIfile_.close();
 }
 
 void utils::INIreader::getData(const std::string &dataName,

@@ -82,7 +82,7 @@ public:
    void getData(const std::string &dataName, T *pData,
                 const int nData = 1) const
    {
-      std::istringstream buffer((*findDataValue(dataName)).second[0].c_str());
+      std::istringstream buffer((*findDataValue(dataName)).second[0]);
 
       for (int i = 0; i < nData; i++) {
          buffer >> pData[i];
