@@ -1,5 +1,5 @@
-#include "Circle.h"
 #include "CartVec.h"
+#include "Circle.h"
 #include "catch.hpp"
 
 TEST_CASE("Circle class")
@@ -8,9 +8,9 @@ TEST_CASE("Circle class")
    {
       Circle c;
 
-      auto [p, r] = c.get();
+      auto [center, r] = c.get_cr();
 
-      REQUIRE(p == Point{0.0, 0.0, 0.0});
+      REQUIRE(center == Point::ORIGIN);
       REQUIRE(r == Approx(1.0));
    }
 
