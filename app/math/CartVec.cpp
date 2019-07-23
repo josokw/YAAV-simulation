@@ -184,7 +184,7 @@ std::istream &operator>>(std::istream &is, CartVec &rhs)
    }
    // Only if everything is ok, output parameter rhs will be changed.
    if (is) {
-      rhs = CartVec(x, y, z);
+      rhs = {x, y, z};
    }
    return is; // Client code should check state of 'is'
 }
