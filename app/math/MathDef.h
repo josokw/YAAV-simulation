@@ -2,6 +2,7 @@
 #define MATHDEF_H
 
 #include "CartVec.h"
+#include "Point.h"
 
 namespace math {
 
@@ -16,13 +17,13 @@ using circle_t = struct Circle {
 };
 
 using edge_t = struct Edge {
-   Edge(const CartVec &start, const CartVec &end)
+   Edge(const Point &start, const Point &end)
       : start(start)
       , end(end)
    {
    }
-   CartVec start;
-   CartVec end;
+   Point start;
+   Point end;
 };
 
 [[nodiscard]] constexpr double toRadians(double x) noexcept

@@ -13,9 +13,11 @@ SOURCES += \
    CircleTests.cpp \
    CartVecTests.cpp \
    PointTests.cpp \
+   PolygonTests.cpp \
    ../app/math/CartVec.cpp \
    ../app/math/Circle.cpp \
-   ../app/math/Point.cpp
+   ../app/math/Point.cpp \
+   ../app/math/Polygon.cpp
 
 HEADERS +=
 
