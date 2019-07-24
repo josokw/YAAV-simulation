@@ -3,7 +3,7 @@
 Yet Another Autonomous Vehicle simulator. Started the development in 2009 (lecacy code C++03), but is still under construction!
 Not based on any external 3D game engine.
 
-Challenge: refactoring to Modern C++.
+Challenge: refactore legacy code to Modern C++, use [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
 
 ## Compiling and running application
 
