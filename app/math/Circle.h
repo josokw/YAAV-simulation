@@ -8,7 +8,8 @@
 
 class CartVec;
 
-/// Represents a circle. Can be translated by a vector (CartVec).
+/// Represents a circle (center point and radius). 
+/// Can be translated by a vector (CartVec).
 class Circle
 {
    friend bool operator==(const Circle &lhs, const Circle &rhs);
@@ -23,18 +24,18 @@ public:
 
    Circle() = default;
    Circle(const Point &center, double radius = 1.0);
-   Circle(const Circle &) = default;
-   Circle &operator=(const Circle &) = default;
-   Circle(Circle &&) = default;
-   Circle &operator=(Circle &&) = default;
-   ~Circle() = default;
 
    const Point &getCenter() const { return center_; }
    double getRadius() const { return radius_; }
-   std::tuple<Point, double> get_cr() const { return {center_, radius_}; }
-
+   std::tuple<Point, double> getCenterRadius() const
+   {
+      return {center_, radius_};
+   }
+   /// Translation: c += cv
    Circle &operator+=(const CartVec &rhs);
+   /// Translation: c -= cv
    Circle &operator-=(const CartVec &rhs);
+   /// Calculates area.
    double area() const { return 2 * M_PI * radius_; }
 
 private:
