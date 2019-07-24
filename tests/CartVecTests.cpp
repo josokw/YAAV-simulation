@@ -32,7 +32,7 @@ TEST_CASE("CartVec class")
       REQUIRE(CartVec::UNIT_Z.get_z() == Approx(1.0));
    }
 
-   SECTION("Initialisation")
+   SECTION("Ctors")
    {
       CartVec cv1; // default initialisation
 
@@ -45,6 +45,12 @@ TEST_CASE("CartVec class")
       REQUIRE(cv2.get_x() == Approx(1.1));
       REQUIRE(cv2.get_y() == Approx(2.2));
       REQUIRE(cv2.get_z() == Approx(0.0));
+
+      CartVec cv3{cv1}; // copy ctor
+
+      REQUIRE(cv3.get_x() == Approx(0.0));
+      REQUIRE(cv3.get_y() == Approx(0.0));
+      REQUIRE(cv3.get_z() == Approx(0.0));
    }
 
    SECTION("Operators")
@@ -52,6 +58,11 @@ TEST_CASE("CartVec class")
       CartVec cv1{1.0, 0.0, 0.5};
       CartVec cv2{1.0, 1.0, 0.5};
       CartVec cv3;
+
+      cv3 = cv1;
+      REQUIRE(cv3.get_x() == Approx(1.0));
+      REQUIRE(cv3.get_y() == Approx(0.0));
+      REQUIRE(cv3.get_z() == Approx(0.5));
 
       cv3 = cv1 + cv2;
       REQUIRE(cv3.get_x() == Approx(2.0));
@@ -128,7 +139,7 @@ TEST_CASE("CartVec class")
    SECTION("get()")
    {
       CartVec cv{1.1, -2.2, 3.3};
-      auto [x, y, z] = cv.get();  // structured bindings
+      auto [x, y, z] = cv.get_xyz();  // structured bindings
 
       REQUIRE(x == Approx(1.1));
       REQUIRE(y == Approx(-2.2));

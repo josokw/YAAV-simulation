@@ -6,22 +6,22 @@
 #include <tuple>
 
 /// Represents a Cartesian vector [x,y,z] in 3D space.
-/// \short Cartesian vector in 3D space.
+/// \short 3D Cartesian vector.
 class CartVec final
 {
    /// Testing for equality.
    /// \see CartVec::eps
    friend bool operator==(const CartVec &lhs, const CartVec &rhs);
    friend bool operator!=(const CartVec &lhs, const CartVec &rhs);
-   /// Add 2 CartVec's.
+   /// cv = cv1 + cv2
    friend CartVec operator+(const CartVec &lhs, const CartVec &rhs);
-   /// Subtract 2 CartVec's.
+   /// cv = cv1 - cv2
    friend CartVec operator-(const CartVec &lhs, const CartVec &rhs);
-   /// Scaling: multiplication by a scalar (lhs).
+   /// Scaling: cv1 = cv2 * scalar
    friend CartVec operator*(double lhs, const CartVec &rhs);
-   /// Scaling: multiplication by a scalar (rhs).
+   /// Scaling: cv1 = scalar * cv2
    friend CartVec operator*(const CartVec &lhs, double rhs);
-   /// Scaling: division by a scalar (rhs).
+   /// Scaling: cv1 = cv2 / scalar
    friend CartVec operator/(const CartVec &lhs, double rhs);
    /// Output format: [x,y,z]
    friend std::ostream &operator<<(std::ostream &os, const CartVec &rhs);
@@ -38,25 +38,20 @@ public:
 
    CartVec() = default;
    CartVec(double x, double y, double z = 0.0);
-   CartVec(const CartVec &other) = default;
-   CartVec &operator=(const CartVec &other) = default;
-   CartVec(CartVec &&other) = default;
-   CartVec &operator=(CartVec &&other) = default;
-   ~CartVec() = default;
 
    double get_x() const { return x_; }
    double get_y() const { return y_; }
    double get_z() const { return z_; }
-   std::tuple<double, double, double> get() const { return {x_, y_, z_}; }
+   std::tuple<double, double, double> get_xyz() const { return {x_, y_, z_}; }
    void set_x(double x) { x_ = x; }
    void set_y(double y) { y_ = y; }
    void set_z(double z) { z_ = z; }
 
-   /// Unary + operator
+   /// Unary + operator: +cv
    CartVec operator+() const { return *this; }
-   /// Unary - operator
+   /// Unary - operator: -cv
    CartVec operator-() const { return {-x_, -y_, -z_}; }
-   /// Compound assignment operator [x,y,z] += [a,b,c]
+   /// Compound assignment operator: cv1 += cv2
    CartVec &operator+=(const CartVec &rhs)
    {
       x_ += rhs.x_;
@@ -64,7 +59,7 @@ public:
       z_ += rhs.z_;
       return *this;
    }
-   /// [x,y,z] -= [a,b,c]
+   /// Compound assignment operator: cv1 -= cv2
    CartVec &operator-=(const CartVec &rhs)
    {
       x_ -= rhs.x_;
@@ -72,7 +67,7 @@ public:
       z_ -= rhs.z_;
       return *this;
    }
-   /// [x,y,z] *= s
+   /// Compound assignment operator: cv1 *= scalar
    CartVec &operator*=(double rhs)
    {
       x_ *= rhs;
@@ -80,7 +75,7 @@ public:
       z_ *= rhs;
       return *this;
    }
-   /// [x,y,z] /= s
+   /// Compound assignment operator: cv1 /= scalar
    CartVec &operator/=(double rhs)
    {
       x_ /= rhs;
@@ -101,10 +96,10 @@ public:
       return x_ * v.x_ + y_ * v.y_ + z_ * v.z_;
    }
    /// Calulates cross product.
-   CartVec cross(const CartVec &v) const
+   CartVec cross(const CartVec &cv) const
    {
-      return {y_ * v.z_ - z_ * v.y_, -x_ * v.z_ + z_ * v.x_,
-              x_ * v.y_ - y_ * v.x_};
+      return {y_ * cv.z_ - z_ * cv.y_, -x_ * cv.z_ + z_ * cv.x_,
+              x_ * cv.y_ - y_ * cv.x_};
    }
    /// Calculates the angle [rad] between vector and v.
    double angle(const CartVec &v) const;
