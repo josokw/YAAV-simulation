@@ -3,19 +3,9 @@
 
 std::ostream &operator<<(std::ostream &os, const XYZrZ &rhs)
 {
-   os << "[" << rhs.position << ", " << rhs.Rz << "]";
+   os << "XYZrZ[" << rhs.position << ", " << rhs.Rz << "]";
 
    return os;
-}
-
-XYZrZ operator+(const XYZrZ &lhs, const XYZrZ &rhs)
-{
-   return {lhs.position + rhs.position, lhs.Rz + rhs.Rz};
-}
-
-XYZrZ operator-(const XYZrZ &lhs, const XYZrZ &rhs)
-{
-   return {lhs.position - rhs.position, lhs.Rz - rhs.Rz};
 }
 
 XYZrZ operator*(const XYZrZ &lhs, double rhs)
@@ -49,13 +39,13 @@ XYZrZ::XYZrZ(double x, double y, double z, double rz)
 {
 }
 
-XYZrZ::XYZrZ(const CartVec &xyz)
+XYZrZ::XYZrZ(const Point &xyz)
    : position{xyz}
    , Rz{0.0}
 {
 }
 
-XYZrZ::XYZrZ(const CartVec &xyz, double rz)
+XYZrZ::XYZrZ(const Point &xyz, double rz)
    : position{xyz}
    , Rz{rz}
 {

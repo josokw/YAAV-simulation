@@ -14,16 +14,18 @@ SOURCES += \
    CartVecTests.cpp \
    PointTests.cpp \
    PolygonTests.cpp \
+   XYZrZtests.cpp \
    ../app/math/CartVec.cpp \
    ../app/math/Circle.cpp \
    ../app/math/Point.cpp \
-   ../app/math/Polygon.cpp
-
-HEADERS +=
+   ../app/math/Polygon.cpp \
+   ../app/math/XYZrZ.cpp \
+   ../app/math/MathDef.cpp
 
 INCLUDEPATH += \
    ../app \
    ../lib \
-   ../app/math
+   ../app/math \
+   ../app/drawables
 
 DESTDIR = $$PWD/../build
