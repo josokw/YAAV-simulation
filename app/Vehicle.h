@@ -15,7 +15,7 @@
 #include "math/MathDef.h"
 #include "math/XYZrZ.h"
 #include "physics/CollisionDetector.h"
-// #include <boost/thread/thread.hpp>
+
 #include <thread>
 #include <vector>
 

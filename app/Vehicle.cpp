@@ -76,10 +76,9 @@ XYZrZ Vehicle::expectedNextXYZrZ() const
    double rotation = rotationSpeed * PHYSICS_SIMTIME_SEC;
    double rz = math::toRadians(m_XYZrZ.Rz);
 
-   return XYZrZ(m_XYZrZ.position.get_x() + cos(rz) * translation,
-                m_XYZrZ.position.get_y() + sin(rz) * translation,
-                m_XYZrZ.position.get_z(),
-                m_XYZrZ.Rz + math::toDegrees(rotation));
+   return {m_XYZrZ.position.get_x() + cos(rz) * translation,
+           m_XYZrZ.position.get_y() + sin(rz) * translation,
+           m_XYZrZ.position.get_z(), m_XYZrZ.Rz + math::toDegrees(rotation)};
 }
 
 /// @todo Remove vehicle control from physics to controlExecute.
@@ -97,7 +96,8 @@ void Vehicle::process()
    double translation = translationSpeed * PHYSICS_SIMTIME_SEC;
    double rotationSpeed = (speedMotorRight - speedMotorLeft) / (2 * m_R);
    double rotation = rotationSpeed * PHYSICS_SIMTIME_SEC;
-   double rz = math::toRadians(m_XYZrZ.Rz);
+   double rz = math::toRadians(m_XYZrZ.getRz());
+
    if (physicsState[CYLOBJ_COLLISION] != 1 &&
        physicsState[WALL_COLLISION] != 1) {
       m_nextXYZrZ.position.set_x(m_XYZrZ.position.get_x() +
@@ -220,9 +220,9 @@ bool Vehicle::isColliding(const Room &room)
    const auto &corners(room.getCorners());
    int nCollisions = 0;
    for (size_t wallID = 0; wallID < corners.size() - 1; ++wallID) {
-      CartVec closestPoint(room.closestPointWall(wallID, m_XYZrZ.position));
+      Point closestPoint(room.closestPointWall(wallID, m_XYZrZ.position));
 
-      if ((closestPoint - m_XYZrZ).length() <= m_R) {
+      if ((closestPoint - m_XYZrZ.position).length() <= m_R) {
          double overshoot =
             (m_R - (closestPoint - m_XYZrZ.position).length()) / m_R;
          ++nCollisions;
@@ -246,7 +246,7 @@ bool Vehicle::isColliding(const Room &room)
 
 bool Vehicle::isColliding(const CylObject &object)
 {
-   //  SET_FNAME("Vehicle::isColliding()");
+   SET_FNAME("Vehicle::isColliding()");
    vehicleCollisions.clear();
    if (collisionDetector.isColliding(getCollisionShape(),
                                      object.getCollisionShape())) {
@@ -260,7 +260,7 @@ bool Vehicle::isColliding(const CylObject &object)
 
 bool Vehicle::isColliding(const Block &object)
 {
-   //  SET_FNAME("Vehicle::isColliding()");
+   SET_FNAME("Vehicle::isColliding()");
    vehicleCollisions.clear();
    if (collisionDetector.isColliding(getCollisionShape(),
                                      object.getCollisionShape())) {

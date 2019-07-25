@@ -1,6 +1,7 @@
 #ifndef POLYGON_H
 #define POLYGON_H
 
+#include "CartVec.h"
 #include "Point.h"
 #include "MathDef.h"
 

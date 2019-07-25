@@ -1,8 +1,8 @@
 #ifndef COLLISIONDETECTOR_H
 #define COLLISIONDETECTOR_H
 
-#include "CartVec.h"
 #include "MathDef.h"
+#include "Point.h"
 #include "Polygon.h"
 
 #include <vector>
@@ -23,13 +23,13 @@ public:
    /// Collission point is calculated on the line between the circle
    /// centers.
    bool isColliding(const math::circle_t &c1, const math::circle_t &c2);
-   const std::vector<CartVec> &getCollisionPoints() const
+   const std::vector<Point> &getCollisionPoints() const
    {
-      return m_collisionPoints;
+      return collisionPoints_;
    }
 
 private:
-   std::vector<CartVec> m_collisionPoints;
+   std::vector<Point> collisionPoints_;
 };
 
 } // namespace physics

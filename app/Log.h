@@ -9,7 +9,7 @@
 #define LOGW(msg) log(" W   " + std::string(FNAME) + " " + msg)
 #define LOGI(msg) log("  I  " + std::string(FNAME) + " " + msg)
 #define LOGD(msg) logDebug("   D " + std::string(FNAME) + " " + msg)
-#define LOGCI(condition, msg)                                             \
+#define LOGCI(condition, msg)                                                  \
    log(condition, "  I  " + std::string(FNAME) + " " + msg)
 
 void log(const std::string &msg);

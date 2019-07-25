@@ -1,18 +1,18 @@
 #ifndef MATHDEF_H
 #define MATHDEF_H
 
-#include "CartVec.h"
+// #include "CartVec.h"
 #include "Point.h"
 
 namespace math {
 
 using circle_t = struct Circle {
-   Circle(const CartVec &m, double r)
+   Circle(const Point &m, double r)
       : m(m)
       , r(r)
    {
    }
-   CartVec m;
+   Point m;
    double r;
 };
 

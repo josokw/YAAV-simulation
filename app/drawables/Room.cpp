@@ -43,7 +43,7 @@ void Room::draw() const
    glPopMatrix();
 }
 
-CartVec Room::closestPointWall(int wallID, const CartVec &xyz) const
+Point Room::closestPointWall(int wallID, const Point &xyz) const
 {
    return corners_.getClosestPointToEdge(wallID, xyz);
 }

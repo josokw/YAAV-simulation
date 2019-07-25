@@ -17,7 +17,8 @@ public:
    virtual void process() = 0;
 
    static PhysicsState_t physicsState;
-   static std::vector<XYZrZ> vehicleCollisions;
+   // static std::vector<XYZrZ> vehicleCollisions;
+   static std::vector<CartVec> vehicleCollisions;
 };
 
 } // namespace physics

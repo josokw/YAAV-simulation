@@ -38,8 +38,10 @@ void hardware::Bumper::process()
    for (size_t i = 0; i < vehicleCollisions.size(); ++i) {
       // phi is in WCS
       double phi =
-         math::toDegrees(std::atan(vehicleCollisions[i].position.get_y() /
-                                   vehicleCollisions[i].position.get_x()));
+         // math::toDegrees(std::atan(vehicleCollisions[i].position.get_y() /
+         //                           vehicleCollisions[i].position.get_x()));
+         math::toDegrees(std::atan(vehicleCollisions[i].get_y() /
+                                   vehicleCollisions[i].get_x()));
       // phi in VCS
       phi -= _vehicle.getXYZrZ().Rz;
       phi = math::normalizeDegrees(phi);

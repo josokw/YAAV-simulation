@@ -44,7 +44,9 @@ void DynamicDirt::removeDirt(const Vehicle &vehicle)
    std::vector<std::list<Dirt>::iterator> tobeRemoved;
 
    for (auto it = _dirt.begin(); it != _dirt.end(); ++it) {
-      XYZrZ dif(vehicle.getXYZrZ() - it->getXYZrZ());
+      // XYZrZ dif(vehicle.getXYZrZ() - it->getXYZrZ());
+      CartVec dif(vehicle.getXYZrZ().getPosition() -
+                  it->getXYZrZ().getPosition());
       if (dif.length() < 0.9 * vehicle.getR()) {
          tobeRemoved.push_back(it);
       }
