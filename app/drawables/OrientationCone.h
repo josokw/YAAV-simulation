@@ -1,9 +1,14 @@
 #ifndef ORIENTATIONCONE_H
 #define ORIENTATIONCONE_H
 
+#include "CartVec.h"
 #include "Drawable.h"
 #include "XYZrZ.h"
 
+#include <array>
+
+/// Draws an orientation cone in a specific color.
+/// \bug Calculations for other positions not correct.
 class OrientationCone : public Drawable
 {
    friend OrientationCone operator*(const OrientationCone &lhs, double rhs);
@@ -14,7 +19,8 @@ public:
    static const OrientationCone OcY;
    static const OrientationCone OcZ;
 
-   OrientationCone(double red, double green, double blue, const XYZrZ &xyzRz);
+   OrientationCone(const std::array<float, 3> &rgb, const Point &position,
+                   const CartVec &orientation);
    OrientationCone(const OrientationCone &ocone);
    OrientationCone &operator=(const OrientationCone &) = delete;
    ~OrientationCone() override;
@@ -22,9 +28,9 @@ public:
    void draw() const override;
 
 private:
-   float red_, green_, blue_;
-   XYZrZ XYZrZ_;
-   double size_;
+   std::array<float, 3> rgb_;
+   Point position_;
+   CartVec orientation_;
    GLUquadricObj *pBody_;
 };
 
