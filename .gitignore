@@ -83,4 +83,4 @@ compile_commands.json
 
 # Executables in build dir and logging
 build
-YAAVsimulator.log
+*.log
