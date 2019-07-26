@@ -28,10 +28,15 @@ TEST_CASE("Point class")
       REQUIRE(p.get_y() == Approx(0.0));
       REQUIRE(p.get_z() == Approx(0.0));
 
-      CartVec v{Point{1.0, 1.0, 1.0} - Point{2.0, 2.0, 2.0}};
-      REQUIRE(v == CartVec{1.0, 1.0, 1.0});
+      const Point p1{1.0, 1.0, 1.0};
+      const Point p2{2.0, 2.0, 2.0};
+
+      CartVec v{p1 - p2}; // v = p1 - p2  ==>  v + p2 == p1
+      REQUIRE(v == CartVec{-1.0, -1.0, -1.0});
       REQUIRE_FALSE(v == CartVec{-1.0, 1.0, 1.0});
       REQUIRE(v != CartVec{-1.0, 1.0, 1.0});
+
+      REQUIRE((p2 + v) == p1);
    }
 
    SECTION("Distance")

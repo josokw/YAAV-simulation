@@ -52,8 +52,8 @@ bool operator!=(const Point &lhs, const Point &rhs)
 
 CartVec operator-(const Point &lhs, const Point &rhs)
 {
-   return {rhs.get_x() - lhs.get_x(), rhs.get_y() - lhs.get_y(),
-           rhs.get_z() - lhs.get_z()};
+   return {lhs.get_x() - rhs.get_x(), lhs.get_y() - rhs.get_y(),
+           lhs.get_z() - rhs.get_z()};
 }
 
 Point operator+(const Point &lhs, const CartVec &rhs)
