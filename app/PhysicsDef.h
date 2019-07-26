@@ -13,7 +13,8 @@ enum PhysicsStates {
 };
 
 namespace physics {
-typedef PhysicsState<double, PHYSICS_N_STATES> PhysicsState_t;
+// typedef PhysicsState<double, PHYSICS_N_STATES> PhysicsState_t;
+typedef PhysicsState<int, PHYSICS_N_STATES> PhysicsState_t;
 }
 
 #endif // PHYSICSDEF_H
