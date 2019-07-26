@@ -20,6 +20,16 @@ void logDebug(const std::string &msg)
    logger.logDebug(msg);
 }
 
+void logInfo(const char *msg)
+{
+   logger.logInfo(msg);
+}
+
+void logInfo(const std::string &msg)
+{
+   logger.logInfo(msg);
+}
+
 void log(const char *msg)
 {
    logger.log(msg);

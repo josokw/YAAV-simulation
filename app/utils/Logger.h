@@ -34,6 +34,16 @@ public:
       if (debugMode_)
          log(message);
    }
+   void logInfo(const std::string &message)
+   {
+      if (not debugMode_)
+         log(message);
+   }
+   void logInfo(const char *message)
+   {
+      if (not debugMode_)
+         log(message);
+   }
 
 protected:
    Logger();
