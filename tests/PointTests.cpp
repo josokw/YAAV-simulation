@@ -31,11 +31,12 @@ TEST_CASE("Point class")
       const Point p1{1.0, 1.0, 1.0};
       const Point p2{2.0, 2.0, 2.0};
 
-      CartVec v{p1 - p2}; // v = p1 - p2  ==>  v + p2 == p1
+      CartVec v{p1 - p2}; 
       REQUIRE(v == CartVec{-1.0, -1.0, -1.0});
       REQUIRE_FALSE(v == CartVec{-1.0, 1.0, 1.0});
       REQUIRE(v != CartVec{-1.0, 1.0, 1.0});
 
+      // v = p1 - p2  ==>  p2 + v == p1
       REQUIRE((p2 + v) == p1);
    }
 
