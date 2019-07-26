@@ -205,7 +205,7 @@ void Vehicle::checkIRQs()
    }
 }
 
-/// \bug Sometimes vehicle remains colliding in an endless loop.
+/// \bug Sometimes vehicle remains colliding walls in an endless loop.
 bool Vehicle::isColliding(const Room &room)
 {
    SET_FNAME("Vehicle::isColliding()");
