@@ -10,8 +10,18 @@ bool physics::CollisionDetector::isColliding(const math::circle_t &c,
    collisionPoints_.clear();
    const std::vector<Point> &vertices(p.getVertices());
    size_t nCollisions = 0;
+   // {
+   //    std::ostringstream msg;
+   //    msg << p;
+   //    LOGD(msg.str());
+   // }
    for (size_t vertexID = 0; vertexID < vertices.size(); ++vertexID) {
       Point closestPoint(p.getClosestPointToEdge(vertexID, c.m));
+      {
+         std::ostringstream msg;
+         msg << "closestPoint = " << closestPoint;
+         LOGD(msg.str());
+      }
       double distance = closestPoint.distance(c.m);
       if (distance <= c.r) {
          ++nCollisions;

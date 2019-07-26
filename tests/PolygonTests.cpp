@@ -27,4 +27,44 @@ TEST_CASE("Polygon class")
 
       REQUIRE(p2.getNormal() == CartVec::UNIT_Z);
    }
+
+   //  bool isFacing(const Point &point) const;
+   // /// Get edge (pair of two vertices) by its index, starts at index 0.
+
+   SECTION("Get closest point to edge")
+   {
+      math::Polygon p{{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.5, 0.75}};
+      math::Edge edge{p.getEdge(0)};
+
+      REQUIRE(edge.start == Point{0.0, 0.0});
+      REQUIRE(edge.end == Point{1.0, 0.0});
+
+      edge = p.getEdge(0);
+      REQUIRE(edge.start == Point{0.0, 0.0});
+      REQUIRE(edge.end == Point{1.0, 0.0});
+
+      edge = p.getEdge(1);
+      REQUIRE(edge.start == Point{1.0, 0.0});
+      REQUIRE(edge.end == Point{1.0, 1.0});
+
+      edge = p.getEdge(2);
+      REQUIRE(edge.start == Point{1.0, 1.0});
+      REQUIRE(edge.end == Point{0.5, 0.75});
+
+      edge = p.getEdge(3);
+      REQUIRE(edge.start == Point{0.5, 0.75});
+      REQUIRE(edge.end == Point{0.0, 0.0});
+
+      REQUIRE(p.getClosestPointToEdge(0, Point{-1.0, 0.0}) == Point{0.0, 0.0});
+      REQUIRE(p.getClosestPointToEdge(0, Point{0.0, -1.0}) == Point{0.0, 0.0});
+
+      REQUIRE(p.getClosestPointToEdge(1, Point{-1.0, 0.0}) == Point{1.0, 0.0});
+      REQUIRE(p.getClosestPointToEdge(1, Point{0.0, -1.0}) == Point{1.0, 0.0});
+
+      CHECK(p.getClosestPointToEdge(2, Point{-1.0, 0.0}) == Point{0.5, 0.75});
+      CHECK(p.getClosestPointToEdge(2, Point{0.0, -1.0}) == Point{0.5, 0.75});
+
+      CHECK(p.getClosestPointToEdge(3, Point{-1.0, 0.0}) == Point{0.0, 0.0});
+      CHECK(p.getClosestPointToEdge(3, Point{0.0, -1.0}) == Point{0.0, 0.0});
+   }
 }

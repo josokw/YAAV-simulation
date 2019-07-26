@@ -205,7 +205,7 @@ void Vehicle::checkIRQs()
    }
 }
 
-/// @bug Sometimes vehicle remains colliding in an endless loop.
+/// \bug Sometimes vehicle remains colliding in an endless loop.
 bool Vehicle::isColliding(const Room &room)
 {
    SET_FNAME("Vehicle::isColliding()");
@@ -235,7 +235,7 @@ bool Vehicle::isColliding(const Room &room)
              << int(overshoot * 100) << "%";
 
          // CartVec delta((closestPoint - m_XYZrZ.position)  * overshoot);
-         CartVec delta(closestPoint - m_XYZrZ.position);
+         CartVec delta{closestPoint - m_XYZrZ.position};
          m_nextXYZrZ = m_XYZrZ + delta;
          msg << " nextXYZrZ: " << m_nextXYZrZ;
          LOGD(msg.str());
@@ -264,6 +264,11 @@ bool Vehicle::isColliding(const Block &object)
    vehicleCollisions.clear();
    if (collisionDetector.isColliding(getCollisionShape(),
                                      object.getCollisionShape())) {
+      {
+         std::ostringstream msg;
+         msg << "############# Is colliding with block";
+         LOGD(msg.str());
+      }
       for (size_t i = 0; i < collisionDetector.getCollisionPoints().size();
            i++) {
          /// In Vehicle CS.
