@@ -10,9 +10,11 @@ namespace math {
 
 std::ostream &operator<<(std::ostream &os, const math::Polygon &rhs)
 {
-   std::copy(rhs.getVertices().begin(), rhs.getVertices().end(),
-             std::ostream_iterator<Point>(os, " "));
-   os << "N = " << rhs.getNormal();
+   os << "Poly[";
+   for (const auto &point: rhs.getVertices()) {
+      os << ' ' << point;
+   }
+   os << " Normal " << rhs.getNormal() << "]";
    return os;
 }
 
