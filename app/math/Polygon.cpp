@@ -14,19 +14,19 @@ std::ostream &operator<<(std::ostream &os, const math::Polygon &rhs)
    for (const auto &point: rhs.getVertices()) {
       os << ' ' << point;
    }
-   os << " Normal " << rhs.getNormal() << "]";
+   os << " Normal" << rhs.getNormal() << "]";
    return os;
 }
 
 } // namespace math
 
 math::Polygon::Polygon(const std::initializer_list<Point> &cvlist)
-   : vertices_{}
+   : vertices_{cvlist}
    , normal_{}
 {
-   for (auto i = begin(cvlist); i != end(cvlist); ++i) {
-      vertices_.push_back(*i);
-   }
+   // for (auto i = begin(cvlist); i != end(cvlist); ++i) {
+   //    vertices_.push_back(*i);
+   // }
    calcNormal();
 }
 
