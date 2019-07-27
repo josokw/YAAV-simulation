@@ -53,8 +53,7 @@ void VirtualReality::process()
    SET_FNAME("VirtualReality::process()");
    XYZrZ currentXYZrZ = m_vehicle.getXYZrZ();
    XYZrZ expectedNextXYZrZ = m_vehicle.expectedNextXYZrZ();
-   math::circle_t collisionShape(expectedNextXYZrZ.position,
-                                 m_vehicle.getR());
+   math::circle_t collisionShape(expectedNextXYZrZ.position, m_vehicle.getR());
 
    Vehicle expectedVehicle(m_vehicle.getR(), m_vehicle.getH(),
                            expectedNextXYZrZ);
@@ -134,7 +133,9 @@ void VirtualReality::init()
       m_cylObjs.push_back(*pCylObj);
       drawables.push_back(pCylObj);
    }
-   m_dirt.generateDirt(m_room, 250);
+   size_t maxDirtParticles{0};
+   IniReader().getData(string("VR.maxDirtParticles"), &maxDirtParticles);
+   m_dirt.generateDirt(m_room, maxDirtParticles);
    LOGD("");
 }
 
