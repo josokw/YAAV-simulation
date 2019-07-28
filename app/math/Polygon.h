@@ -86,8 +86,10 @@ public:
    /// @param angle rotation angle in degrees.
    void rotateAroundXYZ(const Point &xyz, double angle);
    /// Checks if point is inside the polygon.
-   /// @todo Prepare for 3D.
+   /// \todo Prepare for 3D.
    bool isInside(const Point &point) const;
+   /// Checks if all points are inside the polygon.
+   bool isInside(const std::vector<Point> &points) const;
 
 private:
    /// Polygon vertices.

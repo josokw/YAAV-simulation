@@ -15,6 +15,11 @@ TEST_CASE("Polygon class")
 
       REQUIRE(p2.isInside({0.25, 0.25}));
       REQUIRE_FALSE(p2.isInside({-0.25, -0.25}));
+
+      std::vector<Point> points1{{0.5, 0.25}, {0.25, 0.25}};
+      REQUIRE(p2.isInside(points1));
+      std::vector<Point> points2{{0.5, 0.25}, {-5.0, 5.0}, {0.25, 0.25}};
+      REQUIRE_FALSE(p2.isInside(points2));
    }
 
    SECTION("Normal")

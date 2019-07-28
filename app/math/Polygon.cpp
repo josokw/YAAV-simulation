@@ -198,3 +198,13 @@ bool math::Polygon::isInside(const Point &point) const
 
    return isIn;
 }
+
+ bool math::Polygon::isInside(const std::vector<Point> &points) const
+ {
+    for (const auto& point: points) {
+       if (not isInside(point)) {
+          return false;
+       }
+    }
+    return true;
+ }
