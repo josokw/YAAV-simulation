@@ -21,7 +21,7 @@ TEST_CASE("CollissionDtector class")
    {
       physics::CollisionDetector cd;
       const math::Polygon p1{{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}};
-      math::circle_t circle{{-0.4, 0.0}, 1.0};
+      math::Circle circle{{-0.4, 0.0}, 1.0};
 
       bool col;
       col = cd.isColliding({{0, 0.5}, 1}, p1);

@@ -6,16 +6,6 @@
 
 namespace math {
 
-using circle_t = struct Circle {
-   Circle(const Point &m, double r)
-      : m(m)
-      , r(r)
-   {
-   }
-   Point m;
-   double r;
-};
-
 using edge_t = struct Edge {
    Edge(const Point &start, const Point &end)
       : start(start)

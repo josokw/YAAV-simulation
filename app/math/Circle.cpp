@@ -1,6 +1,8 @@
 #include "Circle.h"
 #include "CartVec.h"
 
+namespace math {
+
 bool operator==(const Circle &lhs, const Circle &rhs)
 {
    auto comp = [](double d1, double d2) { return std::abs(d1 - d2) < 1E-8; };
@@ -23,19 +25,21 @@ Circle operator-(const Circle &lhs, const CartVec &rhs)
    return Circle{lhs} -= rhs;
 }
 
-Circle::Circle(const Point &center, double radius)
+} // namespace math
+
+math::Circle::Circle(const Point &center, double radius)
    : center_{center}
    , radius_{radius}
 {
 }
 
-Circle &Circle::operator+=(const CartVec &rhs)
+math::Circle &math::Circle::operator+=(const CartVec &rhs)
 {
    center_ += rhs;
    return *this;
 }
 
-Circle &Circle::operator-=(const CartVec &rhs)
+math::Circle &math::Circle::operator-=(const CartVec &rhs)
 {
    center_ -= rhs;
    return *this;

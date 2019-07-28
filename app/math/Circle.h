@@ -8,7 +8,9 @@
 
 class CartVec;
 
-/// Represents a circle (center point and radius). 
+namespace math {
+
+/// Represents a circle (center point and radius).
 /// Can be translated by a vector (CartVec).
 class Circle
 {
@@ -42,5 +44,7 @@ private:
    Point center_{0.0, 0.0, 0.0};
    double radius_{1.0};
 };
+
+} // namespace math
 
 #endif // CIRCLE_H
