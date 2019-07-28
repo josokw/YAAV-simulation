@@ -5,6 +5,8 @@ Not based on any external 3D game engine. All physics (translations, rotations a
 
 Challenge: refactor legacy code to Modern C++ and use [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
 
+[![CodeFactor](https://www.codefactor.io/repository/github/josokw/yaav-simulator/badge)](https://www.codefactor.io/repository/github/josokw/yaav-simulator)
+
 ## Compiling and running application
 
 QtCreator **YAAVsimulator.pro** file is available. Select this file and press run for **app** or **tests**
