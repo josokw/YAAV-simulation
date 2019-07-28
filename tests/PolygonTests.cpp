@@ -36,24 +36,24 @@ TEST_CASE("Polygon class")
       math::Polygon p{{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.5, 0.75}};
       math::Edge edge{p.getEdge(0)};
 
-      REQUIRE(edge.start == Point{0.0, 0.0});
-      REQUIRE(edge.end == Point{1.0, 0.0});
+      REQUIRE(edge.getStart() == Point{0.0, 0.0});
+      REQUIRE(edge.getEnd() == Point{1.0, 0.0});
 
       edge = p.getEdge(0);
-      REQUIRE(edge.start == Point{0.0, 0.0});
-      REQUIRE(edge.end == Point{1.0, 0.0});
+      REQUIRE(edge.getStart() == Point{0.0, 0.0});
+      REQUIRE(edge.getEnd() == Point{1.0, 0.0});
 
       edge = p.getEdge(1);
-      REQUIRE(edge.start == Point{1.0, 0.0});
-      REQUIRE(edge.end == Point{1.0, 1.0});
+      REQUIRE(edge.getStart() == Point{1.0, 0.0});
+      REQUIRE(edge.getEnd() == Point{1.0, 1.0});
 
       edge = p.getEdge(2);
-      REQUIRE(edge.start == Point{1.0, 1.0});
-      REQUIRE(edge.end == Point{0.5, 0.75});
+      REQUIRE(edge.getStart() == Point{1.0, 1.0});
+      REQUIRE(edge.getEnd() == Point{0.5, 0.75});
 
       edge = p.getEdge(3);
-      REQUIRE(edge.start == Point{0.5, 0.75});
-      REQUIRE(edge.end == Point{0.0, 0.0});
+      REQUIRE(edge.getStart() == Point{0.5, 0.75});
+      REQUIRE(edge.getEnd() == Point{0.0, 0.0});
 
       REQUIRE(p.getClosestPointToEdge(0, Point{-1.0, 0.0}) == Point{0.0, 0.0});
       REQUIRE(p.getClosestPointToEdge(0, Point{0.0, -1.0}) == Point{0.0, 0.0});

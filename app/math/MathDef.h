@@ -1,20 +1,7 @@
 #ifndef MATHDEF_H
 #define MATHDEF_H
 
-// #include "CartVec.h"
-#include "Point.h"
-
 namespace math {
-
-using edge_t = struct Edge {
-   Edge(const Point &start, const Point &end)
-      : start(start)
-      , end(end)
-   {
-   }
-   Point start;
-   Point end;
-};
 
 [[nodiscard]] constexpr double toRadians(double x) noexcept
 {
@@ -26,8 +13,17 @@ using edge_t = struct Edge {
    return 57.2957795130 * x;
 }
 
-/// returns 0 <= angle <= 360 degrees
-double normalizeDegrees(double x);
+/// Returns 0 <= angle <= 360 degrees.
+[[nodiscard]] constexpr double normalizeDegrees(double angle)
+{
+   while (angle > 360) {
+      angle -= 360;
+   }
+   while (angle < 0) {
+      angle += 360;
+   }
+   return angle;
+}
 
 } // namespace math
 

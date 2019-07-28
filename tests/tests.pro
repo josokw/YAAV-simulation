@@ -21,7 +21,6 @@ SOURCES += \
    ../app/math/Point.cpp \
    ../app/math/Polygon.cpp \
    ../app/math/XYZrZ.cpp \
-   ../app/math/MathDef.cpp \
    ../app/physics/CollisionDetector.cpp \
    ../app/utils/Logger.cpp \
    ../app/Log.cpp 

@@ -1,4 +1,5 @@
 #include "Polygon.h"
+#include "Edge.h"
 #include "MathDef.h"
 
 #include <algorithm>
@@ -11,7 +12,7 @@ namespace math {
 std::ostream &operator<<(std::ostream &os, const math::Polygon &rhs)
 {
    os << "Poly[";
-   for (const auto &point: rhs.getVertices()) {
+   for (const auto &point : rhs.getVertices()) {
       os << ' ' << point;
    }
    os << " Normal" << rhs.getNormal() << "]";
@@ -57,18 +58,18 @@ bool math::Polygon::isFacing(const Point &point) const
    return normal_.dot(temp) >= 0.0;
 }
 
-math::edge_t math::Polygon::getEdge(std::size_t index) const
+math::Edge math::Polygon::getEdge(std::size_t index) const
 {
    auto size{vertices_.size()};
 
-   return {vertices_[index % size], vertices_[(index + 1) % size]};
+   return math::Edge{vertices_[index % size], vertices_[(index + 1) % size]};
 }
 
 Point math::Polygon::getClosestPointToEdge(std::size_t index,
                                            const Point &p) const
 {
    auto edge{getEdge(index)};
-   CartVec v{edge.end - edge.start};
+   CartVec v{edge.getEnd() - edge.getStart()};
    CartVec w{p - vertices_[index]};
    double wDotv{w.dot(v)};
    double t{wDotv / v.dot(v)};

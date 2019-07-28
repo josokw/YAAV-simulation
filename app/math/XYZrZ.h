@@ -4,6 +4,8 @@
 #include "CartVec.h"
 #include "Drawable.h"
 #include "MathDef.h"
+#include "Point.h"
+
 
 #include <cmath>
 #include <iostream>
@@ -82,7 +84,7 @@ public:
 
    void draw() const override;
 
-//private:
+   // private:
    Point position{Point::ORIGIN};
    /// In degrees
    double Rz{0.0};

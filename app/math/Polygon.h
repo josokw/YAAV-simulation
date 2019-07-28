@@ -3,7 +3,7 @@
 
 #include "CartVec.h"
 #include "Point.h"
-#include "MathDef.h"
+#include "Edge.h"
 
 #include <initializer_list>
 #include <vector>
@@ -63,7 +63,7 @@ public:
    /// Tests if this polygon is facing the specified point.
    bool isFacing(const Point &point) const;
    /// Get edge (pair of two vertices) by its index, starts at index 0.
-   edge_t getEdge(std::size_t index) const;
+   math::Edge getEdge(std::size_t index) const;
    /// Get closest point on an edge identified by its index to point p.
    Point getClosestPointToEdge(std::size_t index, const Point &p) const;
    /// Calculates and returns minimal and maximal values x, y and z of all
