@@ -2,8 +2,9 @@
 #define POLYGON_H
 
 #include "CartVec.h"
-#include "Point.h"
+#include "Circle.h"
 #include "Edge.h"
+#include "Point.h"
 
 #include <initializer_list>
 #include <vector>
@@ -69,6 +70,8 @@ public:
    /// Calculates and returns minimal and maximal values x, y and z of all
    /// vertices. For bounding box calculations.
    minmaxXYZ_t getMinMaxXYZ() const;
+   //
+   Circle getEnclosingCircle() const { return smallestEnclosingCircle_; }
    /// Translate: p += cv
    Polygon &operator+=(const CartVec &rhs);
    /// Translate: p -= cv
@@ -96,6 +99,19 @@ private:
    std::vector<Point> vertices_;
    /// The normalized normal vector for the polygon.
    CartVec normal_;
+   mutable math::Circle smallestEnclosingCircle_;
+
+   /// No boundary points known
+   void makeSmallestEnclosingCircle() const;
+   /// One boundary point known
+   math::Circle
+   makeSmallestEnclosingCircleOnePoint(const std::vector<Point> &points,
+                                       size_t end, const Point &point) const;
+   /// Two boundary points known
+   math::Circle
+   makeSmallestEnclosingCircleTwoPoints(const std::vector<Point> &points,
+                                        size_t end, const Point &p,
+                                        const Point &q) const;
 };
 
 } // namespace math

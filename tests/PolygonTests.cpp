@@ -72,4 +72,14 @@ TEST_CASE("Polygon class")
       CHECK(p.getClosestPointToEdge(3, Point{-1.0, 0.0}) == Point{0.0, 0.0});
       CHECK(p.getClosestPointToEdge(3, Point{0.0, -1.0}) == Point{0.0, 0.0});
    }
+
+   SECTION("Enclosing circle")
+   {
+       math::Polygon p{{0.0, 0.0}, {0.0, 2.0}, {2.0, 2.0}, {2.0, 0.0}};
+       auto c{p.getEnclosingCircle()};
+       auto r{0.5 * std::sqrt(2.0)};
+
+       CHECK(c == math::Circle{{1.0, 1.0}, r});
+   }
+
 }
