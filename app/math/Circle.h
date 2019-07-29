@@ -42,7 +42,7 @@ public:
    {
       return {center_, radius_};
    }
-   bool isValid() const { return radius_ < 0.0; }
+   bool isValid() const { return radius_ >= 0.0; }
    /// Translation: c += cv
    Circle &operator+=(const CartVec &rhs);
    /// Translation: c -= cv
