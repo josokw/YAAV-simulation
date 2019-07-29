@@ -6,12 +6,22 @@ TEST_CASE("Circle class")
 {
    SECTION("Initialisation")
    {
-      math::Circle c;
+      math::Circle c1;
 
-      auto [center, r] = c.getCenterRadius();
+      auto [center, r] = c1.getCenterRadius();
 
       REQUIRE(center == Point::ORIGIN);
       REQUIRE(r == Approx(1.0));
+
+      REQUIRE(math::Circle::INVALID == math::Circle{{0.0, 0.0, 0.0}, -1.0});
+
+      math::Circle c2{Point{-1.0, 0, 0}, Point{1.0, 0.0}};
+      REQUIRE(c2 == math::Circle{{0.0, 0.0}, 1.0});
+      math::Circle c3{Point{-1.0, 1, 0}, Point{1.0, 1.0}};
+      REQUIRE(c3 == math::Circle{{0.0, 1.0}, 1.0});
+
+      math::Circle c4{Point{2.0, 1, 0}, Point{0.0, 5.0}, Point{-1.0, 2.0}};
+      REQUIRE(c4 == math::Circle{{1.0, 3.0}, std::sqrt(5.0)});
    }
 
    SECTION("Operators")
@@ -29,6 +39,6 @@ TEST_CASE("Circle class")
       c4 = c3 + CartVec{2.0, 3.0};
       REQUIRE(c4 == math::Circle{Point{2.0, 3.0}, 10});
       c4 -= 2 * CartVec{2.0, 3.0};
-      REQUIRE(c4 ==  math::Circle{Point{-2.0, -3.0}, 10});
+      REQUIRE(c4 == math::Circle{Point{-2.0, -3.0}, 10});
    }
 }
