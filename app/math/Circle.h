@@ -6,9 +6,9 @@
 #include <cmath>
 #include <tuple>
 
-class CartVec;
-
 namespace math {
+
+class CartVec;
 
 /// Represents a circle (center point and radius).
 /// Can be translated by a vector (CartVec).

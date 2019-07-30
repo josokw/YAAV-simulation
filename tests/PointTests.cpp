@@ -17,13 +17,13 @@ TEST_CASE("Point class")
    {
       Point p;
 
-      p += CartVec{1, 1, 1};
+      p += math::CartVec{1, 1, 1};
       REQUIRE(p.get_x() == Approx(1.0));
       REQUIRE(p.get_y() == Approx(1.0));
       REQUIRE(p.get_z() == Approx(1.0));
 
-      p -= CartVec::UNIT_Z;
-      p -= CartVec::UNIT_Y;
+      p -= math::CartVec::UNIT_Z;
+      p -= math::CartVec::UNIT_Y;
       REQUIRE(p.get_x() == Approx(1.0));
       REQUIRE(p.get_y() == Approx(0.0));
       REQUIRE(p.get_z() == Approx(0.0));
@@ -31,10 +31,10 @@ TEST_CASE("Point class")
       const Point p1{1.0, 1.0, 1.0};
       const Point p2{2.0, 2.0, 2.0};
 
-      CartVec v{p1 - p2}; 
-      REQUIRE(v == CartVec{-1.0, -1.0, -1.0});
-      REQUIRE_FALSE(v == CartVec{-1.0, 1.0, 1.0});
-      REQUIRE(v != CartVec{-1.0, 1.0, 1.0});
+      math::CartVec v{p1 - p2}; 
+      REQUIRE(v == math::CartVec{-1.0, -1.0, -1.0});
+      REQUIRE_FALSE(v == math::CartVec{-1.0, 1.0, 1.0});
+      REQUIRE(v != math::CartVec{-1.0, 1.0, 1.0});
 
       // v = p1 - p2  ==>  p2 + v == p1
       REQUIRE((p2 + v) == p1);

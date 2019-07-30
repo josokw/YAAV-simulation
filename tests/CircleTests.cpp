@@ -30,15 +30,15 @@ TEST_CASE("Circle class")
       Point p{1.0, 1.0};
       math::Circle c2{p};
 
-      c1 += CartVec{1.0, 1.0};
+      c1 += math::CartVec{1.0, 1.0};
       REQUIRE(c1 == c2);
 
       math::Circle c3{Point::ORIGIN, 10};
       math::Circle c4;
 
-      c4 = c3 + CartVec{2.0, 3.0};
+      c4 = c3 + math::CartVec{2.0, 3.0};
       REQUIRE(c4 == math::Circle{Point{2.0, 3.0}, 10});
-      c4 -= 2 * CartVec{2.0, 3.0};
+      c4 -= 2 * math::CartVec{2.0, 3.0};
       REQUIRE(c4 == math::Circle{Point{-2.0, -3.0}, 10});
    }
 }

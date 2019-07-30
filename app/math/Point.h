@@ -3,7 +3,9 @@
 
 #include <tuple>
 
+namespace math {
 class CartVec;
+}
 
 /// Represents a point in 3D Cartesian coordinates.
 /// A point has no dimensions, only position.
@@ -17,11 +19,11 @@ class Point
    friend bool operator==(const Point &lhs, const Point &rhs);
    friend bool operator!=(const Point &lhs, const Point &rhs);
    /// cv = p1 - p2
-   friend CartVec operator-(const Point &lhs, const Point &rhs);
+   friend math::CartVec operator-(const Point &lhs, const Point &rhs);
    /// Translation: p1 = p2 + cv
-   friend Point operator+(const Point &lhs, const CartVec &rhs);
+   friend Point operator+(const Point &lhs, const math::CartVec &rhs);
    /// Translation: p1 = p2 - cv
-   friend Point operator-(const Point &lhs, const CartVec &rhs);
+   friend Point operator-(const Point &lhs, const math::CartVec &rhs);
 
 public:
    static const Point ORIGIN;
@@ -29,11 +31,11 @@ public:
 
    Point() = default;
    Point(double x, double y, double z = 0.0);
-   Point(const Point &) = default;
-   Point &operator=(const Point &) = default;
-   Point(Point &&) = default;
-   Point &operator=(Point &&) = default;
-   ~Point() = default;
+   // Point(const Point &) = default;
+   // Point &operator=(const Point &) = default;
+   // Point(Point &&) = default;
+   // Point &operator=(Point &&) = default;
+   // ~Point() = default;
 
    double get_x() const { return x_; }
    double get_y() const { return y_; }
@@ -44,9 +46,9 @@ public:
    void set_z(double z) { z_ = z; }
 
    /// Translation p += cv
-   Point &operator+=(const CartVec &rhs);
+   Point &operator+=(const math::CartVec &rhs);
    /// Translation p -= cv
-   Point &operator-=(const CartVec &rhs);
+   Point &operator-=(const math::CartVec &rhs);
    /// Rotates around z.
    void rotateAroundZ(double cosPhi, double sinPhi);
    /// Rotates around y.

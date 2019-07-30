@@ -12,7 +12,7 @@ TEST_CASE("XYZrZ class")
       auto [position, rZ] = xyzRz.getPositionRz();
       REQUIRE(position == Point{0.0, 0.0, 0.0});
       REQUIRE(rZ == Approx(0.0));
-      REQUIRE(xyzRz.heading() == CartVec::UNIT_X);
+      REQUIRE(xyzRz.heading() == math::CartVec::UNIT_X);
 
       REQUIRE(xyzRz.atDistance(3.0) == Point{3.0, 0.0});
 

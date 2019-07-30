@@ -18,7 +18,7 @@ public:
 
    static PhysicsState_t physicsState;
    // static std::vector<XYZrZ> vehicleCollisions;
-   static std::vector<CartVec> vehicleCollisions;
+   static std::vector<math::CartVec> vehicleCollisions;
 };
 
 } // namespace physics

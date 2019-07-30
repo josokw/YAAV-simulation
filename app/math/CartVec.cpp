@@ -5,6 +5,8 @@
 #include <ios>
 #include <iostream>
 
+namespace math {
+
 const CartVec CartVec::ZERO{0.0, 0.0, 0.0};
 const CartVec CartVec::UNIT_X{1.0, 0.0, 0.0};
 const CartVec CartVec::UNIT_Y{0.0, 1.0, 0.0};
@@ -188,3 +190,5 @@ std::istream &operator>>(std::istream &is, CartVec &rhs)
    }
    return is; // Client code should check state of 'is'
 }
+
+} // namespace math

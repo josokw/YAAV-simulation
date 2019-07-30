@@ -26,11 +26,11 @@ TEST_CASE("Polygon class")
    {
       math::Polygon p1{{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}};
 
-      REQUIRE(p1.getNormal() == CartVec::UNIT_Z);
+      REQUIRE(p1.getNormal() == math::CartVec::UNIT_Z);
 
       math::Polygon p2{{0.1, 0.0}, {1.1, 0.0}, {1.0, 1.0}, {0.5, 0.6}};
 
-      REQUIRE(p2.getNormal() == CartVec::UNIT_Z);
+      REQUIRE(p2.getNormal() == math::CartVec::UNIT_Z);
    }
 
    //  bool isFacing(const Point &point) const;

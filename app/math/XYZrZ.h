@@ -18,9 +18,9 @@ class XYZrZ : public Drawable
 {
    friend std::ostream &operator<<(std::ostream &os, const XYZrZ &rhs);
    /// Translation: XYZrZ1 = XYZrZ2 + v
-   friend XYZrZ operator+(const XYZrZ &lhs, const CartVec &rhs);
+   friend XYZrZ operator+(const XYZrZ &lhs, const math::CartVec &rhs);
    /// Translation: XYZrZ1 = XYZrZ2 - v
-   friend XYZrZ operator-(const XYZrZ &lhs, const CartVec &rhs);
+   friend XYZrZ operator-(const XYZrZ &lhs, const math::CartVec &rhs);
    /// Rotation: XYZrZ1 = XYZrZ2 + rZ
    /// [[x,y,z], rZ] + rhs => [[x,y,z], rZ + rhs]
    friend XYZrZ operator+(const XYZrZ &lhs, double rhs);
@@ -40,13 +40,13 @@ public:
 
    /// Compound assignment operator [[x,y,z], Rz] += [a,b,c] =>
    /// [[x+a,y+b,z+c], Rz]
-   XYZrZ &operator+=(const CartVec &rhs)
+   XYZrZ &operator+=(const math::CartVec &rhs)
    {
       position += rhs;
       return *this;
    }
    /// [[x,y,z], Rz] -= [a,b,c] => [[x-a,y-b,z-c], Rz]
-   XYZrZ &operator-=(const CartVec &rhs)
+   XYZrZ &operator-=(const math::CartVec &rhs)
    {
       position -= rhs;
       return *this;
@@ -70,7 +70,7 @@ public:
    double getRz() const { return Rz; }
    std::tuple<Point, double> getPositionRz() const { return {position, Rz}; }
 
-   CartVec heading() const
+   math::CartVec heading() const
    {
       return {cos(math::toRadians(Rz)), sin(math::toRadians(Rz))};
    }

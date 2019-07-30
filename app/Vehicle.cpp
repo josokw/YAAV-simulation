@@ -107,8 +107,8 @@ void Vehicle::process()
       m_nextXYZrZ.Rz = m_XYZrZ.Rz + math::toDegrees(rotation);
    } else {
       static int incr = 0;
-      m_nextXYZrZ =
-         m_XYZrZ - CartVec(cos(rz) * translation, sin(rz) * translation, 0);
+      m_nextXYZrZ = m_XYZrZ - math::CartVec(cos(rz) * translation,
+                                            sin(rz) * translation, 0);
       // m_nextXYZrZ.position.x = m_XYZrZ.position.x - cos(rz) *
       // translation; m_nextXYZrZ.position.y = m_XYZrZ.position.y - sin(rz)
       // * translation;
@@ -235,7 +235,7 @@ bool Vehicle::isColliding(const Room &room)
              << int(overshoot * 100) << "%";
 
          // CartVec delta((closestPoint - m_XYZrZ.position)  * overshoot);
-         CartVec delta{closestPoint - m_XYZrZ.position};
+         math::CartVec delta{closestPoint - m_XYZrZ.position};
          m_nextXYZrZ = m_XYZrZ + delta;
          msg << " nextXYZrZ: " << m_nextXYZrZ;
          LOGD(msg.str());

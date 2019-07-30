@@ -42,7 +42,7 @@ bool physics::CollisionDetector::isColliding(const math::Circle &c1,
 {
    SET_FNAME("physics::CollisionDetector::isColliding(circle, circle)");
    collisionPoints_.clear();
-   CartVec delta{c2.getCenter() - c1.getCenter()};
+   math::CartVec delta{c2.getCenter() - c1.getCenter()};
    if (delta.length() <= (c1.getRadius() + c2.getRadius())) {
       Point collisionPoint{
          c1.getCenter() +
