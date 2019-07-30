@@ -43,6 +43,7 @@ SOURCES += main.cpp \
     utils/stringExt.cpp \
     math/CartVec.cpp \
     math/Point.cpp \
+    math/Edge.cpp \
     math/XYZrZ.cpp \
     math/Polygon.cpp \
     physics/CollisionDetector.cpp \

@@ -16,6 +16,8 @@ public:
 
    Point getStart() const { return start_; }
    Point getEnd() const { return end_; }
+   double length() const { return start_.distance(end_); } 
+   Point getClosestPoint(const Point &point) const;
 
 private:
    Point start_;
