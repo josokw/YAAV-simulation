@@ -68,18 +68,7 @@ math::Edge math::Polygon::getEdge(std::size_t index) const
 Point math::Polygon::getClosestPointToEdge(std::size_t index,
                                            const Point &p) const
 {
-   auto edge{getEdge(index)};
-   CartVec v{edge.getEnd() - edge.getStart()};
-   CartVec w{p - vertices_[index]};
-   double wDotv{w.dot(v)};
-   double t{wDotv / v.dot(v)};
-
-   if (t < 0)
-      t = 0;
-   if (t > 1)
-      t = 1;
-
-   return vertices_[index] + v * t;
+   return getEdge(index).getClosestPoint(p);
 }
 
 math::Polygon::minmaxXYZ_t math::Polygon::getMinMaxXYZ() const
@@ -215,11 +204,11 @@ void math::Polygon::makeSmallestEnclosingCircle() const
    std::vector<Point> shuffledPoints{vertices_};
    std::shuffle(begin(shuffledPoints), end(shuffledPoints), randGen);
 
-   Circle c{math::Circle::INVALID};
+   math::Circle c{math::Circle::INVALID};
 
    for (size_t i = 0; i < shuffledPoints.size(); ++i) {
       const Point &p = shuffledPoints.at(i);
-      if (c.getRadius() < 0 or not c.isInside(p)) {
+      if (c.isNotValid() or not c.isInside(p)) {
          c = makeSmallestEnclosingCircleOnePoint(shuffledPoints, i + 1, p);
       }
    }
@@ -232,7 +221,7 @@ math::Circle math::Polygon::makeSmallestEnclosingCircleOnePoint(
    Circle c{point, 0};
    for (size_t i = 0; i < end; i++) {
       const Point &q = points.at(i);
-      if (!c.isInside(q)) {
+      if (not c.isInside(q)) {
          if (c.getRadius() == 0)
             c = math::Circle(point, q);
          else
@@ -251,7 +240,7 @@ math::Circle math::Polygon::makeSmallestEnclosingCircleTwoPoints(
    Circle right{math::Circle::INVALID};
 
    auto crossf = [](const CartVec &p1, const CartVec &p2) {
-      return (p1.get_x() * p2.get_y()) - (p1.get_y() - p2.get_x());
+      return (p1.get_x() * p2.get_y()) - (p1.get_y() * p2.get_x());
    };
 
    // For each point not in the two-point circle
@@ -263,27 +252,26 @@ math::Circle math::Polygon::makeSmallestEnclosingCircleTwoPoints(
 
       // Form a circumcircle and classify it on left or right side
       double cross = crossf(pq, r - p);
-         // pq.get_x() * (r - p).get_y() - pq.get_y() * (r - p).get_x();
 
       math::Circle c(p, q, r);
-      if (not c.isValid())
+      if (c.isNotValid())
          continue;
-      else if (cross > 0 and (left.getRadius() < 0 or
-               crossf(pq, c.getCenter() - p) > crossf(pq, left.getCenter() - p)))
+      else if (cross > 0 and
+               (left.isNotValid() or crossf(pq, c.getCenter() - p) >
+                                           crossf(pq, left.getCenter() - p)))
          left = c;
       else if (cross < 0 and
-               (right.getRadius() < 0 or
-                crossf(pq, (c.getCenter() - p)) < crossf(pq, right.getCenter() - p) 
-                ))
+               (right.isNotValid() or crossf(pq, (c.getCenter() - p)) <
+                                            crossf(pq, right.getCenter() - p)))
          right = c;
    }
 
    // Select which circle to return
-   if (left.getRadius() < 0 and right.getRadius() < 0)
+   if (left.isNotValid() and right.isNotValid())
       return circ;
-   else if (left.getRadius() < 0)
+   else if (left.isNotValid())
       return right;
-   else if (right.getRadius() < 0)
+   else if (right.isNotValid())
       return left;
    else
       return (left.getRadius() <= right.getRadius()) ? left : right;

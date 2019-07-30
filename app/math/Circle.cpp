@@ -37,6 +37,9 @@ Circle operator-(const Circle &lhs, const CartVec &rhs)
 
 } // namespace math
 
+ double math::Circle::epsCOMPARE{1e-8};
+ double math::Circle::epsMULTIPLY{1 + epsCOMPARE};
+
 math::Circle::Circle(const Point &center, double radius)
    : center_{center}
    , radius_{radius}
@@ -72,13 +75,14 @@ math::Circle &math::Circle::operator-=(const CartVec &rhs)
 
 bool math::Circle::isInside(const Point &point) const
 {
-   return point.distance(center_) < radius_;
+   return point.distance(center_) <= (radius_ * epsMULTIPLY);
 }
 
 void math::Circle::makeCircumcircle(const Point &a, const Point &b,
                                     const Point &c)
 {
-   using namespace std;
+   using std::max;
+   using std::min;
 
    // Mathematical algorithm from Wikipedia: Circumscribed circle
    double ox = (min(min(a.get_x(), b.get_x()), c.get_x()) +

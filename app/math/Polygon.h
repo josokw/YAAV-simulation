@@ -71,7 +71,7 @@ public:
    /// vertices. For bounding box calculations.
    minmaxXYZ_t getMinMaxXYZ() const;
    //
-   Circle getEnclosingCircle() const { return smallestEnclosingCircle_; }
+   Circle getSmallestEnclosingCircle() const { return smallestEnclosingCircle_; }
    /// Translate: p += cv
    Polygon &operator+=(const CartVec &rhs);
    /// Translate: p -= cv
@@ -99,6 +99,8 @@ private:
    std::vector<Point> vertices_;
    /// The normalized normal vector for the polygon.
    CartVec normal_;
+   /// Contains smmalles enclosing circle.
+   /// \info Calculations based on: Project Nayuki.
    mutable math::Circle smallestEnclosingCircle_;
 
    /// No boundary points known

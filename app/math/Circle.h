@@ -25,7 +25,8 @@ class Circle
 
 public:
    static const Circle INVALID;
-   static double eps;
+   static double epsCOMPARE;
+   static double epsMULTIPLY;
 
    Circle() = default;
    Circle(const Point &center, double radius = 1.0);
@@ -42,7 +43,7 @@ public:
    {
       return {center_, radius_};
    }
-   bool isValid() const { return radius_ >= 0.0; }
+   bool isNotValid() const { return radius_ < 0.0; }
    /// Translation: c += cv
    Circle &operator+=(const CartVec &rhs);
    /// Translation: c -= cv

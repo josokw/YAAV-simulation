@@ -76,10 +76,9 @@ TEST_CASE("Polygon class")
    SECTION("Enclosing circle")
    {
        math::Polygon p{{0.0, 0.0}, {0.0, 2.0}, {2.0, 2.0}, {2.0, 0.0}};
-       auto c{p.getEnclosingCircle()};
-       auto r{0.5 * std::sqrt(2.0)};
+       auto circle{p.getSmallestEnclosingCircle()};
+       auto radius{std::sqrt(2.0)};
 
-       CHECK(c == math::Circle{{1.0, 1.0}, r});
+       CHECK(circle == math::Circle{{1.0, 1.0}, radius});
    }
-
 }
