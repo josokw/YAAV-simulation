@@ -4,8 +4,8 @@
 #include <tuple>
 
 namespace math {
+
 class CartVec;
-}
 
 /// Represents a point in 3D Cartesian coordinates.
 /// A point has no dimensions, only position.
@@ -65,5 +65,7 @@ private:
    double y_{0.0};
    double z_{0.0};
 };
+
+} // namespace math
 
 #endif // POINT_H

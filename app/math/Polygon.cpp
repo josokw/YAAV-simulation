@@ -51,7 +51,7 @@ void math::Polygon::calcNormal()
    normal_.normalize();
 }
 
-bool math::Polygon::isFacing(const Point &point) const
+bool math::Polygon::isFacing(const math::Point &point) const
 {
    CartVec temp = point - vertices_[0];
 
@@ -65,8 +65,8 @@ math::Edge math::Polygon::getEdge(std::size_t index) const
    return math::Edge{vertices_[index % size], vertices_[(index + 1) % size]};
 }
 
-Point math::Polygon::getClosestPointToEdge(std::size_t index,
-                                           const Point &p) const
+math::Point math::Polygon::getClosestPointToEdge(std::size_t index,
+                                                 const math::Point &p) const
 {
    return getEdge(index).getClosestPoint(p);
 }
@@ -258,11 +258,11 @@ math::Circle math::Polygon::makeSmallestEnclosingCircleTwoPoints(
          continue;
       else if (cross > 0 and
                (left.isNotValid() or crossf(pq, c.getCenter() - p) >
-                                           crossf(pq, left.getCenter() - p)))
+                                        crossf(pq, left.getCenter() - p)))
          left = c;
       else if (cross < 0 and
                (right.isNotValid() or crossf(pq, (c.getCenter() - p)) <
-                                            crossf(pq, right.getCenter() - p)))
+                                         crossf(pq, right.getCenter() - p)))
          right = c;
    }
 

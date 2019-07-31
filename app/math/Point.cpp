@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iomanip>
 
+namespace math {
+
 std::ostream &operator<<(std::ostream &os, const Point &rhs)
 {
    os << std::setiosflags(std::ios::fixed) << std::setprecision(3) << "P["
@@ -160,3 +162,5 @@ double Point::distance(const Point &pnt) const
                     (y_ - pnt.y_) * (y_ - pnt.y_) +
                     (z_ - pnt.z_) * (z_ - pnt.z_));
 }
+
+} // namespace math

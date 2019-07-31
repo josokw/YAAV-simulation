@@ -10,14 +10,13 @@ bool physics::CollisionDetector::isColliding(const math::Circle &c,
 
    auto smallestEnclosingCircle{p.getSmallestEnclosingCircle()};
 
-   if (not isColliding(c, smallestEnclosingCircle))
-   {
+   if (not isColliding(c, smallestEnclosingCircle)) {
       LOGD("Not colliding with smallest enclosing circle");
       return false;
    }
 
    collisionPoints_.clear();
-   const std::vector<Point> &vertices(p.getVertices());
+   const std::vector<math::Point> &vertices(p.getVertices());
    size_t nCollisions{0};
    // {
    //    std::ostringstream msg;
@@ -25,7 +24,8 @@ bool physics::CollisionDetector::isColliding(const math::Circle &c,
    //    LOGD(msg.str());
    // }
    for (size_t vertexID = 0; vertexID < vertices.size(); ++vertexID) {
-      Point closestPoint(p.getClosestPointToEdge(vertexID, c.getCenter()));
+      math::Point closestPoint(
+         p.getClosestPointToEdge(vertexID, c.getCenter()));
       {
          std::ostringstream msg;
          msg << "closestPoint = " << closestPoint;
@@ -53,7 +53,7 @@ bool physics::CollisionDetector::isColliding(const math::Circle &c1,
    collisionPoints_.clear();
    math::CartVec delta{c2.getCenter() - c1.getCenter()};
    if (delta.length() <= (c1.getRadius() + c2.getRadius())) {
-      Point collisionPoint{
+      math::Point collisionPoint{
          c1.getCenter() +
          delta * ((c1.getRadius() + c2.getRadius()) / c1.getRadius())};
       collisionPoints_.push_back(collisionPoint);

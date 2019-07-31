@@ -39,7 +39,7 @@ void Room::draw() const
    glPopMatrix();
 }
 
-Point Room::closestPointWall(int wallID, const Point &xyz) const
+math::Point Room::closestPointWall(int wallID, const math::Point &xyz) const
 {
    return corners_.getClosestPointToEdge(wallID, xyz);
 }

@@ -23,13 +23,13 @@ public:
    /// Collission point is calculated on the line between the circle
    /// centers.
    bool isColliding(const math::Circle &c1, const math::Circle &c2);
-   const std::vector<Point> &getCollisionPoints() const
+   const std::vector<math::Point> &getCollisionPoints() const
    {
       return collisionPoints_;
    }
 
 private:
-   std::vector<Point> collisionPoints_;
+   std::vector<math::Point> collisionPoints_;
 };
 
 } // namespace physics

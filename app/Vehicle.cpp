@@ -220,7 +220,7 @@ bool Vehicle::isColliding(const Room &room)
    const auto &corners(room.getCorners());
    int nCollisions = 0;
    for (size_t wallID = 0; wallID < corners.size(); ++wallID) {
-      Point closestPoint(room.closestPointWall(wallID, m_XYZrZ.position));
+      math::Point closestPoint(room.closestPointWall(wallID, m_XYZrZ.position));
 
       if ((closestPoint - m_XYZrZ.position).length() <= m_R) {
          double overshoot =

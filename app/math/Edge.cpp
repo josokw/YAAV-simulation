@@ -1,7 +1,7 @@
 #include "Edge.h"
 #include "CartVec.h"
 
-Point math::Edge::getClosestPoint(const Point &point) const
+math::Point math::Edge::getClosestPoint(const math::Point &point) const
 {
    
    CartVec v{getEnd() - getStart()};

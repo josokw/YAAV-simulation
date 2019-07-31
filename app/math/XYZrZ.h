@@ -6,7 +6,6 @@
 #include "MathDef.h"
 #include "Point.h"
 
-
 #include <cmath>
 #include <iostream>
 #include <tuple>
@@ -35,8 +34,8 @@ public:
       : XYZrZ(x, y, z, 0.0)
    {
    }
-   XYZrZ(const Point &xyz);
-   XYZrZ(const Point &xyz, double Rz);
+   XYZrZ(const math::Point &xyz);
+   XYZrZ(const math::Point &xyz, double Rz);
 
    /// Compound assignment operator [[x,y,z], Rz] += [a,b,c] =>
    /// [[x+a,y+b,z+c], Rz]
@@ -66,16 +65,19 @@ public:
       return *this;
    }
 
-   Point getPosition() const { return position; }
+   math::Point getPosition() const { return position; }
    double getRz() const { return Rz; }
-   std::tuple<Point, double> getPositionRz() const { return {position, Rz}; }
+   std::tuple<math::Point, double> getPositionRz() const
+   {
+      return {position, Rz};
+   }
 
    math::CartVec heading() const
    {
       return {cos(math::toRadians(Rz)), sin(math::toRadians(Rz))};
    }
 
-   Point atDistance(double d) const
+   math::Point atDistance(double d) const
    {
       return {position.get_x() + d * cos(math::toRadians(Rz)),
               position.get_y() + d * sin(math::toRadians(Rz)),
@@ -85,7 +87,7 @@ public:
    void draw() const override;
 
    // private:
-   Point position{Point::ORIGIN};
+   math::Point position{math::Point::ORIGIN};
    /// In degrees
    double Rz{0.0};
 };
