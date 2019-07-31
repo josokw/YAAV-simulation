@@ -7,6 +7,15 @@ bool physics::CollisionDetector::isColliding(const math::Circle &c,
                                              const math::Polygon &p)
 {
    SET_FNAME("physics::CollisionDetector::isColliding(circle, polygon)");
+
+   auto smallestEnclosingCircle{p.getSmallestEnclosingCircle()};
+
+   if (not isColliding(c, smallestEnclosingCircle))
+   {
+      LOGD("Not colliding with smallest enclosing circle");
+      return false;
+   }
+
    collisionPoints_.clear();
    const std::vector<Point> &vertices(p.getVertices());
    size_t nCollisions{0};
