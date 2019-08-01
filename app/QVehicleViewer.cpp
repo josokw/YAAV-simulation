@@ -81,16 +81,16 @@ void QVehicleViewer::draw()
 
    const double lookDistance = 0.5;
    double lookAtX =
-      vr->m_vehicle.getXYZrZ().position.get_x() +
-      cos(math::toRadians(vr->m_vehicle.getXYZrZ().Rz)) * lookDistance;
+      vr->vehicle_.getXYZrZ().position.get_x() +
+      cos(math::toRadians(vr->vehicle_.getXYZrZ().Rz)) * lookDistance;
    double lookAtY =
-      vr->m_vehicle.getXYZrZ().position.get_y() +
-      sin(math::toRadians(vr->m_vehicle.getXYZrZ().Rz)) * lookDistance;
+      vr->vehicle_.getXYZrZ().position.get_y() +
+      sin(math::toRadians(vr->vehicle_.getXYZrZ().Rz)) * lookDistance;
    double lookAtZ = 0.0;
 
-   gluLookAt(vr->m_vehicle.getXYZrZ().position.get_x(),
-             vr->m_vehicle.getXYZrZ().position.get_y(),
-             vr->m_vehicle.getH() + 0.2, lookAtX, lookAtY, lookAtZ, 0, 0,
+   gluLookAt(vr->vehicle_.getXYZrZ().position.get_x(),
+             vr->vehicle_.getXYZrZ().position.get_y(),
+             vr->vehicle_.getH() + 0.2, lookAtX, lookAtY, lookAtZ, 0, 0,
              1);
 
    glPushMatrix();

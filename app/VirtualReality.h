@@ -26,32 +26,32 @@ public:
    void draw() const override;
    /// Excecute all physics.
    void process() override;
-   /// Initalize contained objects.
+   /// Initialize contained objects.
    void init();
    /// Continues processing physics.
    void startPhysics();
    /// Halt processing physics, stop running.
    void stopPhysics();
    /// Start stop physics toggle.
-   void startStopPhysics() { m_simTaskPhysics.startStop(); }
+   void startStopPhysics() { simTaskPhysics_.startStop(); }
    /// Get dirt level %
-   double getDirtLevel() const { return m_dirt.getDirtLevel(); }
+   double getDirtLevel() const { return dirt_.getDirtLevel(); }
 
 private:
    std::vector<Drawable *> drawables;
    std::vector<DoPhysics *> physicsProcesses;
-   Room m_room;
-   std::vector<CylObject> m_cylObjs;
+   Room room_;
+   std::vector<CylObject> cylObjs_;
 
 public:
-   Vehicle m_vehicle;
+   Vehicle vehicle_;
 
 private:
-   Ball m_ball;
-   Block m_chair;
-   DynamicDirt m_dirt;
-   bool m_physicsIsRunning;
-   PeriodicTask m_simTaskPhysics;
+   Ball ball_;
+   Block chair_;
+   DynamicDirt dirt_;
+   bool physicsIsRunning_;
+   PeriodicTask simTaskPhysics_;
 };
 
 #endif // VIRTUALREALITY_H

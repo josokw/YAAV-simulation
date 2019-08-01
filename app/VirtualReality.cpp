@@ -8,35 +8,33 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 VirtualReality::VirtualReality()
-   : Drawable()
-   , DoPhysics()
-   , m_room()
-   , m_cylObjs()
-   , m_vehicle(0.15, 0.10, XYZrZ(-1.0, -1.0, 0.0, 35))
-   , m_ball(0.15, XYZrZ(1.0, 1.5, 0.15))
-   , m_chair(0.5, 0.5, 0.6, XYZrZ(-0.8, -1.5, 0.25, 30))
-   , m_dirt()
-   , m_physicsIsRunning(false)
-   , m_simTaskPhysics(this, &VirtualReality::process, PHYSICS_SIMTIME_MSEC)
+   : Drawable{}
+   , DoPhysics{}
+   , room_{}
+   , cylObjs_{}
+   , vehicle_{0.15, 0.10, XYZrZ{-1.0, -1.0, 0.0, 35}}
+   , ball_{0.15, XYZrZ(1.0, 1.5, 0.15)}
+   , chair_(0.5, 0.5, 0.6, XYZrZ(-0.8, -1.5, 0.25, 30))
+   , dirt_{}
+   , physicsIsRunning_{false}
+   , simTaskPhysics_(this, &VirtualReality::process, physics::SIMTIME_MSEC)
 {
    SET_FNAME("VirtualReality::VirtualReality()");
-   physicsProcesses.push_back(&m_vehicle);
-   drawables.push_back(&m_room);
-   drawables.push_back(&m_vehicle);
-   drawables.push_back(&m_ball);
-   drawables.push_back(&m_chair);
-   drawables.push_back(&m_dirt);
+   physicsProcesses.push_back(&vehicle_);
+   drawables.push_back(&room_);
+   drawables.push_back(&vehicle_);
+   drawables.push_back(&ball_);
+   drawables.push_back(&chair_);
+   drawables.push_back(&dirt_);
    LOGI("initialized");
 }
 
 VirtualReality::~VirtualReality()
 {
    SET_FNAME("VirtualReality::~VirtualReality()");
-   m_simTaskPhysics.stop();
-   m_vehicle.stopControlExecute();
+   simTaskPhysics_.stop();
+   vehicle_.stopControlExecute();
    LOGI("");
 }
 
@@ -52,22 +50,22 @@ void VirtualReality::draw() const
 void VirtualReality::process()
 {
    SET_FNAME("VirtualReality::process()");
-   XYZrZ currentXYZrZ = m_vehicle.getXYZrZ();
-   XYZrZ expectedNextXYZrZ = m_vehicle.expectedNextXYZrZ();
-   math::Circle collisionShape(expectedNextXYZrZ.position, m_vehicle.getR());
+   XYZrZ currentXYZrZ = vehicle_.getXYZrZ();
+   XYZrZ expectedNextXYZrZ = vehicle_.expectedNextXYZrZ();
+   math::Circle collisionShape(expectedNextXYZrZ.position, vehicle_.getR());
 
-   Vehicle expectedVehicle(m_vehicle.getR(), m_vehicle.getH(),
+   Vehicle expectedVehicle(vehicle_.getR(), vehicle_.getH(),
                            expectedNextXYZrZ);
    {
       std::ostringstream msg;
-      msg << "Current state vehicle: " << m_vehicle.getXYZrZ()
+      msg << "Current state vehicle: " << vehicle_.getXYZrZ()
           << " Expected: " << expectedVehicle.getXYZrZ();
       LOGD(msg.str());
    }
 
    // Reset physicsState
-   physicsState[CYLOBJ_COLLISION] = 0;
-   physicsState[WALL_COLLISION] = 0;
+   physicsState[physics::CYLOBJ_COLLISION] = 0;
+   physicsState[physics::WALL_COLLISION] = 0;
    vehicleCollisions.clear();
    // Detect collisions
    size_t index = 0;
@@ -79,18 +77,18 @@ void VirtualReality::process()
 
    //    do
    //    {
-   //        while(!isCollided && index < m_cylObjs.size())
+   //        while(!isCollided && index < cylObjs_{}ize())
    //        {
    //            isCollided =
-   //            expectedVehicle.isColliding(m_cylObjs[index]); if
+   //            expectedVehicle.isColliding(cylObjs_{}ndex]); if
    //            (isCollided) physicsState[CYLOBJ_COLLISION] = 1;
    //            ++index;
    //        }
-   //        if (expectedVehicle.isColliding(m_room))
+   //        if (expectedVehicle.isColliding(room_))
    //        {
    //            physicsState[WALL_COLLISION] = 1;
    //        }
-   //        if (expectedVehicle.isColliding(m_chair))
+   //        if (expectedVehicle.isColliding(chair_))
    //        {
    //            physicsState[WALL_COLLISION] = 1;
    //        }
@@ -103,20 +101,20 @@ void VirtualReality::process()
 
    // vehicle set currentPosition to currentPostion + delta
 
-   while (!isCollided && index < m_cylObjs.size()) {
-      isCollided = m_vehicle.isColliding(m_cylObjs[index]);
+   while (!isCollided && index < cylObjs_.size()) {
+      isCollided = vehicle_.isColliding(cylObjs_[index]);
       if (isCollided)
-         physicsState[CYLOBJ_COLLISION] = 1;
+         physicsState[physics::CYLOBJ_COLLISION] = 1;
       ++index;
    }
-   if (m_vehicle.isColliding(m_room)) {
-      physicsState[WALL_COLLISION] = 1;
+   if (vehicle_.isColliding(room_)) {
+      physicsState[physics::WALL_COLLISION] = 1;
    }
-   if (m_vehicle.isColliding(m_chair)) {
-      physicsState[WALL_COLLISION] = 1;
+   if (vehicle_.isColliding(chair_)) {
+      physicsState[physics::WALL_COLLISION] = 1;
    }
    // Check for dirt
-   m_dirt.removeDirt(m_vehicle);
+   dirt_.removeDirt(vehicle_);
    // Process contained objects
    std::for_each(physicsProcesses.begin(), physicsProcesses.end(),
                  std::mem_fun(&DoPhysics::process));
@@ -125,34 +123,34 @@ void VirtualReality::process()
 void VirtualReality::init()
 {
    SET_FNAME("VirtualReality::init()");
-   m_vehicle.setXYZrZ(XYZrZ(-1.0, -1.0, 0.0, -35));
-   vector<string> data;
-   IniReader().getData(string("VR.cylobjects"), data);
-   for (size_t i = 0; i < data.size(); ++i) {
-      std::istringstream is(data[i]);
+   vehicle_.setXYZrZ(XYZrZ(-1.0, -1.0, 0.0, -35));
+   std::vector<std::string> data;
+   IniReader().getData(std::string("VR.cylobjects"), data);
+   for (const auto &dt : data) {
+      std::istringstream is(dt);
       auto *pCylObj = new CylObject(0, 0, XYZrZ(0, 0, 0));
       is >> *pCylObj;
-      m_cylObjs.push_back(*pCylObj);
+      cylObjs_.push_back(*pCylObj);
       drawables.push_back(pCylObj);
    }
    size_t maxDirtParticles{0};
-   IniReader().getData(string("VR.maxDirtParticles"), &maxDirtParticles);
-   m_dirt.generateDirt(m_room, maxDirtParticles);
+   IniReader().getData(std::string("VR.maxDirtParticles"), &maxDirtParticles);
+   dirt_.generateDirt(room_, maxDirtParticles);
    LOGD("");
 }
 
 void VirtualReality::startPhysics()
 {
    SET_FNAME("VirtualReality::startPhysics()");
-   m_simTaskPhysics.start();
-   m_physicsIsRunning = true;
+   simTaskPhysics_.start();
+   physicsIsRunning_ = true;
    LOGI("++++++ START");
 }
 
 void VirtualReality::stopPhysics()
 {
    SET_FNAME("VirtualReality::stopPhysics()");
-   m_simTaskPhysics.stop();
-   m_physicsIsRunning = false;
+   simTaskPhysics_.stop();
+   physicsIsRunning_= false;
    LOGI(" ------ STOP");
 }

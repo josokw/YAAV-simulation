@@ -71,9 +71,9 @@ XYZrZ Vehicle::expectedNextXYZrZ() const
    double speedMotorLeft = 1.2;   // 0.6;   //m_motorLeft.getSpeed();
    double speedMotorRight = 1.14; // 0.57; //m_motorRight.getSpeed();
    double translationSpeed = (speedMotorLeft + speedMotorRight) / 2;
-   double translation = translationSpeed * PHYSICS_SIMTIME_SEC;
+   double translation = translationSpeed * physics::SIMTIME_SEC;
    double rotationSpeed = (speedMotorRight - speedMotorLeft) / (2 * m_R);
-   double rotation = rotationSpeed * PHYSICS_SIMTIME_SEC;
+   double rotation = rotationSpeed * physics::SIMTIME_SEC;
    double rz = math::toRadians(m_XYZrZ.Rz);
 
    return {m_XYZrZ.position.get_x() + cos(rz) * translation,
@@ -93,13 +93,13 @@ void Vehicle::process()
    double speedMotorLeft = 1.2;   // 0.6;   //m_motorLeft.getSpeed();
    double speedMotorRight = 1.14; // 0.57; //m_motorRight.getSpeed();
    double translationSpeed = (speedMotorLeft + speedMotorRight) / 2;
-   double translation = translationSpeed * PHYSICS_SIMTIME_SEC;
+   double translation = translationSpeed * physics::SIMTIME_SEC;
    double rotationSpeed = (speedMotorRight - speedMotorLeft) / (2 * m_R);
-   double rotation = rotationSpeed * PHYSICS_SIMTIME_SEC;
+   double rotation = rotationSpeed * physics::SIMTIME_SEC;
    double rz = math::toRadians(m_XYZrZ.getRz());
 
-   if (physicsState[CYLOBJ_COLLISION] != 1 &&
-       physicsState[WALL_COLLISION] != 1) {
+   if (physicsState[physics::CYLOBJ_COLLISION] != 1 &&
+       physicsState[physics::WALL_COLLISION] != 1) {
       m_nextXYZrZ.position.set_x(m_XYZrZ.position.get_x() +
                                  cos(rz) * translation);
       m_nextXYZrZ.position.set_y(m_XYZrZ.position.get_y() +
@@ -167,7 +167,7 @@ void Vehicle::controlExecute()
          ++tick;
          const boost::system_time timeout(
             boost::get_system_time() +
-            boost::posix_time::milliseconds(PHYSICS_SIMTIME_MSEC * 4));
+            boost::posix_time::milliseconds(physics::SIMTIME_MSEC * 4));
          if (tick % 10 == 0)
             eventQueue.post(1);
          boost::thread::sleep(timeout);

@@ -27,7 +27,7 @@ public:
    void process() override
    {
       if (_isRunning) {
-         _elapsedTime_ms += PHYSICS_SIMTIME_MSEC;
+         _elapsedTime_ms += physics::SIMTIME_MSEC;
          if (_elapsedTime_ms >= _time) {
             if (_pFunction != nullptr) {
                (_pObj->*_pFunction)();

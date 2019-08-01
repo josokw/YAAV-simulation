@@ -17,7 +17,6 @@ SOURCES += main.cpp \
     Vehicle.cpp \
     VirtualReality.cpp \
     QVrViewer.cpp \
-    DoPhysics.cpp \
     EventQueue.cpp \
     Log.cpp \
     Ini.cpp \

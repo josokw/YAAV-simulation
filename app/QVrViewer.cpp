@@ -151,8 +151,8 @@ void QVrViewer::draw()
    glRotatef(-cameraAngle[1], 0.0, 1.0, 0.0); // heading
    glRotatef(-cameraAngle[2], 0.0, 0.0, 1.0); // roll
    if (isPerpendicular) {
-      glTranslatef(-vr->m_vehicle.getXYZrZ().position.get_x(),
-                   -vr->m_vehicle.getXYZrZ().position.get_y(),
+      glTranslatef(-vr->vehicle_.getXYZrZ().position.get_x(),
+                   -vr->vehicle_.getXYZrZ().position.get_y(),
                    -cameraPosition[2]);
    } else {
       glTranslatef(-cameraPosition[0], -cameraPosition[1],
@@ -193,7 +193,7 @@ void QVrViewer::mouseMoveEvent(QMouseEvent *event)
 
 void QVrViewer::wheelEvent(QWheelEvent *event)
 {
-   double cp2 = cameraPosition[2];
+   float cp2 = cameraPosition[2];
    cp2 += 0.03 * (event->delta() / 10);
    if (cp2 < 1.0)
       cp2 = 1.0;
