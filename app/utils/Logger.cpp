@@ -5,12 +5,6 @@
 #include <boost/date_time.hpp>
 #include <boost/thread.hpp>
 
-utils::Logger &utils::Logger::instance()
-{
-   static Logger logger;
-   return logger;
-}
-
 utils::Logger::~Logger()
 {
    SET_FNAME("Logger::~Logger()");
@@ -43,7 +37,8 @@ void utils::Logger::log(const char *message)
 }
 
 utils::Logger::Logger()
-   : logMutex_{}
+   : Singleton<Logger>{}
+   , logMutex_{}
    , filename_{}
    , logFile_{APPNAME ".log"}
    , debugMode_{true}
