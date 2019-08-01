@@ -1,5 +1,6 @@
 #include "CartVec.h"
 #include "Circle.h"
+#include "CircleRz.h"
 #include "catch.hpp"
 
 TEST_CASE("Circle class")
@@ -20,7 +21,8 @@ TEST_CASE("Circle class")
       math::Circle c3{math::Point{-1.0, 1, 0}, math::Point{1.0, 1.0}};
       REQUIRE(c3 == math::Circle{{0.0, 1.0}, 1.0});
 
-      math::Circle c4{math::Point{2.0, 1, 0}, math::Point{0.0, 5.0}, math::Point{-1.0, 2.0}};
+      math::Circle c4{math::Point{2.0, 1, 0}, math::Point{0.0, 5.0},
+                      math::Point{-1.0, 2.0}};
       REQUIRE(c4 == math::Circle{{1.0, 3.0}, std::sqrt(5.0)});
    }
 

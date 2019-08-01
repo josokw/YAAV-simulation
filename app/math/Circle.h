@@ -53,10 +53,11 @@ public:
    /// Calculates area.
    double area() const { return 2 * M_PI * radius_; }
 
-private:
+protected:
    Point center_{0.0, 0.0, 0.0};
    double radius_{1.0};
 
+private:
    void makeCircumcircle(const Point &a, const Point &b, const Point &c);
 };
 

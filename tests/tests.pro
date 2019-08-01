@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
    testMain.cpp \
    CircleTests.cpp \
+   CircleRzTests.cpp \
    CartVecTests.cpp \
    PointTests.cpp \
    PolygonTests.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
    EdgeTests.cpp \
    ../app/math/CartVec.cpp \
    ../app/math/Circle.cpp \
+   ../app/math/CircleRz.cpp \
    ../app/math/Point.cpp \
    ../app/math/Polygon.cpp \
    ../app/math/XYZrZ.cpp \
