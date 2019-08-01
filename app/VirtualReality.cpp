@@ -3,7 +3,8 @@
 #include "Log.h"
 #include "OrientationCone.h"
 #include "PhysicsDef.h"
-#include "math/XYZrZ.h"
+#include "XYZrZ.h"
+
 #include <iostream>
 #include <string>
 
@@ -53,15 +54,16 @@ void VirtualReality::process()
    SET_FNAME("VirtualReality::process()");
    XYZrZ currentXYZrZ = m_vehicle.getXYZrZ();
    XYZrZ expectedNextXYZrZ = m_vehicle.expectedNextXYZrZ();
-   math::circle_t collisionShape(expectedNextXYZrZ.position, m_vehicle.getR());
+   math::Circle collisionShape(expectedNextXYZrZ.position, m_vehicle.getR());
 
    Vehicle expectedVehicle(m_vehicle.getR(), m_vehicle.getH(),
                            expectedNextXYZrZ);
-
-   std::ostringstream msg;
-   msg << "Current state vehicle: " << m_vehicle.getXYZrZ()
-       << " Expected: " << expectedVehicle.getXYZrZ();
-   LOGD(msg.str());
+   {
+      std::ostringstream msg;
+      msg << "Current state vehicle: " << m_vehicle.getXYZrZ()
+          << " Expected: " << expectedVehicle.getXYZrZ();
+      LOGD(msg.str());
+   }
 
    // Reset physicsState
    physicsState[CYLOBJ_COLLISION] = 0;
@@ -128,7 +130,7 @@ void VirtualReality::init()
    IniReader().getData(string("VR.cylobjects"), data);
    for (size_t i = 0; i < data.size(); ++i) {
       std::istringstream is(data[i]);
-      CylObject *pCylObj = new CylObject(0, 0, XYZrZ(0, 0, 0));
+      auto *pCylObj = new CylObject(0, 0, XYZrZ(0, 0, 0));
       is >> *pCylObj;
       m_cylObjs.push_back(*pCylObj);
       drawables.push_back(pCylObj);

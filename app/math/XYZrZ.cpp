@@ -13,12 +13,12 @@ XYZrZ operator*(const XYZrZ &lhs, double rhs)
    return {lhs.position * rhs};
 }
 
-XYZrZ operator+(const XYZrZ &lhs, const CartVec &rhs)
+XYZrZ operator+(const XYZrZ &lhs, const math::CartVec &rhs)
 {
    return {lhs.position + rhs, lhs.Rz};
 }
 
-XYZrZ operator-(const XYZrZ &lhs, const CartVec &rhs)
+XYZrZ operator-(const XYZrZ &lhs, const math::CartVec &rhs)
 {
    return {lhs.position - rhs, lhs.Rz};
 }
@@ -39,13 +39,13 @@ XYZrZ::XYZrZ(double x, double y, double z, double rz)
 {
 }
 
-XYZrZ::XYZrZ(const Point &xyz)
+XYZrZ::XYZrZ(const math::Point &xyz)
    : position{xyz}
    , Rz{0.0}
 {
 }
 
-XYZrZ::XYZrZ(const Point &xyz, double rz)
+XYZrZ::XYZrZ(const math::Point &xyz, double rz)
    : position{xyz}
    , Rz{rz}
 {

@@ -11,17 +11,20 @@ CONFIG += c++17
 SOURCES += \
    testMain.cpp \
    CircleTests.cpp \
+   CircleRzTests.cpp \
    CartVecTests.cpp \
    PointTests.cpp \
    PolygonTests.cpp \
    XYZrZtests.cpp \
    CollisionDetectorTests.cpp \
+   EdgeTests.cpp \
    ../app/math/CartVec.cpp \
    ../app/math/Circle.cpp \
+   ../app/math/CircleRz.cpp \
    ../app/math/Point.cpp \
    ../app/math/Polygon.cpp \
    ../app/math/XYZrZ.cpp \
-   ../app/math/MathDef.cpp \
+   ../app/math/Edge.cpp \
    ../app/physics/CollisionDetector.cpp \
    ../app/utils/Logger.cpp \
    ../app/Log.cpp 

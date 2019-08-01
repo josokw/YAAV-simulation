@@ -2,8 +2,9 @@
 #define POLYGON_H
 
 #include "CartVec.h"
+#include "Circle.h"
+#include "Edge.h"
 #include "Point.h"
-#include "MathDef.h"
 
 #include <initializer_list>
 #include <vector>
@@ -63,12 +64,14 @@ public:
    /// Tests if this polygon is facing the specified point.
    bool isFacing(const Point &point) const;
    /// Get edge (pair of two vertices) by its index, starts at index 0.
-   edge_t getEdge(std::size_t index) const;
+   math::Edge getEdge(std::size_t index) const;
    /// Get closest point on an edge identified by its index to point p.
    Point getClosestPointToEdge(std::size_t index, const Point &p) const;
    /// Calculates and returns minimal and maximal values x, y and z of all
    /// vertices. For bounding box calculations.
    minmaxXYZ_t getMinMaxXYZ() const;
+   //
+   Circle getSmallestEnclosingCircle() const { return smallestEnclosingCircle_; }
    /// Translate: p += cv
    Polygon &operator+=(const CartVec &rhs);
    /// Translate: p -= cv
@@ -86,14 +89,31 @@ public:
    /// @param angle rotation angle in degrees.
    void rotateAroundXYZ(const Point &xyz, double angle);
    /// Checks if point is inside the polygon.
-   /// @todo Prepare for 3D.
+   /// \todo Prepare for 3D.
    bool isInside(const Point &point) const;
+   /// Checks if all points are inside the polygon.
+   bool isInside(const std::vector<Point> &points) const;
 
 private:
    /// Polygon vertices.
    std::vector<Point> vertices_;
    /// The normalized normal vector for the polygon.
    CartVec normal_;
+   /// Contains smmalles enclosing circle.
+   /// \info Calculations based on: Project Nayuki.
+   mutable math::Circle smallestEnclosingCircle_;
+
+   /// No boundary points known
+   void makeSmallestEnclosingCircle() const;
+   /// One boundary point known
+   math::Circle
+   makeSmallestEnclosingCircleOnePoint(const std::vector<Point> &points,
+                                       size_t end, const Point &point) const;
+   /// Two boundary points known
+   math::Circle
+   makeSmallestEnclosingCircleTwoPoints(const std::vector<Point> &points,
+                                        size_t end, const Point &p,
+                                        const Point &q) const;
 };
 
 } // namespace math

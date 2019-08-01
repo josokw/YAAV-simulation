@@ -37,13 +37,14 @@ SOURCES += main.cpp \
     hardware/IOextern.cpp \
     hardware/IOintern.cpp \
     hardware/Battery.cpp \
-    math/Circle.cpp \
     utils/INIreader.cpp \
     utils/Logger.cpp \
     utils/stringExt.cpp \
+    math/Circle.cpp \
+    math/CircleRz.cpp \
     math/CartVec.cpp \
     math/Point.cpp \
-    math/MathDef.cpp \
+    math/Edge.cpp \
     math/XYZrZ.cpp \
     math/Polygon.cpp \
     physics/CollisionDetector.cpp \
@@ -82,14 +83,16 @@ HEADERS += MainWindow.h \
     hardware/IOintern.h \
     hardware/IOextern.h \
     hardware/IObus.h \
-    math/Circle.h \
     ui_MainWindow.h \
     utils/INIreader.h \
     utils/Logger.h \
     utils/stringExt.h \
     math/CartVec.h \
+    math/Circle.h \
+    math/CircleRz.h \
     math/Point.h \
     math/MathDef.h \
+    math/Edge.h \
     math/XYZrZ.h \
     math/Random.h \
     math/Polygon.h \

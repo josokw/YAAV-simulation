@@ -1,9 +1,11 @@
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
+#include "CollisionDetector.h"
 #include "Drawable.h"
 #include "HWdef.h"
 #include "IOdef.h"
+#include "XYZrZ.h"
 #include "hardware/Battery.h"
 #include "hardware/Bumper.h"
 #include "hardware/IObus.h"
@@ -12,9 +14,6 @@
 #include "hardware/Memory.h"
 #include "hardware/Motor.h"
 #include "hardware/Timer.h"
-#include "math/MathDef.h"
-#include "math/XYZrZ.h"
-#include "physics/CollisionDetector.h"
 
 #include <thread>
 #include <vector>
@@ -46,9 +45,9 @@ public:
    void controlExecute();
    void stopControlExecute();
 
-   math::circle_t getCollisionShape() const
+   math::Circle getCollisionShape() const
    {
-      return math::circle_t(m_XYZrZ.position, m_R);
+      return {m_XYZrZ.position, m_R};
    }
    bool isColliding(const Room &room);
    bool isColliding(const CylObject &object);

@@ -21,12 +21,12 @@ public:
    void draw() const override;
    /// Returns collision shape.
    const math::Polygon &getCollisionShape() const { return corners_; }
-   const std::vector<Point> &getCorners() const
+   const std::vector<math::Point> &getCorners() const
    {
       return corners_.getVertices();
    }
    /// Checks if point is in the room. Z-value is ignored!
-   bool isInside(const Point &point) const { return corners_.isInside(point); }
+   bool isInside(const math::Point &point) const { return corners_.isInside(point); }
    math::Polygon::minmaxXYZ_t getMinMaxXYZ() const
    {
       return corners_.getMinMaxXYZ();
@@ -37,7 +37,7 @@ private:
    math::Polygon corners_;
 
 public:
-   Point closestPointWall(int wallID, const Point &xyz) const;
+   math::Point closestPointWall(int wallID, const math::Point &xyz) const;
 };
 
 #endif // ROOM_H

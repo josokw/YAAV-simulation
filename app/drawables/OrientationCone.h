@@ -19,8 +19,8 @@ public:
    static const OrientationCone OcY;
    static const OrientationCone OcZ;
 
-   OrientationCone(const std::array<float, 3> &rgb, const Point &position,
-                   const CartVec &orientation);
+   OrientationCone(const std::array<float, 3> &rgb, const math::Point &position,
+                   const math::CartVec &orientation);
    OrientationCone(const OrientationCone &ocone);
    OrientationCone &operator=(const OrientationCone &) = delete;
    ~OrientationCone() override;
@@ -29,8 +29,8 @@ public:
 
 private:
    std::array<float, 3> rgb_;
-   Point position_;
-   CartVec orientation_;
+   math::Point position_;
+   math::CartVec orientation_;
    GLUquadricObj *pBody_;
 };
 

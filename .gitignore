@@ -81,6 +81,9 @@ compile_commands.json
 # QtCreator local machine specific files for imported projects
 *creator.user*
 
+# Doxygen
+docs/html
+
 # Executables in build dir and logging
 build
 *.log

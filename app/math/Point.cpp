@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iomanip>
 
+namespace math {
+
 std::ostream &operator<<(std::ostream &os, const Point &rhs)
 {
    os << std::setiosflags(std::ios::fixed) << std::setprecision(3) << "P["
@@ -50,26 +52,26 @@ bool operator!=(const Point &lhs, const Point &rhs)
    return not(lhs == rhs);
 }
 
-CartVec operator-(const Point &lhs, const Point &rhs)
+math::CartVec operator-(const Point &lhs, const Point &rhs)
 {
    return {lhs.get_x() - rhs.get_x(), lhs.get_y() - rhs.get_y(),
            lhs.get_z() - rhs.get_z()};
 }
 
-Point operator+(const Point &lhs, const CartVec &rhs)
+Point operator+(const Point &lhs, const math::CartVec &rhs)
 {
    return {lhs.get_x() + rhs.get_x(), lhs.get_y() + rhs.get_y(),
            lhs.get_z() + rhs.get_z()};
 }
 
-Point operator-(const Point &lhs, const CartVec &rhs)
+Point operator-(const Point &lhs, const math::CartVec &rhs)
 {
    return {lhs.get_x() - rhs.get_x(), lhs.get_y() - rhs.get_y(),
            rhs.get_z() - lhs.get_z()};
 }
 
 const Point Point::ORIGIN{0.0, 0.0, 0.0};
-double Point::eps{CartVec::eps};
+double Point::eps{math::CartVec::eps};
 
 Point::Point(double x, double y, double z)
    : x_{x}
@@ -78,7 +80,7 @@ Point::Point(double x, double y, double z)
 {
 }
 
-Point &Point::operator+=(const CartVec &rhs)
+Point &Point::operator+=(const math::CartVec &rhs)
 {
    x_ += rhs.get_x();
    y_ += rhs.get_y();
@@ -87,7 +89,7 @@ Point &Point::operator+=(const CartVec &rhs)
    return *this;
 }
 
-Point &Point::operator-=(const CartVec &rhs)
+Point &Point::operator-=(const math::CartVec &rhs)
 {
    x_ -= rhs.get_x();
    y_ -= rhs.get_y();
@@ -160,3 +162,5 @@ double Point::distance(const Point &pnt) const
                     (y_ - pnt.y_) * (y_ - pnt.y_) +
                     (z_ - pnt.z_) * (z_ - pnt.z_));
 }
+
+} // namespace math

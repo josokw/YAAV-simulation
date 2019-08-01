@@ -1,9 +1,10 @@
 #ifndef CYLOBJECT_H
 #define CYLOBJECT_H
 
+#include "Circle.h"
 #include "Drawable.h"
-#include "MathDef.h"
 #include "XYZrZ.h"
+
 
 #include <iosfwd>
 
@@ -20,11 +21,8 @@ public:
    ~CylObject() override;
 
    void draw() const override;
-   math::circle_t getCollisionShape() const
-   {
-      return {_XYZrZ.position, _R};
-   }
-// private:
+   math::Circle getCollisionShape() const { return {_XYZrZ.position, _R}; }
+   // private:
    double _R;
    double _H;
    XYZrZ _XYZrZ;

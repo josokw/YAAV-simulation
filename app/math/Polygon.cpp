@@ -1,17 +1,19 @@
 #include "Polygon.h"
+#include "Edge.h"
 #include "MathDef.h"
 
 #include <algorithm>
 #include <functional>
 #include <iostream>
 #include <iterator>
+#include <random>
 
 namespace math {
 
 std::ostream &operator<<(std::ostream &os, const math::Polygon &rhs)
 {
    os << "Poly[";
-   for (const auto &point: rhs.getVertices()) {
+   for (const auto &point : rhs.getVertices()) {
       os << ' ' << point;
    }
    os << " Normal" << rhs.getNormal() << "]";
@@ -24,10 +26,8 @@ math::Polygon::Polygon(const std::initializer_list<Point> &cvlist)
    : vertices_{cvlist}
    , normal_{}
 {
-   // for (auto i = begin(cvlist); i != end(cvlist); ++i) {
-   //    vertices_.push_back(*i);
-   // }
    calcNormal();
+   makeSmallestEnclosingCircle();
 }
 
 math::Polygon::Polygon(const std::vector<Point> &vertices)
@@ -35,6 +35,7 @@ math::Polygon::Polygon(const std::vector<Point> &vertices)
    , normal_{}
 {
    calcNormal();
+   makeSmallestEnclosingCircle();
 }
 
 void math::Polygon::addVertex(const Point &vertex)
@@ -50,35 +51,24 @@ void math::Polygon::calcNormal()
    normal_.normalize();
 }
 
-bool math::Polygon::isFacing(const Point &point) const
+bool math::Polygon::isFacing(const math::Point &point) const
 {
    CartVec temp = point - vertices_[0];
 
    return normal_.dot(temp) >= 0.0;
 }
 
-math::edge_t math::Polygon::getEdge(std::size_t index) const
+math::Edge math::Polygon::getEdge(std::size_t index) const
 {
    auto size{vertices_.size()};
 
-   return {vertices_[index % size], vertices_[(index + 1) % size]};
+   return math::Edge{vertices_[index % size], vertices_[(index + 1) % size]};
 }
 
-Point math::Polygon::getClosestPointToEdge(std::size_t index,
-                                           const Point &p) const
+math::Point math::Polygon::getClosestPointToEdge(std::size_t index,
+                                                 const math::Point &p) const
 {
-   auto edge{getEdge(index)};
-   CartVec v{edge.end - edge.start};
-   CartVec w{p - vertices_[index]};
-   double wDotv{w.dot(v)};
-   double t{wDotv / v.dot(v)};
-
-   if (t < 0)
-      t = 0;
-   if (t > 1)
-      t = 1;
-
-   return vertices_[index] + v * t;
+   return getEdge(index).getClosestPoint(p);
 }
 
 math::Polygon::minmaxXYZ_t math::Polygon::getMinMaxXYZ() const
@@ -196,4 +186,93 @@ bool math::Polygon::isInside(const Point &point) const
    }
 
    return isIn;
+}
+
+bool math::Polygon::isInside(const std::vector<Point> &points) const
+{
+   for (const auto &point : points) {
+      if (not isInside(point)) {
+         return false;
+      }
+   }
+   return true;
+}
+
+void math::Polygon::makeSmallestEnclosingCircle() const
+{
+   std::default_random_engine randGen((std::random_device())());
+   std::vector<Point> shuffledPoints{vertices_};
+   std::shuffle(begin(shuffledPoints), end(shuffledPoints), randGen);
+
+   math::Circle c{math::Circle::INVALID};
+
+   for (size_t i = 0; i < shuffledPoints.size(); ++i) {
+      const Point &p = shuffledPoints.at(i);
+      if (c.isNotValid() or not c.isInside(p)) {
+         c = makeSmallestEnclosingCircleOnePoint(shuffledPoints, i + 1, p);
+      }
+   }
+   smallestEnclosingCircle_ = c;
+}
+
+math::Circle math::Polygon::makeSmallestEnclosingCircleOnePoint(
+   const std::vector<Point> &points, size_t end, const Point &point) const
+{
+   Circle c{point, 0};
+   for (size_t i = 0; i < end; i++) {
+      const Point &q = points.at(i);
+      if (not c.isInside(q)) {
+         if (c.getRadius() == 0)
+            c = math::Circle(point, q);
+         else
+            c = makeSmallestEnclosingCircleTwoPoints(points, i + 1, point, q);
+      }
+   }
+   return c;
+}
+
+math::Circle math::Polygon::makeSmallestEnclosingCircleTwoPoints(
+   const std::vector<Point> &points, size_t end, const Point &p,
+   const Point &q) const
+{
+   Circle circ{p, q};
+   Circle left{math::Circle::INVALID};
+   Circle right{math::Circle::INVALID};
+
+   auto crossf = [](const CartVec &p1, const CartVec &p2) {
+      return (p1.get_x() * p2.get_y()) - (p1.get_y() * p2.get_x());
+   };
+
+   // For each point not in the two-point circle
+   CartVec pq = q - p;
+   for (size_t i = 0; i < end; i++) {
+      const Point &r = points.at(i);
+      if (circ.isInside(r))
+         continue;
+
+      // Form a circumcircle and classify it on left or right side
+      double cross = crossf(pq, r - p);
+
+      math::Circle c(p, q, r);
+      if (c.isNotValid())
+         continue;
+      else if (cross > 0 and
+               (left.isNotValid() or crossf(pq, c.getCenter() - p) >
+                                        crossf(pq, left.getCenter() - p)))
+         left = c;
+      else if (cross < 0 and
+               (right.isNotValid() or crossf(pq, (c.getCenter() - p)) <
+                                         crossf(pq, right.getCenter() - p)))
+         right = c;
+   }
+
+   // Select which circle to return
+   if (left.isNotValid() and right.isNotValid())
+      return circ;
+   else if (left.isNotValid())
+      return right;
+   else if (right.isNotValid())
+      return left;
+   else
+      return (left.getRadius() <= right.getRadius()) ? left : right;
 }

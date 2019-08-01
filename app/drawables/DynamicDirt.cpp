@@ -45,8 +45,8 @@ void DynamicDirt::removeDirt(const Vehicle &vehicle)
 
    for (auto it = _dirt.begin(); it != _dirt.end(); ++it) {
       // XYZrZ dif(vehicle.getXYZrZ() - it->getXYZrZ());
-      CartVec dif(vehicle.getXYZrZ().getPosition() -
-                  it->getXYZrZ().getPosition());
+      math::CartVec dif(vehicle.getXYZrZ().getPosition() -
+                        it->getXYZrZ().getPosition());
       if (dif.length() < 0.9 * vehicle.getR()) {
          tobeRemoved.push_back(it);
       }

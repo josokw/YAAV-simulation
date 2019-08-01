@@ -1,9 +1,10 @@
 #include "AppInfo.h"
 #include "Ini.h"
 #include "Log.h"
+#include "Logger.h"
 #include "MainWindow.h"
 #include "VirtualReality.h"
-#include "utils/Logger.h"
+
 #include <QApplication>
 
 #include <boost/program_options.hpp>
@@ -11,26 +12,23 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
 namespace bpo = boost::program_options;
 
 int main(int argc, char *argv[])
 {
    SET_FNAME("main()");
-   bpo::options_description desc(string("Allowed options"));
+   bpo::options_description desc(std::string("Allowed options"));
    desc.add_options()("help,h", "Prints this message")("debug,d",
                                                        "Log debug info");
    bpo::positional_options_description pos;
    bpo::variables_map vm;
-   store(bpo::command_line_parser(argc, argv)
-            .options(desc)
-            .positional(pos)
-            .run(),
-         vm);
+   store(
+      bpo::command_line_parser(argc, argv).options(desc).positional(pos).run(),
+      vm);
    bpo::notify(vm);
 
    if (vm.count("help")) {
-      clog << desc << endl;
+      std::clog << desc << std::endl;
       return 0;
    }
    bool logDebugModeIsOn(false);
@@ -40,8 +38,9 @@ int main(int argc, char *argv[])
 
    int r = 0;
    //----------------------------------------------------------------------
-   //Core code
+   // Core code
    auto &logger = utils::Logger::instance();
+
    LOGI("------------------------- " APPNAME " v" VERSION " started");
    LOGI("------------------------- BOOST libs: v" BOOST_LIB_VERSION);
    LOGI("------------------------- Qt: v" QT_VERSION_STR);
@@ -54,7 +53,7 @@ int main(int argc, char *argv[])
       vr.init();
       LOGI("Core code initialised");
       //-------------------------------------------------------------------
-      //Qt code
+      // Qt code
       QApplication app(argc, argv);
       if (!QGLFormat::hasOpenGL()) {
          std::cerr << "This system has no OpenGL support" << std::endl;
@@ -64,9 +63,11 @@ int main(int argc, char *argv[])
       MainWindow w(vr);
       w.show();
       r = app.exec();
-   } catch (std::exception &x) {
+   }
+   catch (std::exception &x) {
       LOGE(x.what());
-   } catch (...) {
+   }
+   catch (...) {
       LOGE("UNKNOWN EXCEPTION");
    }
    LOGI("--------------------------- " APPNAME " v" VERSION " ended");

@@ -6,12 +6,16 @@
 #include <cmath>
 #include <tuple>
 
+namespace math {
+
 class CartVec;
 
-/// Represents a circle (center point and radius). 
+/// Represents a circle (center point and radius).
 /// Can be translated by a vector (CartVec).
 class Circle
 {
+   /// Output format: C[P[x,y,z],r]
+   friend std::ostream &operator<<(std::ostream &os, const Circle &rhs); 
    friend bool operator==(const Circle &lhs, const Circle &rhs);
    friend bool operator!=(const Circle &lhs, const Circle &rhs);
    /// Translate: c1 = c2 + v
@@ -20,10 +24,18 @@ class Circle
    friend Circle operator-(const Circle &lhs, const CartVec &rhs);
 
 public:
-   static double eps;
+   static const Circle INVALID;
+   static double epsCOMPARE;
+   static double epsMULTIPLY;
 
    Circle() = default;
    Circle(const Point &center, double radius = 1.0);
+   /// Create circle through 2 points, for z = 0.
+   /// \pre z == 0.0 and a != b
+   Circle(const Point &a, const Point &b);
+   /// Create circle through 3 points, for z = 0.
+   /// \pre z == 0.0 and a, b and c are not collinear.
+   Circle(const Point &a, const Point &b, const Point &c);
 
    const Point &getCenter() const { return center_; }
    double getRadius() const { return radius_; }
@@ -31,16 +43,24 @@ public:
    {
       return {center_, radius_};
    }
+   bool isNotValid() const { return radius_ < 0.0; }
    /// Translation: c += cv
    Circle &operator+=(const CartVec &rhs);
    /// Translation: c -= cv
    Circle &operator-=(const CartVec &rhs);
+
+   bool isInside(const Point &point) const;
    /// Calculates area.
    double area() const { return 2 * M_PI * radius_; }
 
-private:
+protected:
    Point center_{0.0, 0.0, 0.0};
    double radius_{1.0};
+
+private:
+   void makeCircumcircle(const Point &a, const Point &b, const Point &c);
 };
+
+} // namespace math
 
 #endif // CIRCLE_H

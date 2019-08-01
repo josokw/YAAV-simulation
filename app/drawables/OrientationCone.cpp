@@ -16,8 +16,8 @@ OrientationCone operator*(double lhs, const OrientationCone &rhs)
 }
 
 OrientationCone::OrientationCone(const std::array<float, 3> &rgb,
-                                 const Point &position,
-                                 const CartVec &orientation)
+                                 const math::Point &position,
+                                 const math::CartVec &orientation)
    : Drawable()
    , rgb_{rgb}
    , position_{position}

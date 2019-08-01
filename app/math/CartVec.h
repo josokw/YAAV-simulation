@@ -5,6 +5,8 @@
 #include <iosfwd>
 #include <tuple>
 
+namespace math {
+
 /// Represents a Cartesian vector [x,y,z] in 3D space.
 /// \short 3D Cartesian vector.
 class CartVec final
@@ -117,5 +119,7 @@ private:
    double y_{0.0};
    double z_{0.0};
 };
+
+} // namespace math
 
 #endif // CARTVEC_H

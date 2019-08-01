@@ -1,23 +1,20 @@
 #ifndef UTILS_LOGGER_H
 #define UTILS_LOGGER_H
 
+#include "Singleton.h"
+
 #include <fstream>
 #include <mutex>
 #include <string>
 
 namespace utils {
 
-/// Logs messages to a file.
-/// Implemented according to the singleton pattern.
-class Logger
+/// Singleton class, logs messages to a file.
+class Logger: public Singleton<Logger>
 {
-public:
-   static Logger &instance();
+   friend class utils::Singleton<Logger>;
 
-   Logger(const Logger &other) = delete;
-   Logger &operator=(const Logger &other) = delete;
-   Logger(const Logger &&other) = delete;
-   Logger &operator=(const Logger &&other) = delete;
+public:
    virtual ~Logger();
 
    void setFilename(const std::string &filename);
