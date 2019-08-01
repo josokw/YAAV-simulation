@@ -2,8 +2,7 @@
 #include "CartVec.h"
 
 math::Point math::Edge::getClosestPoint(const math::Point &point) const
-{
-   
+{   
    CartVec v{getEnd() - getStart()};
    CartVec w{point - getStart()};
    double wDotv{w.dot(v)};
