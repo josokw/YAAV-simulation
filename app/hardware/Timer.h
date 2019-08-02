@@ -3,6 +3,8 @@
 
 #include "DoPhysics.h"
 
+#include <atomic>
+
 namespace hardware {
 
 enum class mode_t { ONE_SHOT, PERIODIC };
@@ -11,37 +13,38 @@ template <typename T> class Timer : public physics::DoPhysics
 {
 public:
    typedef void (T::*pFunction_t)();
+
    Timer(T *obj)
-      : _elapsedTime_ms(0L)
-      , _isRunning(false)
-      , _mode(mode_t::ONE_SHOT)
-      , _time(0L)
-      , _pObj(obj)
-      , _pFunction(nullptr)
+      : elapsedTime_ms_(0L)
+      , isRunning_(false)
+      , mode_(mode_t::ONE_SHOT)
+      , time_(0L)
+      , pObj_(obj)
+      , pFunction_(nullptr)
    {
    }
-   Timer(const Timer &other) = delete;
-   Timer &operator=(const Timer &other) = delete;
-   virtual ~Timer() = default;
+   Timer(const Timer &) = delete;
+   Timer &operator=(const Timer &) = delete;
+   ~Timer() override = default;
 
    void process() override
    {
-      if (_isRunning) {
-         _elapsedTime_ms += physics::SIMTIME_MSEC;
-         if (_elapsedTime_ms >= _time) {
-            if (_pFunction != nullptr) {
-               (_pObj->*_pFunction)();
+      if (isRunning_) {
+         elapsedTime_ms_ += physics::SIMTIME_MSEC;
+         if (elapsedTime_ms_ >= time_) {
+            if (pFunction_ != nullptr) {
+               (pObj_->*pFunction_)();
             }
-            _elapsedTime_ms = 0L;
-            switch (_mode) {
+            elapsedTime_ms_ = 0L;
+            switch (mode_) {
                case mode_t::ONE_SHOT:
-                  _isRunning = false;
+                  isRunning_ = false;
                   break;
                case mode_t::PERIODIC:
-                  _isRunning = true;
+                  isRunning_ = true;
                   break;
                default:
-                  _isRunning = false;
+                  isRunning_ = false;
                   break;
             }
          }
@@ -49,20 +52,20 @@ public:
    }
    void setTime(long long time, mode_t mode)
    {
-      _time = time;
-      _mode = mode;
+      time_ = time;
+      mode_ = mode;
    }
-   void setISR(pFunction_t pF) { _pFunction = pF; }
-   void start() { _isRunning = true; }
-   long long getElapsedTime() const { return _elapsedTime_ms; }
+   void setISR(pFunction_t pF) { pFunction_ = pF; }
+   void start() { isRunning_ = true; }
+   long long getElapsedTime() const { return elapsedTime_ms_; }
 
 private:
-   long long _elapsedTime_ms;
-   bool _isRunning;
-   mode_t _mode;
-   long long _time;
-   T *_pObj;
-   pFunction_t _pFunction;
+   long long elapsedTime_ms_;
+   std::atomic<bool> isRunning_;
+   mode_t mode_;
+   long long time_;
+   T *pObj_;
+   pFunction_t pFunction_;
 };
 
 } // namespace hardware

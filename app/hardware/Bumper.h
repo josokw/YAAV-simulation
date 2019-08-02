@@ -18,14 +18,15 @@ class Bumper : public Sensor, public physics::DoPhysics
 public:
    Bumper(const Vehicle &vehicle, double startAngle, double endAngle, int n,
           memory_t &memory, size_t index1);
-   ~Bumper() = default;
+   ~Bumper() override = default;
 
-   void process();
+   void process() override;
 
 private:
-   utils::Logger &_logger;
-   const Vehicle &_vehicle;
-   std::vector<double> _angles;
+   utils::Logger &logger_;
+   const Vehicle &vehicle_;
+   std::vector<double> angles_;
+
    int calcSensorOffset(double collisionAngle) const;
 };
 

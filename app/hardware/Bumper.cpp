@@ -14,16 +14,16 @@ hardware::Bumper::Bumper(const Vehicle &vehicle, double startAngle,
                          size_t index1)
    : hardware::Sensor(memory, index1)
    , DoPhysics()
-   , _logger(utils::Logger::instance())
-   , _vehicle(vehicle)
-   , _angles()
+   , logger_(utils::Logger::instance())
+   , vehicle_(vehicle)
+   , angles_()
 {
    SET_FNAME("Bumper::Bumper()");
    n = std::min(MAX_BUMPERS, n);
    n = std::max(1, n);
    double angleStep = (endAngle - startAngle) / n;
    for (int i = 0; i <= n; ++i) {
-      _angles.push_back(startAngle + i * angleStep);
+      angles_.push_back(startAngle + i * angleStep);
    }
    LOGI("initialized");
 }
@@ -43,7 +43,7 @@ void hardware::Bumper::process()
          math::toDegrees(std::atan(vehicleCollisions[i].get_y() /
                                    vehicleCollisions[i].get_x()));
       // phi in VCS
-      phi -= _vehicle.getXYZrZ().Rz;
+      phi -= vehicle_.getXYZrZ().Rz;
       phi = math::normalizeDegrees(phi);
       int sensorOffset = calcSensorOffset(phi);
       _memory.write(byte_t(1), _index1 + sensorOffset);
@@ -66,12 +66,12 @@ int hardware::Bumper::calcSensorOffset(double collisionAngle) const
    if (collisionAngle > 180) {
       collisionAngle -= 360;
    }
-   if (collisionAngle < _angles[0] ||
-       collisionAngle > _angles[_angles.size() - 1]) {
+   if (collisionAngle < angles_[0] ||
+       collisionAngle > angles_[angles_.size() - 1]) {
       offset = -1;
    } else {
       size_t i = 0;
-      while (collisionAngle > _angles[i] && i < _angles.size()) {
+      while (collisionAngle > angles_[i] && i < angles_.size()) {
          ++i;
       }
       offset = i - 1;

@@ -1,49 +1,54 @@
 #include "EventQueue.h"
 #include "Log.h"
+
 #include <sstream>
 
 EventQueue::EventQueue()
-   : _destruct(false)
-   , _queue()
-   , _mutex()
-   , _condition()
-   , _thread(std::ref(*this))
+   : stop_{false}
+   , queue_()
+   , mutex_()
+   , condition_()
+   , handleEvents_{[this]() { handle(); }}
 {
 }
 
 EventQueue::~EventQueue()
 {
    SET_FNAME("EventQueue::~EventQueue()");
-   std::unique_lock<std::mutex> lock(_mutex);
-   _destruct = true;
-   _condition.notify_all();
+   std::unique_lock<std::mutex> lock(mutex_);
+   stop_ = true;
+   condition_.notify_all();
    lock.unlock();
-   _thread.join();
+   handleEvents_.join();
    LOGD("");
 }
 
-void EventQueue::operator()()
+void EventQueue::handle()
 {
-   SET_FNAME("EventQueue::operator()");
+   SET_FNAME("EventQueue::handle()");
    try {
-      std::unique_lock<std::mutex> lock(_mutex);
-      while (not _destruct or not _queue.empty()) {
-         while (not _destruct and _queue.empty()) {
-            _condition.wait(lock);
+      std::unique_lock<std::mutex> lock(mutex_);
+      while (not stop_ or not queue_.empty()) {
+         while (not stop_ and queue_.empty()) {
+            condition_.wait(lock);
          }
-         if (not _queue.empty()) {
-            int event = _queue.front();
-            _queue.pop();
+         if (not queue_.empty()) {
+            int event = queue_.front();
+            queue_.pop();
             lock.unlock();
-            std::ostringstream msg;
-            msg << "event " << event << " processed";
-            LOGD(msg.str());
+            {
+               std::ostringstream msg;
+               msg << "event " << event << " processed";
+               LOGD(msg.str());
+            }
             lock.lock();
          }
       }
-   } catch (std::exception &e) {
+   }
+   catch (std::exception &e) {
       LOGE(e.what());
-   } catch (...) {
+   }
+   catch (...) {
       LOGE("Unknown exception");
    }
 }
@@ -51,8 +56,8 @@ void EventQueue::operator()()
 void EventQueue::post(int event)
 {
    SET_FNAME("EventQueue::post()");
-   std::unique_lock<std::mutex> lock(_mutex);
-   _queue.push(event);
+   std::unique_lock<std::mutex> lock(mutex_);
+   queue_.push(event);
    LOGD("event posted");
-   _condition.notify_all();
+   condition_.notify_all();
 }

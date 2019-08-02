@@ -2,6 +2,7 @@
 #define HARDWARE_ACTUATOR_H
 
 #include "HWdef.h"
+
 #include <cstddef>
 
 namespace hardware {
@@ -15,10 +16,10 @@ public:
    virtual ~Actuator() = default;
 
 protected:
-   memory_t &_memory;
-   size_t _index1;
-   size_t _index2;
-   size_t _index3;
+   memory_t &memory_;
+   size_t index1_;
+   size_t index2_;
+   size_t index3_;
 };
 
 } // namespace hardware

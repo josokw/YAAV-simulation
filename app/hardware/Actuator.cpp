@@ -2,27 +2,27 @@
 #include "Memory.h"
 
 hardware::Actuator::Actuator(memory_t &memory, size_t index1)
-   : _memory(memory)
-   , _index1(index1)
-   , _index2(0)
-   , _index3(0)
+   : memory_{memory}
+   , index1_{index1}
+   , index2_{0}
+   , index3_{0}
 {
 }
 
 hardware::Actuator::Actuator(memory_t &memory, size_t index1,
                              size_t index2)
-   : _memory(memory)
-   , _index1(index1)
-   , _index2(index2)
-   , _index3(0)
+   : memory_{memory}
+   , index1_{index1}
+   , index2_{index2}
+   , index3_{0}
 {
 }
 
 hardware::Actuator::Actuator(memory_t &memory, size_t index1,
                              size_t index2, size_t index3)
-   : _memory(memory)
-   , _index1(index1)
-   , _index2(index2)
-   , _index3(index3)
+   : memory_{memory}
+   , index1_{index1}
+   , index2_{index2}
+   , index3_{index3}
 {
 }

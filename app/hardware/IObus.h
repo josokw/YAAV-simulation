@@ -22,7 +22,7 @@ public:
       std::fill(begin(INTin), end(INTin), 0);
       std::fill(begin(INTout), end(INTout), 0);
    }
-   virtual ~IObus() = default;
+   ~IObus() = default;
 
    std::array<bool, N_BOOL_IN> BOOLin;
    std::array<bool, N_BOOL_OUT> BOOLout;

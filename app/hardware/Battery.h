@@ -9,11 +9,11 @@ public:
    Battery();
    ~Battery() = default;
 
-   int getLevel() const { return _level; }
-   void setLevel(int level) { _level = level; }
+   int getLevel() const { return level_; }
+   void setLevel(int level) { level_ = level; }
 
 private:
-   int _level;
+   int level_;
 };
 
 } // namespace hardware
