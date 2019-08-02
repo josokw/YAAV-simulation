@@ -29,7 +29,6 @@ SOURCES += main.cpp \
     drawables/Room.cpp \
     hardware/Sensor.cpp \
     hardware/Actuator.cpp \
-    hardware/Timer.cpp \
     hardware/Memory.cpp \
     hardware/Bumper.cpp \
     hardware/Motor.cpp \
