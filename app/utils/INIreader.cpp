@@ -220,7 +220,7 @@ void utils::INIreader::fillINImap()
 
 void utils::INIreader::getRHSassignment(std::string &RHSline) const
 {
-   size_t pos(line_.find("="));
+   size_t pos(line_.find('='));
    if (pos == std::string::npos) {
       std::ostringstream Xtext;
       Xtext << "[INIreader] syntax error in line " << lineNumber_;
@@ -234,7 +234,7 @@ void utils::INIreader::getRHSassignment(std::string &RHSline) const
 
 void utils::INIreader::getLHSassignment(std::string &LHSline) const
 {
-   size_t pos(line_.find("="));
+   size_t pos(line_.find('='));
    if (pos == std::string::npos) {
       std::ostringstream Xtext;
       Xtext << "[INIreader] syntax error in line " << lineNumber_ << ": '"

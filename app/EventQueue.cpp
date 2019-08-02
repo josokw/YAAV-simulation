@@ -5,9 +5,9 @@
 
 EventQueue::EventQueue()
    : stop_{false}
-   , queue_()
-   , mutex_()
-   , condition_()
+   , queue_{}
+   , mutex_{}
+   , condition_{}
    , handleEvents_{[this]() { handle(); }}
 {
 }

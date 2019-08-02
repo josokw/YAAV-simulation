@@ -12,7 +12,7 @@ enum class mode_t { ONE_SHOT, PERIODIC };
 template <typename T> class Timer : public physics::DoPhysics
 {
 public:
-   typedef void (T::*pFunction_t)();
+   using pFunction_t = void (T::*)();
 
    Timer(T *obj)
       : elapsedTime_ms_(0L)

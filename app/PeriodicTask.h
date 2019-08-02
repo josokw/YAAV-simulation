@@ -2,23 +2,27 @@
 #define PERIODICTASK_H
 
 #include "Log.h"
-#include <boost/bind.hpp>
-#include <boost/thread.hpp>
-#include <exception>
 
-/// Represents a periodic task.
+#include <chrono>
+#include <condition_variable>
+#include <exception>
+#include <functional>
+#include <mutex>
+#include <thread>
+
+/// Represents a periodic task, #t in milliseconds.
+/// \todo Use chrono, check implementation.
 class PeriodicTask
 {
 public:
    template <typename C, typename F>
    PeriodicTask(C *object, F mf, int t)
-      : t(t)
-      , isAlive(true)
-      , isRunning(false)
-      , mutex()
-      , condition()
-      , thread(
-           (boost::bind(&PeriodicTask::execute<C, F>, this, object, mf)))
+      : t_{t}
+      , isAlive_{true}
+      , isRunning_{false}
+      , mutex_{}
+      , condition_{}
+      , thread_{(std::bind(&PeriodicTask::execute<C, F>, this, object, mf))}
    {
       SET_FNAME("PeriodicTask:PeriodicTask()");
       LOGD("");
@@ -28,38 +32,41 @@ public:
    {
       SET_FNAME("PeriodicTask:~PeriodicTask()");
       LOGD("enter dtor");
-      boost::mutex::scoped_lock lock(mutex);
-      condition.notify_one();
-      isAlive = false;
-      isRunning = true;
-      lock.unlock();
-      thread.join();
+      {
+         std::unique_lock<std::mutex> lock(mutex_);
+         condition_.notify_one();
+         isAlive_ = false;
+         isRunning_ = true;
+      }
+      thread_.join();
       LOGI("");
    }
 
    template <typename C, typename F> void execute(C *object, F mf)
    {
       SET_FNAME("PeriodicTask::execute()");
-      boost::mutex::scoped_lock lock(mutex);
-      while (isAlive) {
-         while (!isRunning) {
-            condition.wait(lock);
+      std::unique_lock<std::mutex> lock(mutex_);
+      while (isAlive_) {
+         while (!isRunning_) {
+            condition_.wait(lock);
          }
-         if (isAlive) {
+         if (isAlive_) {
             lock.unlock();
-            const boost::system_time timeout(
-               boost::get_system_time() +
-               boost::posix_time::milliseconds(t));
+            const auto timeout{std::chrono::system_clock::now() +
+                               std::chrono::milliseconds(t_)};
             try {
                (object->*mf)();
-            } catch (std::string &x) {
+            }
+            catch (std::string &x) {
                LOGE(x);
-            } catch (std::exception &x) {
+            }
+            catch (std::exception &x) {
                LOGE(x.what());
-            } catch (...) {
+            }
+            catch (...) {
                LOGE("UNKNOWN EXCEPTION");
             }
-            boost::this_thread::sleep(timeout);
+            std::this_thread::sleep_until(timeout);
             lock.lock();
          }
       }
@@ -68,20 +75,20 @@ public:
 
    void start()
    {
-      boost::mutex::scoped_lock lock(mutex);
-      isRunning = true;
-      condition.notify_one();
+      std::unique_lock<std::mutex> lock(mutex_);
+      isRunning_ = true;
+      condition_.notify_one();
    }
 
    void stop()
    {
-      boost::mutex::scoped_lock lock(mutex);
-      isRunning = false;
+      std::unique_lock<std::mutex> lock(mutex_);
+      isRunning_ = false;
    }
 
    void startStop()
    {
-      if (isRunning) {
+      if (isRunning_) {
          stop();
       } else {
          start();
@@ -89,12 +96,12 @@ public:
    }
 
 private:
-   int t;
-   volatile bool isAlive;
-   volatile bool isRunning;
-   boost::mutex mutex;
-   boost::condition_variable condition;
-   boost::thread thread;
+   int t_;
+   volatile bool isAlive_;
+   volatile bool isRunning_;
+   std::mutex mutex_;
+   std::condition_variable condition_;
+   std::thread thread_;
 };
 
 #endif // PERIODICTASK_H

@@ -15,7 +15,7 @@ class Logger: public Singleton<Logger>
    friend class utils::Singleton<Logger>;
 
 public:
-   virtual ~Logger();
+   ~Logger() override;
 
    void setFilename(const std::string &filename);
    void setDebugMode(bool on) { debugMode_ = on; }
