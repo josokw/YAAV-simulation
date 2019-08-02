@@ -19,7 +19,7 @@ QVehicleViewer::QVehicleViewer(VirtualReality &vr, QWidget *parent)
    cameraPosition[1] = 0.0;
    cameraPosition[2] = 0.1;
 
-   QTimer *timer = new QTimer(this);
+   auto *timer = new QTimer(this);
    connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
    timer->setInterval(20);
    timer->start();

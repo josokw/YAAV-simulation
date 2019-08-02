@@ -58,7 +58,7 @@ MainWindow::MainWindow(VirtualReality &vr, QWidget *parent)
 
    rightVerticalGroupBox = new QGroupBox;
    rightVerticalGroupBox->setMaximumWidth(250);
-   QVBoxLayout *rvgbLayout = new QVBoxLayout;
+   auto *rvgbLayout = new QVBoxLayout;
 
    rvgbLayout->addWidget(startStopButton);
    rvgbLayout->addWidget(topViewButton);

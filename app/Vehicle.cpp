@@ -101,14 +101,14 @@ void Vehicle::process()
    if (physicsState[physics::CYLOBJ_COLLISION] != 1 &&
        physicsState[physics::WALL_COLLISION] != 1) {
       nextXYZrZ_.position.set_x(XYZrZ_.position.get_x() +
-                                 cos(rz) * translation);
+                                cos(rz) * translation);
       nextXYZrZ_.position.set_y(XYZrZ_.position.get_y() +
-                                 sin(rz) * translation);
+                                sin(rz) * translation);
       nextXYZrZ_.Rz = XYZrZ_.Rz + math::toDegrees(rotation);
    } else {
       static int incr = 0;
       nextXYZrZ_ = XYZrZ_ - math::CartVec(cos(rz) * translation,
-                                            sin(rz) * translation, 0);
+                                          sin(rz) * translation, 0);
       // m_nextXYZrZ.position.x = m_XYZrZ.position.x - cos(rz) *
       // translation; m_nextXYZrZ.position.y = m_XYZrZ.position.y - sin(rz)
       // * translation;
@@ -205,7 +205,6 @@ void Vehicle::checkIRQs()
    }
 }
 
-/// \bug Sometimes vehicle remains colliding walls in an endless loop.
 bool Vehicle::isColliding(const Room &room)
 {
    SET_FNAME("Vehicle::isColliding()");
@@ -269,11 +268,10 @@ bool Vehicle::isColliding(const Block &object)
          msg << "############# Is colliding with block";
          LOGD(msg.str());
       }
-      for (size_t i = 0; i < collisionDetector.getCollisionPoints().size();
-           i++) {
+      for(const auto &collisionPoints : collisionDetector.getCollisionPoints())
+      {
          /// In Vehicle CS.
-         vehicleCollisions.push_back(collisionDetector.getCollisionPoints()[i] -
-                                     XYZrZ_.position);
+         vehicleCollisions.push_back(collisionPoints - XYZrZ_.position);
       }
       return true;
    }

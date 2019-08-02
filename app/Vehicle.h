@@ -25,6 +25,7 @@ class Room;
 
 /// Represents the autonomous vehicle.
 /// \todo Develop hardware components.
+/// \bug Sometimes vehicle remains colliding walls in an endless loop.
 class Vehicle : public Drawable, public physics::DoPhysics
 {
    friend std::ostream &operator<<(std::ostream &os, const Vehicle &rhs);
