@@ -1,20 +1,21 @@
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
+#include "Battery.h"
+#include "Bumper.h"
 #include "CollisionDetector.h"
 #include "Drawable.h"
 #include "HWdef.h"
+#include "IObus.h"
 #include "IOdef.h"
+#include "IOextern.h"
+#include "IOintern.h"
+#include "Memory.h"
+#include "Motor.h"
+#include "Timer.h"
 #include "XYZrZ.h"
-#include "hardware/Battery.h"
-#include "hardware/Bumper.h"
-#include "hardware/IObus.h"
-#include "hardware/IOextern.h"
-#include "hardware/IOintern.h"
-#include "hardware/Memory.h"
-#include "hardware/Motor.h"
-#include "hardware/Timer.h"
 
+#include <atomic>
 #include <thread>
 #include <vector>
 
@@ -22,6 +23,8 @@ class Block;
 class CylObject;
 class Room;
 
+/// Represents the autonomous vehicle.
+/// \todo Develop hardware components.
 class Vehicle : public Drawable, public physics::DoPhysics
 {
    friend std::ostream &operator<<(std::ostream &os, const Vehicle &rhs);
@@ -30,25 +33,22 @@ public:
    Vehicle(double R, double H, const XYZrZ &xyzRz);
    Vehicle(const Vehicle &) = delete;
    Vehicle &operator=(const Vehicle &) = delete;
-   virtual ~Vehicle();
+   ~Vehicle() override;
 
-   XYZrZ getXYZrZ() const { return m_XYZrZ; }
-   void setXYZrZ(const XYZrZ &xyzrz) { m_XYZrZ = xyzrz; }
-   double getR() const { return m_R; }
-   double getH() const { return m_H; }
+   XYZrZ getXYZrZ() const { return XYZrZ_; }
+   void setXYZrZ(const XYZrZ &xyzrz) { XYZrZ_ = xyzrz; }
+   double getR() const { return R_; }
+   double getH() const { return H_; }
    XYZrZ expectedNextXYZrZ() const;
 
-   virtual void draw() const;
-   virtual void process();
+   void draw() const override;
+   void process() override;
    /// main program for controlling vehicle
    void controlInit();
    void controlExecute();
    void stopControlExecute();
 
-   math::Circle getCollisionShape() const
-   {
-      return {m_XYZrZ.position, m_R};
-   }
+   math::Circle getCollisionShape() const { return {XYZrZ_.position, R_}; }
    bool isColliding(const Room &room);
    bool isColliding(const CylObject &object);
    bool isColliding(const Block &object);
@@ -66,10 +66,10 @@ public:
    volatile int shared2;
 
 private:
-   double m_R;
-   double m_H;
-   XYZrZ m_XYZrZ;
-   XYZrZ m_nextXYZrZ;
+   double R_;
+   double H_;
+   XYZrZ XYZrZ_;
+   XYZrZ nextXYZrZ_;
    std::vector<Drawable *> drawables;
    physics::CollisionDetector collisionDetector;
    std::vector<DoPhysics *> physicsProcesses;
@@ -78,14 +78,14 @@ private:
    hardware::IOextern IOext;
    hardware::IRQbus<Vehicle, N_IRQ_IN> IRQs;
    hardware::Timer<Vehicle> timer;
-   hardware::memory_t memory;
-   hardware::Bumper m_Bumper;
-   hardware::Motor m_motorLeft;
-   hardware::Motor m_motorRight;
-   hardware::Battery m_battery;
-   GLUquadricObj *m_pBody;
-   volatile bool m_controlExecuteIsRunning;
-   std::thread m_simProgram;
+   hardware::memory_t memory_;
+   hardware::Bumper bumper_;
+   hardware::Motor motorLeft_;
+   hardware::Motor motorRight_;
+   hardware::Battery battery_;
+   GLUquadricObj *pBody_;
+   volatile std::atomic<bool> controlExecuteIsRunning_;
+   std::thread simProgram_;
 
    void checkIRQs();
 };

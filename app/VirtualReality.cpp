@@ -54,8 +54,7 @@ void VirtualReality::process()
    XYZrZ expectedNextXYZrZ = vehicle_.expectedNextXYZrZ();
    math::Circle collisionShape(expectedNextXYZrZ.position, vehicle_.getR());
 
-   Vehicle expectedVehicle(vehicle_.getR(), vehicle_.getH(),
-                           expectedNextXYZrZ);
+   Vehicle expectedVehicle(vehicle_.getR(), vehicle_.getH(), expectedNextXYZrZ);
    {
       std::ostringstream msg;
       msg << "Current state vehicle: " << vehicle_.getXYZrZ()
@@ -116,8 +115,9 @@ void VirtualReality::process()
    // Check for dirt
    dirt_.removeDirt(vehicle_);
    // Process contained objects
-   std::for_each(physicsProcesses.begin(), physicsProcesses.end(),
-                 std::mem_fun(&DoPhysics::process));
+   for (auto &prcs : physicsProcesses) {
+      prcs->process();
+   }
 }
 
 void VirtualReality::init()
@@ -151,6 +151,6 @@ void VirtualReality::stopPhysics()
 {
    SET_FNAME("VirtualReality::stopPhysics()");
    simTaskPhysics_.stop();
-   physicsIsRunning_= false;
+   physicsIsRunning_ = false;
    LOGI(" ------ STOP");
 }

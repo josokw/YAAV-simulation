@@ -14,7 +14,7 @@
 
 #include <vector>
 
-/// Reponsible for all aspects of calculating graphics and physics.
+/// Responsible for all aspects of calculating graphics and physics.
 /// Contains a #PeriodicTask for executing physics.
 /// The #draw() function must me executed by a thread in the GUI.
 class VirtualReality : public Drawable, public physics::DoPhysics
@@ -22,19 +22,19 @@ class VirtualReality : public Drawable, public physics::DoPhysics
 public:
    VirtualReality();
    ~VirtualReality() override;
-   /// Execute graphics
+   /// Executes graphics
    void draw() const override;
-   /// Excecute all physics.
+   /// Excecutes all physics.
    void process() override;
-   /// Initialize contained objects.
+   /// Initializes contained objects.
    void init();
    /// Continues processing physics.
    void startPhysics();
-   /// Halt processing physics, stop running.
+   /// Halts processing physics, stop running.
    void stopPhysics();
-   /// Start stop physics toggle.
+   /// Starts stop physics toggle.
    void startStopPhysics() { simTaskPhysics_.startStop(); }
-   /// Get dirt level %
+   /// Gets dirt level %
    double getDirtLevel() const { return dirt_.getDirtLevel(); }
 
 private:
@@ -50,7 +50,7 @@ private:
    Ball ball_;
    Block chair_;
    DynamicDirt dirt_;
-   bool physicsIsRunning_;
+   std::atomic<bool> physicsIsRunning_;
    PeriodicTask simTaskPhysics_;
 };
 

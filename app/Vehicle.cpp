@@ -18,17 +18,17 @@
 
 std::ostream &operator<<(std::ostream &os, const Vehicle &rhs)
 {
-   os << rhs.m_R << " " << rhs.m_H << " " << rhs.m_nextXYZrZ;
+   os << rhs.R_ << " " << rhs.H_ << " " << rhs.nextXYZrZ_;
    return os;
 }
 
 Vehicle::Vehicle(double R, double H, const XYZrZ &xyzRz)
    : Drawable()
    , DoPhysics()
-   , m_R(R)
-   , m_H(H)
-   , m_XYZrZ(xyzRz)
-   , m_nextXYZrZ(xyzRz)
+   , R_(R)
+   , H_(H)
+   , XYZrZ_(xyzRz)
+   , nextXYZrZ_(xyzRz)
    , drawables()
    , collisionDetector()
    , physicsProcesses()
@@ -37,22 +37,22 @@ Vehicle::Vehicle(double R, double H, const XYZrZ &xyzRz)
    , IOext(IO)
    , IRQs()
    , timer(this)
-   , memory()
-   , m_Bumper(*this, -110, 110, 6, memory, hardware::BUMPER0)
-   , m_motorLeft(IOext, MOTORLEFT_PWM_INT, MOTORLEFT_FORWARD_BOOL)
-   , m_motorRight(IOext, MOTORRIGHT_PWM_INT, MOTORRIGHT_FORWARD_BOOL)
-   , m_pBody(gluNewQuadric())
-   , m_controlExecuteIsRunning(true)
-   , m_simProgram(std::thread(&Vehicle::controlExecute, this))
+   , memory_()
+   , bumper_(*this, -110, 110, 6, memory_, hardware::BUMPER0)
+   , motorLeft_(IOext, MOTORLEFT_PWM_INT, MOTORLEFT_FORWARD_BOOL)
+   , motorRight_(IOext, MOTORRIGHT_PWM_INT, MOTORRIGHT_FORWARD_BOOL)
+   , pBody_(gluNewQuadric())
+   , controlExecuteIsRunning_(true)
+   , simProgram_(std::thread(&Vehicle::controlExecute, this))
 {
    SET_FNAME("Vehicle::Vehicle()");
    // Physics part
    physicsProcesses.push_back(&timer);
-   physicsProcesses.push_back(&m_Bumper);
-   physicsProcesses.push_back(&m_motorLeft);
-   physicsProcesses.push_back(&m_motorRight);
+   physicsProcesses.push_back(&bumper_);
+   physicsProcesses.push_back(&motorLeft_);
+   physicsProcesses.push_back(&motorRight_);
    // Drawable part
-   gluQuadricDrawStyle(m_pBody, GLU_FILL);
+   gluQuadricDrawStyle(pBody_, GLU_FILL);
    // Control part
    controlInit();
    LOGI("initialized");
@@ -61,8 +61,8 @@ Vehicle::Vehicle(double R, double H, const XYZrZ &xyzRz)
 Vehicle::~Vehicle()
 {
    SET_FNAME("Vehicle::~Vehicle()");
-   m_controlExecuteIsRunning = false;
-   m_simProgram.join();
+   controlExecuteIsRunning_ = false;
+   simProgram_.join();
    LOGI("");
 }
 
@@ -72,13 +72,13 @@ XYZrZ Vehicle::expectedNextXYZrZ() const
    double speedMotorRight = 1.14; // 0.57; //m_motorRight.getSpeed();
    double translationSpeed = (speedMotorLeft + speedMotorRight) / 2;
    double translation = translationSpeed * physics::SIMTIME_SEC;
-   double rotationSpeed = (speedMotorRight - speedMotorLeft) / (2 * m_R);
+   double rotationSpeed = (speedMotorRight - speedMotorLeft) / (2 * R_);
    double rotation = rotationSpeed * physics::SIMTIME_SEC;
-   double rz = math::toRadians(m_XYZrZ.Rz);
+   double rz = math::toRadians(XYZrZ_.Rz);
 
-   return {m_XYZrZ.position.get_x() + cos(rz) * translation,
-           m_XYZrZ.position.get_y() + sin(rz) * translation,
-           m_XYZrZ.position.get_z(), m_XYZrZ.Rz + math::toDegrees(rotation)};
+   return {XYZrZ_.position.get_x() + cos(rz) * translation,
+           XYZrZ_.position.get_y() + sin(rz) * translation,
+           XYZrZ_.position.get_z(), XYZrZ_.Rz + math::toDegrees(rotation)};
 }
 
 /// @todo Remove vehicle control from physics to controlExecute.
@@ -94,46 +94,46 @@ void Vehicle::process()
    double speedMotorRight = 1.14; // 0.57; //m_motorRight.getSpeed();
    double translationSpeed = (speedMotorLeft + speedMotorRight) / 2;
    double translation = translationSpeed * physics::SIMTIME_SEC;
-   double rotationSpeed = (speedMotorRight - speedMotorLeft) / (2 * m_R);
+   double rotationSpeed = (speedMotorRight - speedMotorLeft) / (2 * R_);
    double rotation = rotationSpeed * physics::SIMTIME_SEC;
-   double rz = math::toRadians(m_XYZrZ.getRz());
+   double rz = math::toRadians(XYZrZ_.getRz());
 
    if (physicsState[physics::CYLOBJ_COLLISION] != 1 &&
        physicsState[physics::WALL_COLLISION] != 1) {
-      m_nextXYZrZ.position.set_x(m_XYZrZ.position.get_x() +
+      nextXYZrZ_.position.set_x(XYZrZ_.position.get_x() +
                                  cos(rz) * translation);
-      m_nextXYZrZ.position.set_y(m_XYZrZ.position.get_y() +
+      nextXYZrZ_.position.set_y(XYZrZ_.position.get_y() +
                                  sin(rz) * translation);
-      m_nextXYZrZ.Rz = m_XYZrZ.Rz + math::toDegrees(rotation);
+      nextXYZrZ_.Rz = XYZrZ_.Rz + math::toDegrees(rotation);
    } else {
       static int incr = 0;
-      m_nextXYZrZ = m_XYZrZ - math::CartVec(cos(rz) * translation,
+      nextXYZrZ_ = XYZrZ_ - math::CartVec(cos(rz) * translation,
                                             sin(rz) * translation, 0);
       // m_nextXYZrZ.position.x = m_XYZrZ.position.x - cos(rz) *
       // translation; m_nextXYZrZ.position.y = m_XYZrZ.position.y - sin(rz)
       // * translation;
-      m_nextXYZrZ.Rz = m_XYZrZ.Rz - 27 + incr;
+      nextXYZrZ_.Rz = XYZrZ_.Rz - 27 + incr;
       ++incr;
       if (incr > 15) {
          incr = 0;
       }
    }
-   m_nextXYZrZ.Rz = math::normalizeDegrees(m_nextXYZrZ.Rz);
-   m_XYZrZ = m_nextXYZrZ;
+   nextXYZrZ_.Rz = math::normalizeDegrees(nextXYZrZ_.Rz);
+   XYZrZ_ = nextXYZrZ_;
 }
 
 void Vehicle::draw() const
 {
    glPushMatrix();
-   m_XYZrZ.draw();
+   XYZrZ_.draw();
    glPointSize(5);
    glColor4f(1.0f, 0.0f, 0.0f, 1.0f); // point color
    glBegin(GL_POINTS);
-   glVertex3f(m_R * 0.8, 0.0, m_H);
+   glVertex3f(R_ * 0.8, 0.0, H_);
    glEnd();
    glPointSize(1);
    glColor4f(0.5f, 0.5f, 0.5f, 1.0f); // line color
-   gluCylinder(m_pBody, m_R, m_R, m_H, 20, 20);
+   gluCylinder(pBody_, R_, R_, H_, 20, 20);
    glPopMatrix();
    std::for_each(drawables.begin(), drawables.end(),
                  std::mem_fun(&Drawable::draw));
@@ -163,7 +163,7 @@ void Vehicle::controlExecute()
       unsigned long long tick = 0ull;
       EventQueue eventQueue;
 
-      while (m_controlExecuteIsRunning) {
+      while (controlExecuteIsRunning_) {
          ++tick;
          const boost::system_time timeout(
             boost::get_system_time() +
@@ -185,7 +185,7 @@ void Vehicle::controlExecute()
 
 void Vehicle::stopControlExecute()
 {
-   m_controlExecuteIsRunning = false;
+   controlExecuteIsRunning_ = false;
 }
 
 void Vehicle::ISR0()
@@ -220,24 +220,24 @@ bool Vehicle::isColliding(const Room &room)
    const auto &corners(room.getCorners());
    int nCollisions = 0;
    for (size_t wallID = 0; wallID < corners.size(); ++wallID) {
-      math::Point closestPoint(room.closestPointWall(wallID, m_XYZrZ.position));
+      math::Point closestPoint(room.closestPointWall(wallID, XYZrZ_.position));
 
-      if ((closestPoint - m_XYZrZ.position).length() <= m_R) {
+      if ((closestPoint - XYZrZ_.position).length() <= R_) {
          double overshoot =
-            (m_R - (closestPoint - m_XYZrZ.position).length()) / m_R;
+            (R_ - (closestPoint - XYZrZ_.position).length()) / R_;
          ++nCollisions;
 
-         vehicleCollisions.push_back(closestPoint - m_XYZrZ.position);
+         vehicleCollisions.push_back(closestPoint - XYZrZ_.position);
 
          std::ostringstream msg;
          msg << "WCS: " << closestPoint << " "
-             << (closestPoint - m_XYZrZ.position) << " " << std::setw(2)
+             << (closestPoint - XYZrZ_.position) << " " << std::setw(2)
              << int(overshoot * 100) << "%";
 
          // CartVec delta((closestPoint - m_XYZrZ.position)  * overshoot);
-         math::CartVec delta{closestPoint - m_XYZrZ.position};
-         m_nextXYZrZ = m_XYZrZ + delta;
-         msg << " nextXYZrZ: " << m_nextXYZrZ;
+         math::CartVec delta{closestPoint - XYZrZ_.position};
+         nextXYZrZ_ = XYZrZ_ + delta;
+         msg << " nextXYZrZ: " << nextXYZrZ_;
          LOGD(msg.str());
       }
    }
@@ -252,7 +252,7 @@ bool Vehicle::isColliding(const CylObject &object)
                                      object.getCollisionShape())) {
       /// In Vehicle CS.
       vehicleCollisions.push_back(collisionDetector.getCollisionPoints()[0] -
-                                  m_XYZrZ.position);
+                                  XYZrZ_.position);
       return true;
    }
    return false;
@@ -273,7 +273,7 @@ bool Vehicle::isColliding(const Block &object)
            i++) {
          /// In Vehicle CS.
          vehicleCollisions.push_back(collisionDetector.getCollisionPoints()[i] -
-                                     m_XYZrZ.position);
+                                     XYZrZ_.position);
       }
       return true;
    }
